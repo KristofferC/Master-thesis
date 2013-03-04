@@ -161,3 +161,31 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+###########
+# Latex
+##########
+*.dvi
+*.nav
+*.snm
+*.pdf
+*.synctex.gz
+*.aux
+*.toc
+*.blg
+*.log
+*.out
+*.ps
+*.bbl
+*.toc
+*.run.xml
+*~
+*.backup
+*.mat
+*.zip
+*.sw*
+.*
+*-blx.bib
+*.bcf
+*.top
+
