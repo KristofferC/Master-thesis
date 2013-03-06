@@ -1,0 +1,35 @@
+\documentclass[border=12pt, crop]{standalone}
+    \usepackage{psfrag}
+    \usepackage{graphicx}
+    \pagestyle{empty}
+  
+    % You can run this by typing the following commands:
+    %    latex 2dplot.tex
+    %    dvips -o 2dplot.ps 2dplot.dvi
+  
+    \begin{document}
+  
+    % The syntax of the "psfrag" command is:
+    %    \psfrag{tag}[<posn>][<psposn>][<scale>][<rot>]{replacement}
+    % See the file pfgguide.ps for full documentation.
+  
+      \psfrag{ngrain}[l][B][1][0]{Average total force among the runs}
+      \psfrag{ngrain5}[B][B][1][0]{$n = 5$}
+      \psfrag{ngrain20}[B][B][1][0]{$n = 20$}
+      \psfrag{ngrain50}[B][B][1][0]{$n = 50$}
+      \psfrag{ngrain100}[B][B][1][0]{$n = 100$}
+      \psfrag{ngrain250}[B][B][1][0]{$n = 250$}
+      \psfrag{ngrain500}[B][B][1][0]{$n = 500$}
+      \psfrag{Total force}[B][B][1][0]{Total force}
+      \psfrag{Displacement}[B][B][1][0]{Displacement $u_y$}
+            
+      \psfrag{uy}[l][l][1.5][0]{$u_y(t)$}
+      \psfrag{uy=0}[l][l][1.5][0]{$u_y = 0$}
+      \psfrag{ux=0}[l][l][1.5][0]{$u_x = 0$}
+      \psfrag{uz=0}[l][l][1.5][0]{$u_z = 0$}
+ \psfrag{x}[B][B][1][0]{$x$}
+  \psfrag{y}[B][B][1][0]{$y$}  
+  \psfrag{v}[B][B][1.5][0]{$z$}
+      \includegraphics[scale = 0.6]{test_case.eps}
+
+    \end{document}

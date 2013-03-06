@@ -32,6 +32,8 @@
 \usepackage{subfig} % Subfloats
 \usepackage[refpage]{nomencl}
 
+
+
 % Read the manuals for the respective package to see the usage;
 %\usepackage{pdfpages} % For included other pdf files (like articles).
 %\usepackage{thmtools} % For theorems.
@@ -56,8 +58,8 @@
 \copyrightyear{2013}
 
 % You should scale the figure according to textwidth and or paperheight.
-\coverfigure{\includegraphics[width=\textwidth,height=0.4\paperheight,keepaspectratio]{figures/Grains2}}
-\covercaption{A voronoi tesselation in 3D bounded by the unit box. Rendered with the Neper software}
+\coverfigure{\includegraphics[width=0.5\paperheight,height=0.5\paperheight]{figures/Grains3}}
+\covercaption{A voronoi tesselation containing 1000 polyhedras bounded by the unit box. Rendered with the Neper software.}
 
 \firstabstract{\subfile{sections/abstract}}
 %\secondabstract{swedish}{\lipsum} % Optional
@@ -70,7 +72,7 @@
 % Use \presectiontitle to render add titles to new sections.
 %\extrafrontmatter{\presectiontitle{Nomenclature} } % Optional
 
-\addbibresource{Masters_kricarl.bib} % New comnand, use if available
+\addbibresource{Masters_kricarl_bib.bib} % New comnand, use if available
 %\bibliography{ExampleBib} % Legacy command
 
 \begin{document}
@@ -91,10 +93,12 @@
  % Sets up page numbering for the rest of the document.
 % Highly recommended to put contents into subfiles, or use \input.
 \subfile{sections/micro_gen}
+\subfile{sections/convergence}
+\subfile{sections/generate_interface_elements}
 
 
 
-%\nocite{*} % Cites everything from the bibliography
+
 \printbibliography % This command is new in biblatex. Do not attempt to use style files as with old latex.
 
 \end{document}

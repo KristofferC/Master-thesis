@@ -1,0 +1,40 @@
+% Sample file on how to use subfiles.
+\documentclass[convergence.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Convergence in grain number and mesh}
+
+In order to determine the number of grains needed for the model to be considered a RVE multiple runs for different levels of granularity was done in Abaqus. The specifics of the simulation used can be seen in figure \ref{fig:test_case}. This tries to model a volume element inside a bar undergoing a stress-strain test. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.8]{figures/test_case}
+\caption{This figure is informative but really ugly. Also the z in the coordinate system is weird.}
+\label{fig:test_case}
+\end{figure}
+
+
+Five runs where made for different granularity going from 5 grains up to 500. The results can be seen in figure \ref{fig:separate}. It can be seen that the variance in the runs somewhat tend to decrease with higher granularity. However, the results are not very conclusive. The variance in the simulation with 5 grains exhibits similar variance as the one with 100 grains. With even larger number of grains the variance in the results is noticeably smaller. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.8]{figures/separate}
+\caption{Five runs for different granularities.}
+\label{fig:separate}
+\end{figure}
+
+
+The average force for the runs with the same granularity can be seen in figure \ref{fig:average}. There is no general trend visible in the plots which can be taken as an indication that we do not approach the true curve from above or below but that the results are spread around it.
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.8]{figures/average}
+\caption{The average force among the different runs.}
+\label{fig:average}
+\end{figure}
+
+\end{document}
+
+\newpage
