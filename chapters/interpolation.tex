@@ -1,0 +1,42 @@
+% Sample file on how to use subfiles.
+\documentclass[generate_interface_elements.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Cohesive elements in Abaqus}
+
+
+
+\chapter{Interpolation of traction separation results}
+
+Since we want to do calculation in the general strain case but only have access to the boundary cases of pure shear and pure normal strain some sort of interpolation is needed. The method that has been used is described here.
+
+The traction is calculated by $K \epsilon = t$ where $K$ in general is the matrix
+
+\[
+\left[
+\begin{array}{c c c}
+K_{nn} & K_{nt} & K_{ns} \\
+K_{tn} & K_{tt} & K_{ts} \\
+K_{sn} & K_{st} & K_{ss} \\
+\end{array}
+\]
+
+We will consider the uncoupled case in which only the diagonal elements in the stiffness matrix is non-zero. There is also isotropy in the shear directions such that $K_{tt} = K_{ss}$. The traction can thus be written as
+\[ [t_n, t_t, t_s] = [K_{nn} \epsilon_n, K_{tt} \epsilon_t, K_{tt} \epsilon_s \]
+
+From the software we can get get the a measure of how much of the traction is from the normal and shearing component. This measure is in form of a number $\phi_1$ between 0 and 1 that is defined as
+
+$ \phi_1 = \frac{2}{\pi} \arctan \left( \frac{\tau}{\langle t_n \rangle} $
+
+where $ \tau = \sqrt{t_s^2 + t_t^2}$. It can be seen that for pure shear tractions the value of $\phi1$ is 1 and for pure normal strain it is 0. 
+
+The following interpolation scheme was used.
+
+For a given total displacement $d = \sqrt{d_n^2 + d_s^2 + d_t^2}$ a total strain $\epsilon = \sqrt{K^2_{nn} d_n^2 + K^2_{tt} \left(d_s^2 + d_t^2 \right)}$. With the value of $ \phi1$ the displacements in the normal 
+
+
+This would lead to the following curves where $\phi1$ has been varied from 0 to 1.
+
+
+\end{document}

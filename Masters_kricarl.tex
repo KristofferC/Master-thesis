@@ -29,10 +29,10 @@
 \usepackage[firstinits=true, style=alphabetic]{biblatex} % Modern bibliography facilities
 \usepackage{mathtools} % All your math related needs
 \usepackage{tikz} % Draw figures. Required for cover page
-\usepackage{subfig} % Subfloats
+%\usepackage{subfig} % Subfloats
 \usepackage[refpage]{nomencl}
-
-
+\usepackage{caption}
+\usepackage{subcaption}
 
 % Read the manuals for the respective package to see the usage;
 %\usepackage{pdfpages} % For included other pdf files (like articles).
@@ -61,12 +61,12 @@
 \coverfigure{\includegraphics[width=0.5\paperheight,height=0.5\paperheight]{figures/Grains3}}
 \covercaption{A voronoi tesselation containing 1000 polyhedras bounded by the unit box. Rendered with the Neper software.}
 
-\firstabstract{\subfile{sections/abstract}}
+\firstabstract{\subfile{chapters/abstract}}
 %\secondabstract{swedish}{\lipsum} % Optional
 \keywords{Two phase duplex steel, Voronoi tesselation, Grain structure, etc etc}
 
-\preface{\subfile{sections/preface}} 
-\acknowledgements{\subfile{sections/acknowledgements}}
+\preface{\subfile{chapters/preface}} 
+\acknowledgements{\subfile{chapters/acknowledgements}}
 
 % You can add extra contents such as abbreviations and nomenclature using.
 % Use \presectiontitle to render add titles to new sections.
@@ -92,9 +92,9 @@
 
  % Sets up page numbering for the rest of the document.
 % Highly recommended to put contents into subfiles, or use \input.
-\subfile{sections/micro_gen}
-\subfile{sections/convergence}
-\subfile{sections/generate_interface_elements}
+\subfile{chapters/micro_gen}
+\subfile{chapters/results}
+\subfile{chapters/generate_interface_elements}
 
 
 
