@@ -33,6 +33,7 @@
 \usepackage[refpage]{nomencl}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{amssymb}
 
 % Read the manuals for the respective package to see the usage;
 %\usepackage{pdfpages} % For included other pdf files (like articles).
@@ -47,8 +48,10 @@
 
 \usepackage{lipsum}\setlipsumdefault{1-3} % Package used to put in placeholder text. Remove it.
 
+\renewcommand{\vec}[1]{\boldsymbol{\underline{\mathbf{#1}}}}
+
 % User commands
-\title{Two phase duplex steel}
+\title{TITLE}
 %\subtitle{And Perhaps a Subtitle} % Optional
 \author{Kristoffer Carlsson}
 \thesisin{Solid and Structural Mechanics}
@@ -59,7 +62,7 @@
 
 % You should scale the figure according to textwidth and or paperheight.
 \coverfigure{\includegraphics[width=0.5\paperheight,height=0.5\paperheight]{figures/Grains3}}
-\covercaption{A voronoi tesselation containing 1000 polyhedras bounded by the unit box. Rendered with the Neper software.}
+\covercaption{A Voronoi tesselation of a cube containing 1000 grains. Rendered with the Neper software.}
 
 \firstabstract{\subfile{chapters/abstract}}
 %\secondabstract{swedish}{\lipsum} % Optional
@@ -92,9 +95,12 @@
 
  % Sets up page numbering for the rest of the document.
 % Highly recommended to put contents into subfiles, or use \input.
+\subfile{chapters/introduction}
 \subfile{chapters/micro_gen}
+\subfile{chapters/meshing_micro}
+\subfile{chapters/grain_boundary_law}
+\subfile{chapters/load_case}
 \subfile{chapters/results}
-\subfile{chapters/generate_interface_elements}
 
 
 
