@@ -1,0 +1,173 @@
+% Sample file on how to use subfiles.
+\documentclass[generate_interface_elements.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Grain boundary traction separation law}
+
+From Martin we have these curves calculated with LAMPS that show the grain boundary blah blah. Figure för shear och normal vid lite olika temperaturer / hastigheter.
+
+
+
+The finite element analysis software Abaqus, used in this thesis, has support for \textit{cohesive elements}. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis these cohesive elements are used to model the grain boundary law calculated in the atomic simulations.
+
+The difference between cohesive elements and normal elements are that cohesive elements are not supposed to model any material but instead they are supposed to model the actual interface between two materials. The state of the element does not contain a stress tensor like in normal elements but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$. The normal direction is defined from the node numbering of the element. An illustration of this can be seen in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
+%
+\[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
+%
+The $T_0$ here is not the thickness of the cohesive element but a constitutive thickness that when put to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
+
+
+
+
+\begin{figure}
+\centering
+ \includegraphics[width=.4\linewidth]{./figures/cohs_ele}
+\caption{Orientation of a cohesive element. The order of the nodes is used to determine the bottom and top face as well as the positive normal direction. In order for the normal direction to point upwards the nodes should be given in a counter clockwise direction.}
+\label{fig:cohs_ori}
+\end{figure}
+
+
+When modeling damage and failure of a material using cohesive element there are three main \textbf{things} that need to be defined:
+
+\begin{enumerate}
+\item The properties of the material before damage has taken place. Abaqus only has support for a a linear elastic traction-separation law prior to damage. This is however what the atomic simulations have shown so this is not a limitation in this case.
+
+\item The criteria that defines when the material is said to start to experience damage. This is called the \textit{damage initiation criteria}.
+
+\item The properties of the material after the damage initiation criteria has been fulfilled need to be prescribed. This is called the \textit{damage evolution}, it describes how the degradation of the material stiffness is changing as the material is experience more and more damage.
+\end{enumerate}
+
+These three ifdsbhikfsdkjfb will be described in the next sections.
+ 
+ \section{Undamaged behavior}
+ 
+ The behavior of the material before damage is assumed to be elastic and is written in term of a constitutive matrix as
+ 
+ \[ \vec{t} = 
+ \left[
+\begin{array}{c c c}
+t_n\\
+t_s\\
+t_t \\
+\end{array} \right]
+=
+\left[
+\begin{array}{c c c}
+K_{nn} & K_{nt} & K_{ns} \\
+K_{tn} & K_{tt} & K_{ts} \\
+K_{sn} & K_{st} & K_{ss} \\
+\end{array} \right]
+ \left[
+\begin{array}{c c c}
+\epsilon_n\\
+\epsilon_s\\
+\epsilon_t \\
+\end{array} \right]
+= \vec{K} \vec{\epsilon}.
+\]
+
+
+
+ 
+ 
+
+\section{Damage initiation criteria}
+
+\section{Damage evolution}
+
+
+
+We will consider the uncoupled case in which only the diagonal elements in the stiffness matrix is non-zero. There is also isotropy in the shear directions such that $K_{tt} = K_{ss}$. The traction can thus be written as
+\[ [t_n, t_t, t_s] = [K_{nn} \epsilon_n, K_{tt} \epsilon_t, K_{tt} \epsilon_s \]
+
+From the software we can get get the a measure of how much of the traction is from the normal and shearing component. This measure is in form of a number $\phi_1$ between 0 and 1 that is defined as
+
+$ \phi_1 = \frac{2}{\pi} \arctan \left( \frac{\tau}{\langle t_n \rangle} \right) $
+
+where $ \tau = \sqrt{t_s^2 + t_t^2}$. It can be seen that for pure shear tractions the value of $\phi1$ is 1 and for pure normal strain it is 0. 
+
+The following interpolation scheme was used.
+
+For a given total displacement $d = \sqrt{d_n^2 + d_s^2 + d_t^2}$ a total strain $\epsilon = \sqrt{K^2_{nn} d_n^2 + K^2_{tt} \left(d_s^2 + d_t^2 \right)}$. With the value of $ \phi1$ the displacements in the normal 
+
+
+This would lead to the following curves where $\phi1$ has been varied from 0 to 1.
+
+
+
+Since the faces of the grains are meshed with triangles it 
+
+
+The way these cohesive elements are inserted into the mesh output from Neper is as follows. 
+
+Every face is shared by two grains. The nodes in a face are duplicated twice and all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes. The two new faces are then connected to each other using six node cohesive wedge elements. This is repeated for all faces in the microstructure. An example of the insertion of these cohesive elements between two grains can be seen in figure \ref{fig:cohs_2}. The grains have for clarity of the figure been separated. In the start of an actual analysis the cohesive element have no width.
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.4\textwidth}
+  \centering
+  \includegraphics[width=.4\linewidth]{./figures/2_cohs}
+  \caption{}
+  \label{fig:cohs_2_a}
+\end{subfigure}%
+\hspace{-10mm}
+\begin{subfigure}[b]{.4\textwidth}
+  \centering
+  \includegraphics[width=.4\linewidth]{./figures/2_grain_no_cohs}
+  \caption{}
+  \label{fig:cohs_2_b}
+\end{subfigure}%
+\hspace{-10mm}
+\begin{subfigure}[b]{.4\textwidth}
+  \centering
+  \includegraphics[width=.4\linewidth]{./figures/2_grain_cohs}
+  \caption{}
+  \label{fig:cohs_2_c}
+\end{subfigure}
+\caption{Insertion of cohesive elements between two grains. (a) The two grains. (b) Duplication of nodes in the face. Grains have been separated for clarity of the figure. (c) Cohesive elements inserted. }
+\label{fig:cohs_2}
+\end{figure}
+
+
+
+
+Since we want to do calculation in the general strain case but only have access to the boundary cases of pure shear and pure normal strain some sort of interpolation is needed. The method that has been used is described here.
+
+ 
+
+The traction is calculated by $K \epsilon = t$ where $K$ in general is the matrix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/cohs_with_poly}
+  \caption{Course structured mesh.}
+  \label{fig:pois_voronoi_struct_a}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/cohs_without_poly}
+  \caption{More refined structured mesh.}
+  \label{fig:pois_voronoi_struct_b}
+\end{subfigure}
+\caption{Structured mesh of different coarseness.}
+\label{fig:pois_voronoi_struct}
+\end{figure}
+
+
+\end{document}

@@ -1,0 +1,50 @@
+% Sample file on how to use subfiles.
+\documentclass[load_case.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Load case}
+
+
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/100_grain_diff_col}
+  \caption{}
+  \label{fig:cowc_a}
+\end{subfigure}%
+\hspace{-10mm}
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/100_grain_wcco}
+  \caption{}
+  \label{fig:cowc_b}
+\end{subfigure}%
+\hspace{-10mm}
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/100_grain_co}
+  \caption{}
+  \label{fig:cowc_c}
+\end{subfigure}
+\caption{(a) The generated microstructure. (b) Assignment of materials to grains. This is with 10\%/90\% WC/Co. (c). The grains containing WC hidded.}
+\label{fig:cohs_2}
+\end{figure}
+
+
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.8]{figures/test_case}
+\caption{This figure is informative but really ugly. Also the z in the coordinate system is weird.}
+\label{fig:test_case}
+\end{figure}
+
+
+Started this master thesis with the presumption of doing a 3d Mesher for a Voronoi topology. Then came Neper. And I got thrown into continuum mechanics.
+
+\end{document}
