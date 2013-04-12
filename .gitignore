@@ -189,3 +189,7 @@ pip-log.txt
 *.bcf
 *.top
 
+*.eps
+*.png
+*.svg
+
