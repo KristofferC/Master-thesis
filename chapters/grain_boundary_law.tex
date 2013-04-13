@@ -37,12 +37,21 @@ When modeling damage and failure of a material using cohesive element there are 
 
 \item The properties of the material after the damage initiation criteria has been fulfilled need to be prescribed. This is called the \textit{damage evolution}, it describes how the degradation of the material stiffness is changing as the material is experience more and more damage.
 \end{enumerate}
+%
+A possible scenario for the damage initiation and evolution can be seen in figure \ref{fig:tract_sep}.
 
-These three ifdsbhikfsdkjfb will be described in the next sections.
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=.6\linewidth]{./figures/tract_sep}
+\caption{An example of a traction separation law. The point $a$ is the damage initation point where the stiffness of the material start to degrade. The damage evolution is the interval covered at $b$ showing how the damage is evolving with increasing separation. In this figure a linear damage evolution. At the separation point $\delta_n^t$ the material is at a complete failure and a fracture has occurred.}
+\label{fig:tract_sep}
+\end{figure}
+
+\section{Undamaged behavior}
  
- \section{Undamaged behavior}
- 
- The behavior of the material before damage is assumed to be elastic and is written in term of a constitutive matrix as
+ The behaviour of the material before damage is assumed to be elastic and is written in term of a constitutive matrix as
  
  \[ \vec{t} = 
  \left[
@@ -67,33 +76,63 @@ K_{sn} & K_{st} & K_{ss} \\
 = \vec{K} \vec{\epsilon}.
 \]
 
-
+As can be seen from the matrix coupled behaviour of all components are supported. However, since we only have experimental data for pure shear and normal strains only the diagonal elements will be non zero in this analysis. There is also no difference between the shear directions which means $K_{tt} = K_{ss}$. From the atomistic simulations we can see that $K_{nn} = XXX$ and $K_{tt} = XXX$.
 
  
  
 
-\section{Damage initiation criteria}
+\section{Damage initiation}
+
+The damage initiation criteria is the point when the degradation of the material starts to occur. This can either be described as a function of the strain or the traction. There are two possible functions that can be used, one is based on the maximum strain or traction component and one is based on length of the strain or traction vector. For the traction criteria these functions can be expressed as
+
+\[ \max \left( \frac{\langle t_n \rangle}{t_n^0} ,\frac{ t_s }{t_s^0} ,  \frac{ t_t }{t_t^0}  \right) = 1,  \] 
+
+\[  \left( \frac{\langle t_n \rangle}{t_n^0} \right)^2 +   \left( \frac{ t_s }{t_s^0} \right)^2 +   \left( \frac{ t_t }{t_t^0} \right)^2 = 1.   \]	
+%
+Here $t_n^2, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compressions (negative tractions) do not lead to any damage. The functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criteria is used. From the atomic simulations in figure XXX we can identify $\epsilon_n^0 = XXX$ and $\epsilon_t = \epsilon_s = XXX$.
 
 \section{Damage evolution}
 
+The damage evolution describes the rate of the degradation of the material based on the separation. The current degradation of the material is completely captured in one scalar $D$. The tractions are then calculated as 
+%
+\[ \vec{t} = (1 - D) \overline{\vec{t \]
+%
+ where $\overline{\vec{t}}$ is the traction in the element that would have occurred if there was no damage in the material. Before the damage initiation criteria has been fulfilled $D = 0$. This is one major limitation to the cohesive elements. By having the damage completely described with a single scalar it is hard to capture the difference in the traction separation law for normal and shear separations that the atomic simulations has shown exist. It would be useful if the damage in the material could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user made material where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UMAT}) but doing this out of scope for this thesis.
 
 
-We will consider the uncoupled case in which only the diagonal elements in the stiffness matrix is non-zero. There is also isotropy in the shear directions such that $K_{tt} = K_{ss}$. The traction can thus be written as
-\[ [t_n, t_t, t_s] = [K_{nn} \epsilon_n, K_{tt} \epsilon_t, K_{tt} \epsilon_s \]
+
 
 From the software we can get get the a measure of how much of the traction is from the normal and shearing component. This measure is in form of a number $\phi_1$ between 0 and 1 that is defined as
 
-$ \phi_1 = \frac{2}{\pi} \arctan \left( \frac{\tau}{\langle t_n \rangle} \right) $
+begin{align} \phi_1 = \frac{2}{\pi} \arctan \left( \frac{ \sqrt{t_s^2 + t_t^2}}{\langle t_n \rangle} \right) & \Rightarrow \\
+   \underbrace{\tan\left( \phi_1\frac{ \pi}{2} \right)}_{P} \langle t_n \rangle =  \sqrt{t_s^2 + t_t^2} & \Rightarrow \\
+ P^2\langle K_{nn} \d_n \rangle^2 = K_{tt}^2 \left( \d_s^2 + \d_t^2 \right)
+\end{align}
 
-where $ \tau = \sqrt{t_s^2 + t_t^2}$. It can be seen that for pure shear tractions the value of $\phi1$ is 1 and for pure normal strain it is 0. 
+This together with 
+\[ d = \sqrt{d_n^2 + d_s^2 + d_t^2}  \]
+means we can solve for $d_n$ and $\sqrt{d_s^2 + d_t^2}$ in terms of $\phi_1$ and $d$.
 
-The following interpolation scheme was used.
+The result is 
+\[ d_n = \frac{d}{\sqrt{\left(\frac{PK_{nn}}{K_{tt}}\right)^2 + 1 }  } \]
+\[ \sqrt{d_t^2 + d_s^2} = d\sqrt{1 -\frac{1}{\left(\frac{PK_{nn}}{K_{tt}} \right)^2 + 1 } \]
 
-For a given total displacement $d = \sqrt{d_n^2 + d_s^2 + d_t^2}$ a total strain $\epsilon = \sqrt{K^2_{nn} d_n^2 + K^2_{tt} \left(d_s^2 + d_t^2 \right)}$. With the value of $ \phi1$ the displacements in the normal 
+We now calculate two different damage scalars, $D_n$ which is the damage from the pure . The total damage
 
 
-This would lead to the following curves where $\phi1$ has been varied from 0 to 1.
+$ D = 1 - (1 - D_n)(1 - D_t). $
 
+This is similar to how Abaqus calculates total damage from different damage from multiple criteria, see section 23.2.3 in the Abaqus manual.
+
+
+Using this method would give the traction separation laws as in figure \ref{fig:mixed_tract_sep} for different $\phi_1$.
+
+\begin{figure}
+\centering
+  \includegraphics[width=.6\linewidth]{./figures/mixed_tract_sep}
+\caption{The resulting traction for different $\phi_1$. The limiting cases of pure shear and pure normal displacement is shown in blue. It can be seen that the earliest fracture possible is in the case of pure normal separation which is expected. }
+\label{fig:mixed_tract_sep}
+\end{figure}
 
 
 Since the faces of the grains are meshed with triangles it 
@@ -136,18 +175,6 @@ Since we want to do calculation in the general strain case but only have access 
  
 
 The traction is calculated by $K \epsilon = t$ where $K$ in general is the matrix
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
