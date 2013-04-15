@@ -5,7 +5,22 @@
 
 \chapter{Load case}
 
+The FEM analysis that is to performed is to simulate cubic piece inside a bar experiencing a uniaxial tensile testing. \textbf{A bit about multiscale modeling, how the cube is supposed to represent a RVE.} 
 
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.6]{figures/test_case}
+\caption{This figure is informative but really ugly.}
+\label{fig:test_case}
+\end{figure}
+
+
+
+
+The way Cobolt (Co) and Tungsten Carbide (WC) is assigned to different grains is as follows. The smallest grains are set to contain Cobolt until they constitute the desired volume fraction. The rest of the grains are set to Tungsten Carbide. Cohesive elements are then inserted in the faces that are shared by either two WC grains or one WC grain and one Co grain. There are thus no cohesive element between two Co grains. The reasoning behind this is that the Co grains are usually smaller than the WC grans.  An example of the assignments of materials to a microstructure can be seen in figure \ref{fig:cowc}.
 
 \begin{figure}
 \centering
@@ -30,21 +45,13 @@
   \label{fig:cowc_c}
 \end{subfigure}
 \caption{(a) The generated microstructure. (b) Assignment of materials to grains. This is with 10\%/90\% WC/Co. (c). The grains containing WC hidded.}
-\label{fig:cohs_2}
+\label{fig:cowc}
 \end{figure}
 
 
 
 
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 0.8]{figures/test_case}
-\caption{This figure is informative but really ugly. Also the z in the coordinate system is weird.}
-\label{fig:test_case}
-\end{figure}
 
-
-Started this master thesis with the presumption of doing a 3d Mesher for a Voronoi topology. Then came Neper. And I got thrown into continuum mechanics.
 
 \end{document}

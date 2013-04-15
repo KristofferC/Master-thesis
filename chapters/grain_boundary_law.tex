@@ -5,7 +5,7 @@
 
 \chapter{Grain boundary traction separation law}
 
-From Martin we have these curves calculated with LAMPS that show the grain boundary blah blah. Figure för shear och normal vid lite olika temperaturer / hastigheter.
+\textbf{Introduction to results from Martin, atomistic simulation of the traction separation law, different velocities temperatures...}
 
 
 
@@ -89,45 +89,42 @@ The damage initiation criteria is the point when the degradation of the material
 
 \[  \left( \frac{\langle t_n \rangle}{t_n^0} \right)^2 +   \left( \frac{ t_s }{t_s^0} \right)^2 +   \left( \frac{ t_t }{t_t^0} \right)^2 = 1.   \]	
 %
-Here $t_n^2, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compressions (negative tractions) do not lead to any damage. The functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criteria is used. From the atomic simulations in figure XXX we can identify $\epsilon_n^0 = XXX$ and $\epsilon_t = \epsilon_s = XXX$.
+Here $t_n^2, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compression (negative normal traction) do not lead to any damage. The functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criteria is used. From the atomic simulations in figure XXX we can identify $\epsilon_n^0 = XXX$ and $\epsilon_t = \epsilon_s = XXX$.
 
 \section{Damage evolution}
 
-The damage evolution describes the rate of the degradation of the material based on the separation. The current degradation of the material is completely captured in one scalar $D$. The tractions are then calculated as 
+The damage evolution describes the rate of the degradation of the material based on the separation. The current degradation of the material is completely captured in one scalar $D$. The traction vector are then calculated as 
 %
-\[ \vec{t} = (1 - D) \overline{\vec{t \]
+\[ \vec{t} = (1 - D) \overline{\vec{t}} \]
 %
- where $\overline{\vec{t}}$ is the traction in the element that would have occurred if there was no damage in the material. Before the damage initiation criteria has been fulfilled $D = 0$. This is one major limitation to the cohesive elements. By having the damage completely described with a single scalar it is hard to capture the difference in the traction separation law for normal and shear separations that the atomic simulations has shown exist. It would be useful if the damage in the material could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user made material where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UMAT}) but doing this out of scope for this thesis.
+ where $\overline{\vec{t}}$ is the traction in the element that would have occurred if there was no damage in the material. Before the damage initiation criteria has been fulfilled $D = 0$. Having the damage completely described by only a scalar is one of the major limitation to the cohesive elements. This means it is hard to capture the difference in the traction separation law for normal and shear separations that the atomic simulations have shown exist. It would be useful if the damage in the material could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user made material where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UMAT}) but doing this out of scope for this thesis.
 
-
-
-
-From the software we can get get the a measure of how much of the traction is from the normal and shearing component. This measure is in form of a number $\phi_1$ between 0 and 1 that is defined as
-
-begin{align} \phi_1 = \frac{2}{\pi} \arctan \left( \frac{ \sqrt{t_s^2 + t_t^2}}{\langle t_n \rangle} \right) & \Rightarrow \\
-   \underbrace{\tan\left( \phi_1\frac{ \pi}{2} \right)}_{P} \langle t_n \rangle =  \sqrt{t_s^2 + t_t^2} & \Rightarrow \\
- P^2\langle K_{nn} \d_n \rangle^2 = K_{tt}^2 \left( \d_s^2 + \d_t^2 \right)
+If we firstly assume that we only have separations in the normal direction and want to give $D$ in table form the following procedure would be used. $K_{nn}$ is calculated as the slope of the initial elastic response. For separations larger than the damage initiation, at a specific point $(\delta_n, \sigma_n)$, $D$ is calculated as $D_f(K_{nn}, \delta_n, \sigma_n)$ where $D_f$ is the function:
+%
+\[ D_f(K, \delta, \sigma) \mapsto   1 - \frac{\sigma}{K\delta}. \]
+%
+However, in general, we do not have pure normal or pure shear separations. From Abaqus software we can get get the a measure of the relation in magnitude between the normal and shearing traction components. This measure is in form of a number $\phi_1$ between 0 and 1 that is defined as
+%
+\[ \phi_1 = \frac{2}{\pi} \arctan \left( \frac{ \tau}{\langle t_n \rangle} \right) \]
+%
+where $\tau$ is the effective shear traction $\sqrt{t_s^2 + t_t^2}$. It is also possible to get a number $\phi_2$ that gives a relation between the shear tractions but since there is no difference between the shear directions in this analysis this is not used. Using the equation for $\phi_1$ together with the equation for the effective separation,
+%
+\[ d_m = \sqrt{d_n^2 + d_s^2 + d_t^2},  \]
+%
+we can solve for the normal separation $d_n$ and the effective shear separation $ d_\tau = \sqrt{d_s^2 + d_t^2}.$ in terms of the known $\phi_1$ and $d$. The results are:
+%
+\begin{align}
+ d_n & = \frac{d_m}{\sqrt{\left(\frac{PK_{nn}}{K_{tt}}\right)^2 + 1 }  }  \\
+ d_\tau  & = d_m\sqrt{1 -\frac{1}{\left(\frac{PK_{nn}}{K_{tt}} \right)^2 + 1 }}.
 \end{align}
+%
+We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the damage scalars that for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. The issue now is how these should be combined to give an overall damage to the material. One way of doing this is by the formula,
+%
+\[ D = 1 - (1 - D_n)(1 - D_t). \]
+%
+For mixed separation it is always smaller than the individual $D_n$ and $D_t$ This way is similar to how Abaqus calculates the total damage when multiple criteria of damage are active, see section 23.2.3 in the Abaqus manual. Using this method would give traction separation laws as in figure \ref{fig:mixed_tract_sep} for different $\phi_1$. It can be seen that the border cases of pure shear and pure normal displacements are respected.
 
-This together with 
-\[ d = \sqrt{d_n^2 + d_s^2 + d_t^2}  \]
-means we can solve for $d_n$ and $\sqrt{d_s^2 + d_t^2}$ in terms of $\phi_1$ and $d$.
-
-The result is 
-\[ d_n = \frac{d}{\sqrt{\left(\frac{PK_{nn}}{K_{tt}}\right)^2 + 1 }  } \]
-\[ \sqrt{d_t^2 + d_s^2} = d\sqrt{1 -\frac{1}{\left(\frac{PK_{nn}}{K_{tt}} \right)^2 + 1 } \]
-
-We now calculate two different damage scalars, $D_n$ which is the damage from the pure . The total damage
-
-
-$ D = 1 - (1 - D_n)(1 - D_t). $
-
-This is similar to how Abaqus calculates total damage from different damage from multiple criteria, see section 23.2.3 in the Abaqus manual.
-
-
-Using this method would give the traction separation laws as in figure \ref{fig:mixed_tract_sep} for different $\phi_1$.
-
-\begin{figure}
+\begin{figure}[h]
 \centering
   \includegraphics[width=.6\linewidth]{./figures/mixed_tract_sep}
 \caption{The resulting traction for different $\phi_1$. The limiting cases of pure shear and pure normal displacement is shown in blue. It can be seen that the earliest fracture possible is in the case of pure normal separation which is expected. }
@@ -135,12 +132,18 @@ Using this method would give the traction separation laws as in figure \ref{fig:
 \end{figure}
 
 
-Since the faces of the grains are meshed with triangles it 
 
+\section{Insertion of cohesive elements into mesh}
 
-The way these cohesive elements are inserted into the mesh output from Neper is as follows. 
+From Neper we get a mesh of the generated microstructure but it does not have the possibility of inserting the cohesive elements between all the grains so this has to be done. A script was written that parsed the generated mesh file and inserted the elements. This is done in the following way. 
+%
+\begin{itemize}
+\item Every face is shared by two grains. The nodes in a face are duplicated twice and all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes.
+\item The two new faces are then connected to each other using six node cohesive wedge elements. This is repeated for all faces in the microstructure. 
+\end{itemize}
+%
+An example of the insertion of these cohesive elements between two grains can be seen in figure \ref{fig:cohs_2}. The grains have for clarity of the figure been separated. In the start of an actual analysis the cohesive element have no width. A figure of the insertion of cohesive element for a complete micro structure is shown in figure \ref{fig:cohs_large}.
 
-Every face is shared by two grains. The nodes in a face are duplicated twice and all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes. The two new faces are then connected to each other using six node cohesive wedge elements. This is repeated for all faces in the microstructure. An example of the insertion of these cohesive elements between two grains can be seen in figure \ref{fig:cohs_2}. The grains have for clarity of the figure been separated. In the start of an actual analysis the cohesive element have no width.
 \begin{figure}
 \centering
 \begin{subfigure}[b]{.4\textwidth}
@@ -169,31 +172,22 @@ Every face is shared by two grains. The nodes in a face are duplicated twice and
 
 
 
-
-Since we want to do calculation in the general strain case but only have access to the boundary cases of pure shear and pure normal strain some sort of interpolation is needed. The method that has been used is described here.
-
- 
-
-The traction is calculated by $K \epsilon = t$ where $K$ in general is the matrix
-
-
-
 \begin{figure}
 \centering
 \begin{subfigure}[b]{.5\textwidth}
   \centering
   \includegraphics[width=.5\linewidth]{./figures/cohs_with_poly}
   \caption{Course structured mesh.}
-  \label{fig:pois_voronoi_struct_a}
+  \label{fig:cohs_large_a}
 \end{subfigure}%
 \begin{subfigure}[b]{.5\textwidth}
   \centering
   \includegraphics[width=.5\linewidth]{./figures/cohs_without_poly}
   \caption{More refined structured mesh.}
-  \label{fig:pois_voronoi_struct_b}
+  \label{fig:cohs_large_b}
 \end{subfigure}
 \caption{Structured mesh of different coarseness.}
-\label{fig:pois_voronoi_struct}
+\label{fig:cohs_large}
 \end{figure}
 
 
