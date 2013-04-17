@@ -1,0 +1,112 @@
+% Sample file on how to use subfiles.
+\documentclass[fem.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Introduction to finite element method}
+
+Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems. This is later put into the context of a 
+
+\begin{enumerate}
+\item Reformulate the problem as a weak formulation.
+\item Discretize the problem. This is done by constructing a finite dimensional space 
+\item Solve the discrete problem.
+
+\end{enumerate}
+
+\section{Galerkin method}
+\label{sec:galerkin}
+Assuming that we have the problem in it's weak form , that is 
+
+\[  a(u,v) = f(v) \quad \forall v \in X \]
+
+The space $\Omega$ is then discretized into a finite dimensional subspace $\Omega_h$ of dimension $d$ with the basis $\{e_1, \ldots, e_d\}$. The function $v$ can now be written as a linear combination of the basis
+
+\[ v = \sum_{i=1}^d n_i e_i, \quad n_i \in \mathbb{R} \]
+
+The discrete representation of the problem, where we have moved from the space $X$ to the discrete space $X_h$, is formulated as
+%
+\begin{equation} 
+    a(u_h, v) = f(v) \quad \forall v \in X_h
+    \label{eqn:disc_prob}
+\end{equation}
+%
+and in particular
+\begin{equation} 
+    a(u_h, e_j) = f(e_j) \quad j = 1, \ldots, d
+    \label{eqn:disc_part}
+\end{equation}
+
+Representing $u_h$ in the new basis gives
+\begin{equation} 
+    a \left(\sum_{i=1}^d \eta_i e_i, e_j\right) = f(e_j) \quad j = 1, \ldots, d, \quad \eta_i \in \mathbb{R}
+    \label{eqn:u_new_base}
+\end{equation}
+
+Exploiting the bilinearity in $a$ this can be rewritten as 
+\begin{equation} 
+    \sum_{i=1}^d a \left( e_i, e_j\right)\eta_i = f(e_j) \quad j = 1, \ldots, d, \quad 
+    \label{eqn:final}
+\end{equation}
+
+This can in condensed form be written as
+\begin{equation} 
+    A \eta = f
+    \label{eqn:cond}
+\end{equation}
+where $A_{ij} = a(e_i, e_j)$ and $f_j = f(e_j)$. $A$ is commonly known as the \textit{stiffness matrix} and 
+
+This system of equations can then be solved by direct or iterative methods.%
+
+
+\section{fhdsif}
+In the structural mechanical problems the momentum equation is solved
+%
+\begin{equation} 
+   \sigma_{ji,j} + f_i = 0
+    \label{eqn:cond}
+\end{equation}
+%
+
+%
+\begin{equation} 
+  \int_\Omega  v_i\sigma_{ji,j} + \int_\Omega v_i f_i = 0
+    \label{eqn:cond}
+\end{equation}
+%
+
+%
+\begin{equation} 
+  \int_\Omega  v_{i,j} \sigma_{ji}  = \int_\Gamma v_i t_i + \int_\Omega v_i f_i
+    \label{eqn:weak}
+\end{equation}
+%
+where traction vector $t_i = \sigma_{ij}n_j$ has been introduced. This is the weak formulation of the original problem. It can be shown that this has the same solutions.
+
+By using a constitutive relations and a discritization of the space we can follow the same method as described in the section \ref{sec:galerkin}, an equation of the same type as  \ref{eqn:final} can be written. As an example if we assume linear elasticity we can write
+
+\[ \sigma_{ij} = C_{ijkl} \epsilon_{kl} \quad  \epsilon_{kl}(u) = \frac{1}{2} \left(u_{k,l} + u_{l,k}\right)  \]
+
+\[ v_{i,j} \sigma_{i,j} =  \epsilon_{ij}(v) \sigma_{i,j} \]
+
+By expanding $v$ into $\sum n_i e_i$ and $b_i = n_{i,j}$  = 
+
+\begin{equation} 
+  \int_\Omega  \epsilon_{ij}(v)  C_{ijkl} \epsilon_{kl}(u)  = \int_\Gamma v_m t_m + \int_\Omega v_m f_m
+    \label{eqn:weak}
+\end{equation}
+%
+
+By expanding $v$ and $u$ into a discritized base and running through the same argument as in section we end up with the expression:
+
+\begin{equation} 
+\sum_{o = 1}^d \left( \int_\Omega  \epsilon_{ij}(N_p)  C_{ijkl} \epsilon_{kl}(N_o)\right) a_{om}  = \int_\Gamma N_p t_m + \int_\Omega N_p f_m
+    \quad p = 1, ..., D, \quad m = 1,2,3
+\end{equation}
+
+\begin{equation} 
+A_{po} a_{om} = f_{pm}
+\end{equation}
+
+
+\end{document}
