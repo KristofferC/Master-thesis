@@ -22,6 +22,7 @@
 \usepackage{microtype} % Magically improves typesetting for pdflatex
 \usepackage{subfiles} % Convenient use of subfiles in documents. Using \subfile is optional. See README
 \usepackage{hyperref} % Required for in document links and document metadata.
+\usepackage{autonum}
 \usepackage[swedish, english]{babel}
 
 % More or less required packages
@@ -61,7 +62,7 @@
 \copyrightyear{2013}
 
 % You should scale the figure according to textwidth and or paperheight.
-\coverfigure{\includegraphics[width=0.5\paperheight,height=0.5\paperheight]{figures/Grains3}}
+\coverfigure{\includegraphics[width=0.5\paperheight,height=0.5\paperheight]{./figures/cohs_without_poly}}
 \covercaption{A Voronoi tesselation of a cube containing 1000 grains. Rendered with the Neper software.}
 
 \firstabstract{\subfile{chapters/abstract}}
@@ -97,6 +98,7 @@
 % Highly recommended to put contents into subfiles, or use \input.
 \subfile{chapters/introduction}
 \subfile{chapters/micro_gen}
+\subfile{chapters/fem}
 \subfile{chapters/meshing_micro}
 \subfile{chapters/grain_boundary_law}
 \subfile{chapters/load_case}
