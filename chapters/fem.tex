@@ -5,17 +5,27 @@
 
 \chapter{Introduction to finite element method}
 
-Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems. This is later put into the context of a 
+Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems. This is later exemplified by applying it to a linear elasticity problem. 
 
-\begin{enumerate}
-\item Reformulate the problem as a weak formulation.
-\item Discretize the problem. This is done by constructing a finite dimensional space 
-\item Solve the discrete problem.
 
-\end{enumerate}
 
 \section{Galerkin method}
 \label{sec:galerkin}
+
+In general the steps in the Galerkin method are:
+\begin{enumerate}
+\item Find the weak formulation of the problem. A weak fomulation is when the equation is not required to hold pointwise, which is usually what one means when talking about a solution to an equation, but instead it should hold with respect to certain test functions. This is easier to illustrate with an example. Consider the Poisson equation
+
+
+\begin{align}
+-\Delta u & = f, \quad \text{in} \Omega, \\
+u & = 0, \quad  \text{on} \Gamma
+\end{align}
+
+ It should solutions that hold pointwise are also weak solutions but not vice versa. 
+\item Discretize the problem. This is done by constructing a finite dimensional space 
+\item Solve the discrete problem.
+\end{enumerate}
 Assuming that we have the problem in it's weak form , that is 
 
 \[  a(u,v) = f(v) \quad \forall v \in X \]
@@ -56,7 +66,7 @@ This can in condensed form be written as
 \end{equation}
 where $A_{ij} = a(e_i, e_j)$ and $f_j = f(e_j)$. $A$ is commonly known as the \textit{stiffness matrix} and 
 
-This system of equations can then be solved by direct or iterative methods.%
+This system of equations can then be solved by direct or iterative methods. With certain requirements on the bilinear form it can be showed that this equation has a unique solution (see Lax-Milgram theorem).
 
 
 \section{fhdsif}
