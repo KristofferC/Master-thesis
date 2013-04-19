@@ -5,7 +5,7 @@
 
 \chapter{Introduction to finite element method}
 
-Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems. This is later exemplified by applying it to a linear elasticity problem. 
+Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems. The exact requirements on the This is later exemplified by applying it to a linear elasticity problem.
 
 
 
@@ -14,109 +14,158 @@ Here follows a short introduction to the basic principles behind the Galerkin fi
 
 In general the steps in the Galerkin method are:
 \begin{enumerate}
-\item Find the weak formulation of the problem. A weak fomulation is when the equation is not required to hold pointwise, which is usually what one means when talking about a solution to an equation, but instead it should hold with respect to certain test functions. This is easier to illustrate with an example. Consider the Poisson equation
+\item \emph{Find the weak formulation of the problem.} The weak formulation does not required the solution to the equation to hold pointwise but instead it should hold with respect to certain test functions. An example to illustrate this is useful. Consider the Poisson equation on a bounded domain $\Omega \subset \mathbb{R}^d$ with a boundary $\Gamma$, and
 
+
+\begin{equation}
+\label{eqn:poisson}
+\left\{ \begin{array}{ll}
+u_{,ii} & = f, \quad \text{in } \Omega, \\
+u & = 0, \quad  \text{on } \Gamma. \end{array} \right.
+\end{equation}
+Let $v \in V$ be an arbitrary function where $V$ is the Hilbert space $H_0^1(\Omega)$ where the zero in the subscript denotes that the functions should vanish on the boundary. Multiplying \ref{eqn:poisson} by $v$, integrating over $\Omega$ and using Green's identity gives:
 
 \begin{align}
--\Delta u & = f, \quad \text{in} \Omega, \\
-u & = 0, \quad  \text{on} \Gamma
+\underbrace{\int_\Omega u_{,i} v_{,i}}_{a(u,v)} = \cancel{\int_\Gamma v u_{,i} n_i } \underbrace{- \int_\Omega fv}_{f(v)}, \quad \forall v \in V.
 \end{align}
 
- It should solutions that hold pointwise are also weak solutions but not vice versa. 
-\item Discretize the problem. This is done by constructing a finite dimensional space 
-\item Solve the discrete problem.
-\end{enumerate}
-Assuming that we have the problem in it's weak form , that is 
+The integral over the boundary is zero due to $v$ being zero everywhere on it. A function $u$ which satisfies this relation is called a weak solution to the original problem. In general the weak form can be written as
+\begin{equation}
+\label{eqn_weak}
+    a(u,v) = f(v), \quad \forall v \in V
+\end{equation}
+where $a(.,.)$ is of bilinear form and $f(.)$ is of linear form. The purpose of rewriting the equation in weak form is that the requirement on the smoothness of the function $u$ has been reduced. 
 
-\[  a(u,v) = f(v) \quad \forall v \in X \]
-
-The space $\Omega$ is then discretized into a finite dimensional subspace $\Omega_h$ of dimension $d$ with the basis $\{e_1, \ldots, e_d\}$. The function $v$ can now be written as a linear combination of the basis
-
-\[ v = \sum_{i=1}^d n_i e_i, \quad n_i \in \mathbb{R} \]
-
-The discrete representation of the problem, where we have moved from the space $X$ to the discrete space $X_h$, is formulated as
+\item \emph{Discretize the problem.} This is done by constructing a finite dimensional subspace of $V$ denoted $V_h$. Let $\{N_1, \ldots, N_D \}$  be a basis for the subspace. The function $v$ can now be written as a linear combination of the basis
 %
 \begin{equation} 
-    a(u_h, v) = f(v) \quad \forall v \in X_h
-    \label{eqn:disc_prob}
+v =  c_\beta N_\beta, \quad c_\beta \in \mathbb{R} 
 \end{equation}
 %
-and in particular
+Here we introduce the notation that greek letter indices are taken from the range 1 to $D$. The discrete analogue of the weak form \ref{eqn_weak} 
+is then written as: Find $u_h \in V_h$ such that
+%
 \begin{equation} 
-    a(u_h, e_j) = f(e_j) \quad j = 1, \ldots, d
+\label{eqn_disc_analo}
+  a(u_h,v) = f(v) \quad \forall v \in V_h.
+\end{equation}
+Since this should hold for all admissible $v$ it should hold true componentwise:
+\begin{equation} 
+    a(u_h, N_\beta) = f(N_\beta).
     \label{eqn:disc_part}
 \end{equation}
-
+%
 Representing $u_h$ in the new basis gives
 \begin{equation} 
-    a \left(\sum_{i=1}^d \eta_i e_i, e_j\right) = f(e_j) \quad j = 1, \ldots, d, \quad \eta_i \in \mathbb{R}
+    a \left(a_\beta N_\alpha, N_\beta \right) = f(N_\beta ) \quad a_\alpha \in \mathbb{R}
     \label{eqn:u_new_base}
 \end{equation}
-
-Exploiting the bilinearity in $a$ this can be rewritten as 
+%
+Since $a$ is bilinear this can be rewritten as 
 \begin{equation} 
-    \sum_{i=1}^d a \left( e_i, e_j\right)\eta_i = f(e_j) \quad j = 1, \ldots, d, \quad 
+    a \left( N_\alpha, N_\beta \right)a_\alpha = f(N_\beta)
     \label{eqn:final}
 \end{equation}
-
+%
 This can in condensed form be written as
 \begin{equation} 
-    A \eta = f
+    \mathbf{K} \vec{a} = \vec{b}
     \label{eqn:cond}
 \end{equation}
-where $A_{ij} = a(e_i, e_j)$ and $f_j = f(e_j)$. $A$ is commonly known as the \textit{stiffness matrix} and 
-
-This system of equations can then be solved by direct or iterative methods. With certain requirements on the bilinear form it can be showed that this equation has a unique solution (see Lax-Milgram theorem).
+where $K_{\alpha \beta} = a(N_\alpha, N_\beta)$ is a $D \times D$ matrix and $b_\beta = f(N_\beta)$ is a vector with $D$ elements. $\mathbf{K}$ is commonly denoted as the \textit{stiffness matrix} and $b$ the load vector.
 
 
-\section{fhdsif}
-In the structural mechanical problems the momentum equation is solved
+\item \textit{Solve the discrete problem.}. In practice this means to solve the system of equations \ref{eqn:cond}. This can be solved by direct (Gauss elimination) or iterative methods (Jacobi method, Gauss-Seidel method). Generally the functions constituting the basis are chosen such that they are non zero only in a small region of $V_h$. This means that the matrix $\mathbf{K}$ will be sparse and can be solved much faster than a general dense $D \times D$ system.
+
+\end{enumerate}
+
+The way the subspace $V_h$ is constructed deserves some more attention.   A common way is to divide the domain $\Omega$ into a set (called a \textit{mesh})  of geometrical solids $K_i$ such that
 %
 \begin{equation} 
-   \sigma_{ji,j} + f_i = 0
+    \Omega = \bigcup_{i = 1}^D K_i
+\end{equation}
+%
+If the dimension of $\Omega$ is 2 and the boundary $\Gamma$ is piecewise linear, one way of constructing such a mesh is by triangles where no vertex lies on the edge of another triangle. The vertices of the triangles are called \textit{nodes}. These nodes are assigned a unique number $P_i \in \mathbb{N}$ as an identifier. $P_i$ can then be used as a parameter to describe the function $v$. The space $V_h$ can be constructed as for example the set of all linear functions on every triangle $P_o$ satisfying the boundary conditions on $\Gamma$. The basis can be written as
+%
+\begin{equation} 
+    N_i(P_j) = \delta_{ij}, \quad i,j = 1,\ldots, D
+\end{equation}
+%
+We can see that $N_i$ is only non zero for triangles having the node $P_i$ as one of its vertices. Figure \ref{fig:tri_mesh} shows an example of this where only the shaded triangles gets a contribution from $N_i$. This means that the stiffness matrix will in general be sparse. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 1.0]{figures/tri_mesh}
+\caption{Basis function.}
+\label{fig:tri_mesh}
+\end{figure}
+
+
+
+\section{FEM for linear elasticity}
+As a relevant example, the derivation of the stiffness matrix and load vector for a linear elastic mechanics problem is given. The equation that is to be solved is Cauchys momentum equation on a domain $\Omega$ with a given traction $g_i = \sigma_{ij} \hat{n}_j$ on the boundary $\Gamma$,
+\begin{equation} 
+\left\{
+\begin{array}{ll}
+   \sigma_{ji,j} + f_i = 0 \quad \text{on } \Omega \\
+   t_i = g_i \quad \text{on } \Gamma \end{array} \right.
     \label{eqn:cond}
 \end{equation}
 %
-
+As described before the equation is multiplied by a kinetically admissible function $v$ and an integration over the domain is performed,
 %
 \begin{equation} 
-  \int_\Omega  v_i\sigma_{ji,j} + \int_\Omega v_i f_i = 0
+  \int_\Omega  v_i\sigma_{ji,j} \id x + \int_\Omega v_i f_i \id x = 0, 
+  \int
     \label{eqn:cond}
 \end{equation}
 %
-
+Using Gauss identity and the boundary condition of the problem gives
 %
 \begin{equation} 
-  \int_\Omega  v_{i,j} \sigma_{ji}  = \int_\Gamma v_i t_i + \int_\Omega v_i f_i
+  \int_\Omega  v_{i,j} \sigma_{ji} \id x  - \int_\Omega v_i f_i \id x - \int_\Gamma v_i g_i \id s = 0
     \label{eqn:weak}
 \end{equation}
 %
-where traction vector $t_i = \sigma_{ij}n_j$ has been introduced. This is the weak formulation of the original problem. It can be shown that this has the same solutions.
-
-By using a constitutive relations and a discritization of the space we can follow the same method as described in the section \ref{sec:galerkin}, an equation of the same type as  \ref{eqn:final} can be written. As an example if we assume linear elasticity we can write
-
-\[ \sigma_{ij} = C_{ijkl} \epsilon_{kl} \quad  \epsilon_{kl}(u) = \frac{1}{2} \left(u_{k,l} + u_{l,k}\right)  \]
-
-\[ v_{i,j} \sigma_{i,j} =  \epsilon_{ij}(v) \sigma_{i,j} \]
-
-By expanding $v$ into $\sum n_i e_i$ and $b_i = n_{i,j}$  = 
-
-\begin{equation} 
-  \int_\Omega  \epsilon_{ij}(v)  C_{ijkl} \epsilon_{kl}(u)  = \int_\Gamma v_m t_m + \int_\Omega v_m f_m
-    \label{eqn:weak}
+ This is the weak formulation of the original problem. If we assume linear elasticity we can write the constitutive relations between the stress and strain and the relation between strain and displacement as
+%
+\begin{equation}
+\label{eqn:const} 
+\sigma_{ij} = C_{ijkl} \epsilon_{kl} \quad  \epsilon_{kl}(u) = \frac{1}{2} \left(u_{k,l} + u_{l,k}\right). 
 \end{equation}
 %
-
-By expanding $v$ and $u$ into a discritized base and running through the same argument as in section we end up with the expression:
-
+Due to symmetry in $\sigma_{ij}$ and $\epsilon_{ij}$ the stiffness tensor must satisfy $C_{ijkl} = C_{ijlk}$ and thus we have the following relation.
+%
+\begin{equation}
+\label{eqn:symm}
+ C_{ijkl}\epsilon_{kl} (u) = C_{ijkl}\frac{1}{2} \left(u_{k,l} + u_{l,k}\right) = C_{ijkl}u_{k,l} 
+\end{equation}
+%
+Inserting \ref{eqn:const} and \ref{eqn:symm} into \ref{eqn:weak} gives
+%
 \begin{equation} 
-\sum_{o = 1}^d \left( \int_\Omega  \epsilon_{ij}(N_p)  C_{ijkl} \epsilon_{kl}(N_o)\right) a_{om}  = \int_\Gamma N_p t_m + \int_\Omega N_p f_m
-    \quad p = 1, ..., D, \quad m = 1,2,3
+  \int_\Omega  v_{i,j} C_{ijkl} u_{k,l} \id x = \int_\Gamma v_i g_i \id s + \int_\Omega v_i f_i \id x
+    \label{eqn:weak_2}
+\end{equation}
+%
+By moving to the finite dimensional subspace $V_h$, and rewriting $v_h$ and $u_h$ into the basis of that subspace we end up with the expression:
+%
+\begin{equation} 
+\int_\Omega  N_{\beta,j}v_{i\beta}   C_{ijkl} N_{\alpha,l} u_{k\alpha} \id x -\int_\Omega N_\beta v_{i\beta} f_i - \int_\Gamma N_\beta v_{i\beta} g_i = 0
+\end{equation}
+This can be rewritten as
+\begin{equation} 
+\left( K_{\beta i \alpha k}u_{\alpha k} - f_{i \beta} \right) v_{i\beta} = 0,
+\end{equation}
+where
+\begin{equation} 
+K_{\beta i \alpha k} = \int_\Omega  N_{\beta,j}C_{ijkl}N_{\alpha,l}  \id x , \quad f_{i \beta} = \int_\Gamma N_\beta g_i + \int_\Omega N_\beta f_i.
+\end{equation}
+Since this should hold for every kinematically admissible $v_i$ we have the following linear equations to solve:
+\begin{equation} 
+K_{\beta i \alpha k}u_{k \alpha} - f_{\beta i} = 0
 \end{equation}
 
-\begin{equation} 
-A_{po} a_{om} = f_{pm}
-\end{equation}
 
 
 \end{document}
