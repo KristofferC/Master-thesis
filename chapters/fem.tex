@@ -5,9 +5,7 @@
 
 \chapter{Introduction to finite element method}
 
-Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems. The exact requirements on the This is later exemplified by applying it to a linear elasticity problem.
-
-
+Here follows a short introduction to the basic principles behind the Galerkin finite element method for elliptic problems.  This method is later exemplified by applying it to a linear elasticity problem.
 
 \section{Galerkin method}
 \label{sec:galerkin}
@@ -103,7 +101,7 @@ We can see that $N_i$ is only non zero for triangles having the node $P_i$ as on
 
 
 \section{FEM for linear elasticity}
-As a relevant example, the derivation of the stiffness matrix and load vector for a linear elastic mechanics problem is given. The equation that is to be solved is Cauchys momentum equation on a domain $\Omega$ with a given traction $g_i = \sigma_{ij} \hat{n}_j$ on the boundary $\Gamma$,
+As a relevant example, the derivation of the stiffness matrix and load vector for a linear elastic mechanics problem is given. The equation that is to be solved is Cauchys momentum equation on a domain $\Omega$ with a given traction $t_i = \sigma_{ij} \hat{n}_j$ on the boundary $\Gamma$,
 \begin{equation} 
 \left\{
 \begin{array}{ll}
@@ -163,7 +161,7 @@ K_{\beta i \alpha k} = \int_\Omega  N_{\beta,j}C_{ijkl}N_{\alpha,l}  \id x , \qu
 \end{equation}
 Since this should hold for every kinematically admissible $v_i$ we have the following linear equations to solve:
 \begin{equation} 
-K_{\beta i \alpha k}u_{k \alpha} - f_{\beta i} = 0
+K_{\beta i \alpha k}u_{\alpha k} - f_{\beta i} = 0
 \end{equation}
 
 

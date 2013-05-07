@@ -5,7 +5,52 @@
 
 \chapter{Meshing of microstructure}
 
-In order to do a FEM analysis of the generated microstructure it need to be meshed. \textbf{A bit here about Neper, say it generates a mesh of tetrahedrons conforming to grain boundaries }
+In order to do a FEM analysis of the generated microstructure it need to be meshed. To generate the mesh the same software that were generated the tessellation was used. Neper uses a scheme to generate a mesh in which it starts meshing in the lowest dimension and then uses these elements as seed to generate  Firstly, a node is created at all vertices. Using these nodes as seeds the edges are 
+
+
+One problem in meshing a Voronoi tessellation is that it is likely to contain faces that are smaller than the desired characteristic size of the finite volume elements that make up the mesh. One solution to this is to have the mesh more refined in those    parts but this will lead to a significant increase in the total number of elements in the mesh. Another method is to change the shape of the grains in such a way that the small faces and edges are removed but the general shape of the grain is preserved. The latter method is what the Neper software use. This can be seen if one carefully compares the unmeshed microstructure in figure \ref{fig:pois_voronoi} to the meshed in figure \ref{fig:pois_voronoi_mesh}. Some of the small faces and edges in the unmeshed case have been removed in the meshing process. A detailed description of the algorithm used to reshape the grains can be read in the referenced paper.
+
+
+ 
+ \begin{figure}
+\centering
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/img_body_mesh.png}
+  \caption{All grains shown.}
+  \label{fig:pois_voronoi_a_mesh}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/img_nobody_mesh.png}
+  \caption{Grains that are part of the domain boundary hidden.}
+  \label{fig:pois_voronoi_b_mesh}
+\end{subfigure}
+\caption{Unstructured mesh of a Voronoi tessellation containing 100 grains bounded by a cube}
+\label{fig:pois_voronoi_mesh}
+\end{figure}
+
+
+ \textbf{A bit here about Neper, say it generates a mesh of tetrahedrons conforming to grain boundaries }
+
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/c3d4}
+  \caption{Four node tetrahedral element C3D4}
+  \label{fig:mesh_a}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/c3d10}
+  \caption{Ten node tetrahedral element C3D10}
+  \label{fig:mesh_b}
+\end{subfigure}
+\caption{Tetrahedral element of a) order 1 and b) order 2}
+\label{fig:mesh}
+\end{figure}
 
 
 
@@ -30,27 +75,6 @@ Another way of meshing the microstructure, which would be computationally fast a
 \label{fig:mesh}
 \end{figure}
 
-One problem in meshing a Voronoi tessellation is that it is likely to contain faces that are smaller than the desired characteristic size of the finite volume elements that make up the mesh. One solution to this is to have the mesh more refined in those    parts but this will lead to a significant increase in the total number of elements in the mesh. Another method is to change the shape of the grains in such a way that the small faces and edges are removed but the general shape of the grain is preserved. The latter method is what the Neper software use. This can be seen if one carefully compares the unmeshed microstructure in figure \ref{fig:pois_voronoi} to the meshed in figure \ref{fig:pois_voronoi_mesh}. Some of the small faces and edges in the unmeshed case have been removed in the meshing process. A detailed description of the algorithm used to reshape the grains can be read in the referenced paper.
-
-
- 
- \begin{figure}
-\centering
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/img_body_mesh.png}
-  \caption{All grains shown.}
-  \label{fig:pois_voronoi_a_mesh}
-\end{subfigure}%
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/img_nobody_mesh.png}
-  \caption{Grains that are part of the domain boundary hidden.}
-  \label{fig:pois_voronoi_b_mesh}
-\end{subfigure}
-\caption{Unstructured mesh of a Voronoi tessellation containing 100 grains bounded by a cube}
-\label{fig:pois_voronoi_mesh}
-\end{figure}
 
 
 \end{document}
