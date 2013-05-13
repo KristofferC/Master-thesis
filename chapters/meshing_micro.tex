@@ -5,7 +5,39 @@
 
 \chapter{Meshing of microstructure}
 
-In order to do a FEM analysis of the generated microstructure it need to be meshed. To generate the mesh the same software that were generated the tessellation was used. Neper uses a scheme to generate a mesh in which it starts meshing in the lowest dimension and then uses these elements as seed to generate  Firstly, a node is created at all vertices. Using these nodes as seeds the edges are 
+In order to do a finite element analysis the generated microstructure need to be meshed. A mesh is a partition of the a structure into smaller 
+
+One way of creating such a mesh, which would be computationally fast and simple to implement, would be to ignore the shape of the grains and use a structured mesh of hexahedral elements. Each element would then be said to be a part of that grain which occupies most of its volume. With a reduction in the size of the hexahedrons the shapes of the grains are better approximated. Example of such meshes can be seen in figure \ref{fig:pois_voronoi_mesh_cube}.
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/img_body_mesh_cube}
+  \caption{}
+  \label{fig:mesh_a}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/img_body_mesh_cube_fine}
+  \caption{}
+  \label{fig:mesh_b}
+\end{subfigure}
+\caption{Structured mesh of different coarseness.}
+\label{fig:mesh}
+\end{figure}
+
+A refinement of having each finite element belong to one grain would be to not let all the Gauss points in the element be considered a part of the same grain. If an element is intersected by two or more grains the Gauss points inside that element could be assigned to the grain they are spatially located in. This has been done in \cite{Nygards20031049}, \cite{Cailletaud2003351} and \cite{Barbe2001513}. There are however multiple drawbacks to using a structured mesh. 
+
+
+
+ In some cases, for example \cite{Bohlke201011}. 
+
+
+ the result is not significantly different when using a structured or unstructured mesh, even if the same number of degrees of freedom is used in the analysis. However, in other cases such as \cite{Li20091163} it was found that when calculating the elasto-viscoplastic response of polycrystalline microstructures they could reduce the number of elements and still get a convergent result if they used a conforming unstructured mesh. Since Neper has the capability of making a mesh conforming to the grain boundaries that type of mesh will be used. 
+
+
+ To generate the mesh the same software that were generated the tessellation was used. Neper uses a scheme to generate a mesh in which it starts meshing in the lowest dimension and then uses these elements as seed to generate  Firstly, a node is created at all vertices. Using these nodes as seeds the edges are 
 
 
 One problem in meshing a Voronoi tessellation is that it is likely to contain faces that are smaller than the desired characteristic size of the finite volume elements that make up the mesh. One solution to this is to have the mesh more refined in those    parts but this will lead to a significant increase in the total number of elements in the mesh. Another method is to change the shape of the grains in such a way that the small faces and edges are removed but the general shape of the grain is preserved. The latter method is what the Neper software use. This can be seen if one carefully compares the unmeshed microstructure in figure \ref{fig:pois_voronoi} to the meshed in figure \ref{fig:pois_voronoi_mesh}. Some of the small faces and edges in the unmeshed case have been removed in the meshing process. A detailed description of the algorithm used to reshape the grains can be read in the referenced paper.
@@ -54,26 +86,8 @@ One problem in meshing a Voronoi tessellation is that it is likely to contain fa
 
 
 
-Another way of meshing the microstructure, which would be computationally fast and simple would be to ignore the shape of the grains and use a structured mesh of hexahedral elements. Each element would then be said to be a part of that grain which occupies most of its volume. With a reduction in the size of the hexahedrons the grain boundaries are better approximated.   Example of such meshes can be seen in figure \ref{fig:pois_voronoi_mesh_cube}. A refinement to this would be to let the Gauss points in the element not all be part of the same grain. If an element is intersected by two or more grains the Gauss points inside that element could be assigned to the grain they are spatially located in. This has been done in \cite{Nygards20031049}, \cite{Cailletaud2003351} and \cite{Barbe2001513}. In some cases, for example \cite{Bohlke201011}, the result is not significantly different when using a structured or unstructured mesh, even if the same number of degrees of freedom is used in the analysis. However, in other cases such as \cite{Li20091163} it was found that when calculating the elasto-viscoplastic response of polycrystalline microstructures they could reduce the number of elements and still get a convergent result if they used a conforming unstructured mesh. Since Neper has the capability of making a mesh conforming to the grain boundaries that type of mesh will be used. 
 
 
-\begin{figure}
-\centering
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/img_body_mesh_cube}
-  \caption{Course structured mesh.}
-  \label{fig:mesh_a}
-\end{subfigure}%
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/img_body_mesh_cube_fine}
-  \caption{More refined structured mesh.}
-  \label{fig:mesh_b}
-\end{subfigure}
-\caption{Structured mesh of different coarseness.}
-\label{fig:mesh}
-\end{figure}
 
 
 

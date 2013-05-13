@@ -5,22 +5,70 @@
 
 \chapter{Introduction}
 
-\textbf{Stuff about WC/Co, where it is used, previous work}.
+
+
+ \begin{figure}
+\centering
+
+\begin{subfigure}{.1\textwidth}
+  \centering
+  \includegraphics[width=.2\linewidth]{./figures/macro.png}
+  \caption{}
+  \label{fig:macro}
+\end{subfigure}
+\label{fig:macro}
+\scalebox{1.5}{$\boldsymbol{\longrightarrow}$}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  \includegraphics[width=.6\linewidth]{./figures/CrystalGrain.png}
+  \caption{}
+  \label{fig:meso}
+\end{subfigure}%
+\scalebox{1.5}{$\boldsymbol{\longrightarrow}$}
+\begin{subfigure}{.33\textwidth}
+  \centering
+  \includegraphics[width=.6\linewidth]{./figures/micro.jpg}
+  \caption{}
+  \label{fig:micro}
+\end{subfigure}%
+\caption{a) Macro, b) meso, c) micro\cite{Ozawa:ko5009}}
+
+\end{figure}
+
 
 Many materials
 
-In for example polycrystalline materials di
 
 
-generally determined by experiments made on bulk materials. These are materials at the macroscopic level. However, these properties
-are the result of 
 
-If one correctly models the physical laws that are relevant at the mesoscale the macroscale properties should 
+generally determined by experiments made on bulk materials. These are materials at the macroscopic level. However in the case of heterogeneous materials, these properties are the result of statistical averages of physic 
+
+
+
+If one correctly models the physical laws that are relevant at the mesoscale the properties at the macroscale should be extractable as the model gets large enough for the statistical differences in the   of  to average out.
+
+Being able to model the materials at the mesoscale is useful since it enables us to see how changes in the  predictions for the macroscopic behaviour for 
+
+This allows for doing something called in order to determine what 
+
+ result if the model one is large enough. Such a model is known as a \textit{representative volume element} or in short RVE.
+ 
+ 
+By being able to describe the materials at 
+
+In order to  
 
 In this thesis the Voronoi tesselation is used to generate a microstructure which exihibit similar distribution in grain size as many polycrystalline materials. 
 The generation of the tesselation and the meshing of it is done using thee open source program Neper.
+
+The resulting mesh was then used to conduct a an analysis trying to simulate a uniaxial stress test on
+
+An introduction to cohesive elements in Abaqus is given and a 
  and mesh the resulting microstructure with a mesh conforming to the grain boundaries. A script was written to parse this mesh
  and insert new element between the grains. These elements are used to simulate the 
+
+
+In this Master's theses an enxamble of microstructures was generated using the open software Ne
 
 %Finite element analysis of this was done using the commercial software Abaqus of . 
 %aim
