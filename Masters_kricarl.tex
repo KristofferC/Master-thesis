@@ -30,6 +30,7 @@
 \usepackage[firstinits=true, style=alphabetic]{biblatex} % Modern bibliography facilities
 \usepackage{mathtools} % All your math related needs
 \usepackage{tikz} % Draw figures. Required for cover page
+\usetikzlibrary{shapes,arrows}
 %\usepackage{subfig} % Subfloats
 \usepackage[refpage]{nomencl}
 \usepackage{caption}
@@ -102,14 +103,15 @@
 \large
 \subfile{chapters/introduction}
 \subfile{chapters/micro_gen}
-\subfile{chapters/fem}
+
 \subfile{chapters/meshing_micro}
 \subfile{chapters/grain_boundary_law}
 \subfile{chapters/load_case}
 \subfile{chapters/results}
 \subfile{chapters/discussion}
 
-
+\appendix
+\subfile{chapters/fem}
 
 
 \newpage

@@ -35,6 +35,10 @@ A refinement of having each finite element belong to one grain would be to not l
 
 
  the result is not significantly different when using a structured or unstructured mesh, even if the same number of degrees of freedom is used in the analysis. However, in other cases such as \cite{Li20091163} it was found that when calculating the elasto-viscoplastic response of polycrystalline microstructures they could reduce the number of elements and still get a convergent result if they used a conforming unstructured mesh. Since Neper has the capability of making a mesh conforming to the grain boundaries that type of mesh will be used. 
+=======
+In order to do a FEM analysis of the generated microstructure it need to be meshed.
+
+
 
 
  To generate the mesh the same software that were generated the tessellation was used. Neper uses a scheme to generate a mesh in which it starts meshing in the lowest dimension and then uses these elements as seed to generate  Firstly, a node is created at all vertices. Using these nodes as seeds the edges are 
