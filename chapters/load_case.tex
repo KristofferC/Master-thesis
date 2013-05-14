@@ -5,6 +5,8 @@
 
 \chapter{Load case}
 
+\textbf{Much of these need to be moved before the crystal plasticity chapter since stuff here is used there.}
+
 The FEM analysis that is to performed is to simulate cubic piece inside a bar experiencing a uniaxial tensile testing. \textbf{A bit about multiscale modeling, how the cube is supposed to represent a RVE.} 
 
 
@@ -18,7 +20,7 @@ The FEM analysis that is to performed is to simulate cubic piece inside a bar ex
 \end{figure}
 
 
-
+\textbf{This is WC-CO and should be moved to a separate chapter}
 
 The way Cobolt (Co) and Tungsten Carbide (WC) is assigned to different grains is as follows. The smallest grains are set to contain Cobolt until they constitute the desired volume fraction. The rest of the grains are set to Tungsten Carbide. Cohesive elements are then inserted in the faces that are shared by either two WC grains or one WC grain and one Co grain. There are thus no cohesive element between two Co grains. The reasoning behind this is that the Co grains are usually smaller than the WC grans.  An example of the assignments of materials to a microstructure can be seen in figure \ref{fig:cowc}.
 

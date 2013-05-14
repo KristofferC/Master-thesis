@@ -1,0 +1,48 @@
+% Sample file on how to use subfiles.
+\documentclass[crystal_plast.tex]{subfiles}
+
+\begin{document}
+\newpage
+\chapter{Crystal plasticity}
+
+\textbf{Only figures so far}
+
+ \begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.75\linewidth]{./figures/500_grains_aus_ferr}
+  \caption{}
+  \label{fig:ausferr_3d}
+\end{subfigure}%
+\begin{subfigure}{.6\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/2d_voro_ausferr}
+  \caption{}
+  \label{fig:ausferr_2d}
+\end{subfigure}
+\caption{a) 3d RVE  b) 2d RVE taken from \cite{lillbacka2007multiscale}, reprinted with permission.}
+\label{fig:ausferr}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width = 0.75\textwidth]{figures/sep}
+\caption{Separate runs}
+\label{fig:sep}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width = 0.75\textwidth]{figures/avg}
+\caption{Averages}
+\label{fig:avg}
+\end{figure}
+
+
+
+\newpage
+
+
+\end{document}

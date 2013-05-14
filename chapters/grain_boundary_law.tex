@@ -5,6 +5,8 @@
 
 \chapter{Cohesive elements}
 
+\textbf{Should move some of the stuff here that only refers to WC-CO to a chapter after it}
+
 In polycrystalline meterials 
 
 The finite element analysis software Abaqus, used in this thesis, has support for \textit{cohesive elements}. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis these cohesive elements are used to model the grain boundary law calculated in the atomic simulations.
@@ -14,9 +16,6 @@ The difference between cohesive elements and normal elements are that cohesive e
 \[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
 %
 The $T_0$ here is not the thickness of the cohesive element but a constitutive thickness that when put to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
-
-
-
 
 
 
@@ -135,44 +134,18 @@ For mixed separation it is always smaller than the individual $D_n$ and $D_t$ Th
 
 \section{Insertion of cohesive elements into mesh}
 
+\textbf{Description of method used...}
+
 \tikzstyle{b} = [rectangle, draw, fill=blue!20, node distance=3cm, text width=6em, text centered, rounded corners, minimum height=4em, thick]
 \tikzstyle{l} = [draw, -latex',thick]
 
 \begin{tikzpicture}[fill=blue,ultra thick, scale = 0.75, transform shape,font=\Large]
-\node [b] (a1) [draw, minimum width=3.5cm,minimum height=2.5cm] {device $1$};
-\node [b] (a2) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a1,node distance=4cm] {device $2$};
-\node [b] (a3) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a2,node distance=4cm] {device $3$};
-\node [b] (duplicate) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a2,node distance=4cm] {};
+\node [b] (a1) [draw, minimum width=3.5cm,minimum height=2.5cm] {blue $1$};
+\node [b] (a2) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a1,node distance=4cm] {blah $2$};
+\node [b] (a3) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a2,node distance=4cm] {bleh $3$};
 
 \path [l] (a1) -- (a2);
-\end{tikzpicture}
-
-\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
-    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
-\tikzstyle{block} = [rectangle, draw, fill=white!20, 
-    text width=12em, text centered, rounded corners, minimum height=4em]
-\tikzstyle{line} = [draw, -latex']
-\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
-    minimum height=2em]
-\begin{tikzpicture}[node distance = 2cm, auto]
-    % Place nodes
-    \node [block] (init) {initialize model};
-    \node [block, below of=init] (identify) {identify candidate models};
-    \node [block, below of=identify] (evaluate) {evaluate candidate models};
-    \node [block, left of=evaluate, node distance=3cm] (update) {update model};
-    \node [decision, below of=evaluate] (decide) {is best candidate better?};
-    \node [block, below of=decide, node distance=3cm] (stop) {stop};
-   
-    % Draw edges
-    \path [line] (init) -- (identify);
-    \path [line] (identify) -- (evaluate);
-    \path [line] (evaluate) -- (decide);
-    \path [line] (decide) -| node [near start] {yes} (update);
-    \path [line] (update) |- (identify);
-    \path [line] (decide) -- node {no}(stop);
-    \path [line,dashed] (expert) -- (init);
-    \path [line,dashed] (system) -- (init);
-    \path [line,dashed] (system) |- (evaluate);
+\path [l] (a2) -- (a3);
 \end{tikzpicture}
 
 
