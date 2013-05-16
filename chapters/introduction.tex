@@ -16,46 +16,32 @@
   \caption{}
   \label{fig:macro}
 \end{subfigure}
-\scalebox{1.5}{$\boldsymbol{\longrightarrow}$}
+\scalebox{1.5}{$\boldsymbol{\longleftarrow}$}
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.6\linewidth]{./figures/CrystalGrain.png}
   \caption{}
   \label{fig:meso}
 \end{subfigure}%
-\scalebox{1.5}{$\boldsymbol{\longrightarrow}$}
+\scalebox{1.5}{$\boldsymbol{\longleftarrow}$}
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.6\linewidth]{./figures/micro.jpg}
   \caption{}
   \label{fig:micro}
 \end{subfigure}
-\caption{a) Macro, b) meso, c) micro \cite{Ozawa:ko5009}}
+\caption{Material properties at a certain scale are commonly statistical averages of heterogeneous physical properties of a smaller scale. The figure show a) macro scale, b) meso scale\cite{wiki:grain} and c) micro scale\cite{Ozawa:ko5009}}
 \label{micmacmes}
 \end{figure}
 
 
-%generally determined by experiments made on bulk materials. These are materials at the macroscopic level. However in the case of heterogeneous %materials, these properties are the result of statistical averages of physical properties at a smaller level.
-%These are of
+Most materials that on a macroscopic scale can be considered homogeneous are usually at a smaller scale to some extent heterogeneous. Since the heterogeneous properties are small compared to the macroscopic scale this properties tend to average out giving a homogeneous response at the macroscopic level. In applications materials with certain macroscopic properties are desirable and knowledge how to create a material with these specific properties is valuable. 
 
-Bleh bleh
+If one correctly models the physical laws that are relevant at the mesoscale the correct macroscopic properties of the material should be extractible as the model gets large enough for the statistical differences in the heterogeneity to average out. Such a model is known as a \textit{representative volume element} or in short \textit{RVE}. Having such a model enables us to see how changes in mesoscopic properties affects the macroscopic material. Simulations can then be done to see what mesoscopic properties gives the best material for the given application. This is known as \textit{material optimization}. This reasoning gives the motivation for investigating methods in accurately modelling materials at different scales. This is known as \textit{multiscale modelling}.
 
+In this thesis the Voronoi tessellation is used to generate a three dimensional microstructure which approximates the distribution in grain size and grain shape in many polycrystalline materials. Finite element simulations for two phase steel exhibiting crystal plasticity under uniaxial loading was done.
 
-
-If one correctly models the physical laws that are relevant at the mesoscale the properties at the macroscale should be extractible as the model gets large enough for the statistical differences in the  of  to average out.  Such a model is known as a \textit{representative volume element} or in short RVE.
-
-Being able to model the materials at the mesoscale is useful since it enables us to see how changes in mesoscopic properties affects the macroscopic material. \textbf{Något om att det möjliggör material optimization?}
-
-
-
-In this thesis the Voronoi tessellation is used to generate a microstructure which exhibit similar distribution in grain size as many polycrystalline materials. The generation of the tessellation and the meshing of it is done using thee open source program Neper.
-
-The resulting mesh was then used to conduct a an analysis trying to simulate a uniaxial stress test on crystal plasticity
-
-An introduction to cohesive elements in Abaqus is given... These elements are used to simulate the grain boundary laws between grains...
-Cohesive elements were inserted between grain boundaries and test were done blah blah
-
-
+After that, a description of the cohesive elements in the commercial finite element analysis software Abaqus is given. Cohesive elements are inserted into the microstructure in the grain boundaries and similar finite element analysis as for the two phase steel is done on a microstructure containing tungsten carbide where cobalt has disspated into the grain bondaries. The data for the traction separation law in the grain boundaries are taken from atomistic simulations performed in CITERA MARTIN YEY HAN FÅR VARA MED SÅ KUL! There are however convergence problems in the finite element solver when using cohesive elements and possible solutions to this are attempted and discussed.
 
 
 \end{document}

@@ -3,9 +3,44 @@
 
 \begin{document}
 \newpage
-\chapter{Crystal plasticity}
+\chapter{Crystal plasticity in duplex steel}
 
-\textbf{Only figures so far}
+
+\section{Governing equations}
+
+\begin{table}
+\caption {Material parameters used in the analysis.}
+\label{tbl:mat_par}
+\centering
+    \begin{tabular}{cccccccccccc}
+    \toprule%
+    \multirow{2}*{Material}      & G & $\lambda$ & $\tau^y$  & \multirow{2}*{q}   & \multirow{2}*{$\xi$} & $h_0$  & $h_\infty$  & \multirow{2}*{$\eta$} & \multirow{2}*{$m$} & \multirow{2}*{$n$} & $t_*$ \\ 
+        &  [GPa] & [GPa] & [MPa] &    &  &  [MPa] & [MPa] & &  &  & [s] \\\otoprule%
+    Austenite & 71      & 106            & 210            & 0.1 & 75    & 4000        & 0                & 0.0001 & 1.0 & 1.0 & 50        \\ 
+    Ferrite   & 71      & 106            & 250            & 1.1 & 50    & 100         & 0                & 0.001  & 1.0 & 1.0 & 50        \\\bottomrule
+    \end{tabular}
+\end{table}
+
+
+
+\section{Loading case}
+
+
+\subsection{Bondary conditions}
+The FEM analysis that is to performed is to simulate cubic piece inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the cubic microstructure. The boundary conditions are set by explicitly setting the displacements of different nodes in the model. In the analysis performed in this section the nodes at the bottom face of the cube where fixed such that they could not move in the vertical direction. The nodes in two of the edges have the additional boundary condition that they can only move parallel to their edge. Stresses in the models are induced by having the nodes in the top face of the cube move at a fixed rate in the vertical direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case}. 
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/test_case}
+\caption{Illustration of the boundary conditions applied to the microstructure.}
+\label{fig:test_case}
+\end{figure}
+
+\subsection{Material assignment}
+
+
 
  \begin{figure}
 \centering
@@ -21,9 +56,46 @@
   \caption{}
   \label{fig:ausferr_2d}
 \end{subfigure}
-\caption{a) 3d RVE  b) 2d RVE taken from \cite{lillbacka2007multiscale}, reprinted with permission.}
+\caption{a) One example of a three dimensional  with X grains.  b) Two dimensional grain structure used in \cite{lillbacka2007multiscale}, reprinted with permission.}
 \label{fig:ausferr}
 \end{figure}
+
+
+\textbf{How calculation of stress is done}
+
+We want the volume averages stress. This could be done by summing the volume weighted stress from all the elements. This would however require us to save data for all the elements in the model. It is possible to by using the following reasoning:
+
+Using the divergence theorem the following relation can be written.
+
+\begin{equation}
+\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
+\end{equation}
+
+Using the product rule we can write
+
+\begin{equation}
+\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
+\end{equation}
+
+
+
+\begin{equation}
+\int_\Omega ( \sigma_{ij} x_k )_i \id x = \int_\Omega \sigma_{ij,i} x_k + \overbrace{\sigma_{ij} \underbrace{x_{k,i}}_{\delta_{ki}}}^{\sigma_{kj}} \id V 
+\end{equation}
+
+\begin{equation}
+= \int_V \sigma_{kj} \id V = V \overline{\sigma_{kj}}
+\end{equation}
+
+
+\[ \overline{\sigma}_{zz} = \frac{1}{V} \int_\Omega \sigma_{zz} dV = \frac{1}{A} \int_\Gamma F_{z} dA? \]
+
+
+
+\section{Results}
+
+\textbf{Only figures so far}
+
 
 
 \begin{figure}[ht]

@@ -24,10 +24,12 @@
 \usepackage{hyperref} % Required for in document links and document metadata.	
 \usepackage{autonum}
 \usepackage[swedish, english]{babel}
+\usepackage{ctable}
+\usepackage{multirow}
 
 % More or less required packages
 \usepackage{csquotes} % Needed for biblatex
-\usepackage[firstinits=true, style=alphabetic]{biblatex} % Modern bibliography facilities
+\usepackage[firstinits=true, isbn=false, style=numeric]{biblatex} % Modern bibliography facilities
 \usepackage{mathtools} % All your math related needs
 \usepackage{tikz} % Draw figures. Required for cover page
 \usetikzlibrary{shapes,arrows}
@@ -54,12 +56,13 @@
 
 \renewcommand{\vec}[1]{\boldsymbol{\underline{\mathbf{#1}}}}
 \newcommand{\id}{\, \mathrm{d}}
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
 
 % User commands
-\title{TITLE}
+\title{Modelling of three dimensional microstructures including grain boundary mechanisms}
 %\subtitle{And Perhaps a Subtitle} % Optional
 \author{Kristoffer Carlsson}
-\thesisin{Solid and Structural Mechanics}
+\thesisin{Applied Mechanics}
 \department{Department of Applied Mechanics}
 \division{Division of Solid Mechanics}
 \reportno{2013:03}
@@ -67,11 +70,11 @@
 
 % You should scale the figure according to textwidth and or paperheight.
 \coverfigure{\includegraphics[width=0.5\paperheight,height=0.5\paperheight]{./figures/cohs_without_poly}}
-\covercaption{A Voronoi tesselation of a cube containing 1000 grains. Rendered with the Neper software.}
+\covercaption{Cohesive zone elements between grains. The actual grains have been hidden and the cohesive elements been given a non zero width.}
 
 \firstabstract{\subfile{chapters/abstract}}
 %\secondabstract{swedish}{\lipsum} % Optional
-\keywords{Two phase duplex steel, Voronoi tesselation, Grain structure, etc etc}
+\keywords{3D microstructure, Voronoi tesselation, Cohesive zones, Grain boundary traction separation law.}
 
 \preface{\subfile{chapters/preface}} 
 \acknowledgements{\subfile{chapters/acknowledgements}}
@@ -108,9 +111,10 @@
 \subfile{chapters/crystal_plast}
 \subfile{chapters/grain_boundary_law}
 \subfile{chapters/load_case}
-\subfile{chapters/results}
+\subfile{chapters/wcco}
 \subfile{chapters/discussion}
 
+\newpage
 \appendix
 \subfile{chapters/fem}
 

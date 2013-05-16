@@ -1,5 +1,5 @@
 % Sample file on how to use subfiles.
-\documentclass[generate_interface_elements.tex]{subfiles}
+\documentclass[grain_boundary_law.tex]{subfiles}
 
 \begin{document}
 
@@ -7,7 +7,7 @@
 
 \textbf{Should move some of the stuff here that only refers to WC-CO to a chapter after it}
 
-In polycrystalline meterials 
+In polycrystalline materials \cite[p. 11]{Buss04}
 
 The finite element analysis software Abaqus, used in this thesis, has support for \textit{cohesive elements}. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis these cohesive elements are used to model the grain boundary law calculated in the atomic simulations.
 
@@ -134,25 +134,13 @@ For mixed separation it is always smaller than the individual $D_n$ and $D_t$ Th
 
 \section{Insertion of cohesive elements into mesh}
 
-\textbf{Description of method used...}
 
-\tikzstyle{b} = [rectangle, draw, fill=blue!20, node distance=3cm, text width=6em, text centered, rounded corners, minimum height=4em, thick]
-\tikzstyle{l} = [draw, -latex',thick]
-
-\begin{tikzpicture}[fill=blue,ultra thick, scale = 0.75, transform shape,font=\Large]
-\node [b] (a1) [draw, minimum width=3.5cm,minimum height=2.5cm] {blue $1$};
-\node [b] (a2) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a1,node distance=4cm] {blah $2$};
-\node [b] (a3) [draw, minimum width=3.5cm,minimum height=2.5cm,below of=a2,node distance=4cm] {bleh $3$};
-
-\path [l] (a1) -- (a2);
-\path [l] (a2) -- (a3);
-\end{tikzpicture}
-
-
-From Neper we get a mesh of the generated microstructure but it does not have the possibility of inserting the cohesive elements between all the grains so this has to be done. A script was written that parsed the generated mesh file and inserted the elements. This is done in the following way. 
+From Neper we get a mesh of the generated microstructure but it does not have the possibility of inserting the cohesive elements between all the grains so this has to be done. A script was written that parsed the generated mesh file and inserted the elements. In order to facilitate describing the process the elements are inserted some notation will be given here. A node  This was done in the following way. 
 %
 \begin{itemize}
-\item Every face is shared by two grains. The nodes in a face are duplicated twice and all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes.
+\item Every face is shared by two grains except faces in the boundary which are ignored. What we want to do is create two separate faces, one for both grains and then have cohesive elements connect the two faces. From the Neper mesh file, element sets with triangles in all faces can be extracted. Each node $n$ in the face are duplicated twice into two sets of nodes ${n_i}
+
+ that will constitute the new faces. The nodes in one of these sets are connected with triangles  all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes.
 \item The two new faces are then connected to each other using six node cohesive wedge elements. This is repeated for all faces in the microstructure. 
 \end{itemize}
 %
@@ -160,27 +148,27 @@ An example of the insertion of these cohesive elements between two grains can be
 
 \begin{figure}
 \centering
-\begin{subfigure}[b]{.4\textwidth}
+\begin{subfigure}[b]{.5\linewidth}
   \centering
-  \includegraphics[width=.4\linewidth]{./figures/2_cohs}
+  \includegraphics[width=.5\linewidth]{./figures/2_cohs}
   \caption{}
   \label{fig:cohs_2_a}
 \end{subfigure}%
 \hspace{-10mm}
-\begin{subfigure}[b]{.4\textwidth}
+\begin{subfigure}[b]{.5\linewidth}
   \centering
-  \includegraphics[width=.4\linewidth]{./figures/2_grain_no_cohs}
+  \includegraphics[width=.5\linewidth]{./figures/2_grain_no_cohs}
   \caption{}
   \label{fig:cohs_2_b}
 \end{subfigure}%
 \hspace{-10mm}
-\begin{subfigure}[b]{.4\textwidth}
+\begin{subfigure}[b]{.5\linewidth}
   \centering
-  \includegraphics[width=.4\linewidth]{./figures/2_grain_cohs}
+  \includegraphics[width=.5\linewidth]{./figures/2_grain_cohs}
   \caption{}
   \label{fig:cohs_2_c}
 \end{subfigure}
-\caption{Insertion of cohesive elements between two grains. (a) The two grains. (b) Duplication of nodes in the face. Grains have been separated for clarity of the figure. (c) Cohesive elements inserted. }
+\caption{Insertion of cohesive elements between two grains. (a) The two grains. (b) Duplication of nodes in the face. Grains have been separated for clarity of the figure. (c) Cohesive elements inserted between the two faces. }
 \label{fig:cohs_2}
 \end{figure}
 

@@ -5,26 +5,31 @@
 
 \chapter{Microstructure generation}
 
-In order to conduct numerical analyses of materials with a polycrystalline structure the geometrical properties of the grains in the material must be modeled. Relevant properties are the distribution of grain sizes, geometrical shape of the grains and orientation of the crystal lattices in the grains.
-One possibility is to to extract the three dimensional microstructure from experiments in which for example X-ray microtomography is used. The images generated from such an experiment can be analyzed resulting in a digital representation of the microstructure, see for example \cite{Bhandari200722}. This is however a complicated process. The experiments required are extensive and expensive. When conducting multiscale modelling it would be desirable to be able to generate a large batch of different microstructures. This is so that variance in the results from the analyses with different microstructures can be studied to see if the model is large enough to represent a RVE. 
-One would want a mathematically analytic description of a microstructure that is similar enough to the real structure of the material such that meaningful analysis can be done. One common way to do this is with the Voronoi tesselation. A Voronoi tessellation is a partition of a domain $D \in \mathbb{R}^d$ into $n$ regions $R_i$ in $D$, each corresponding to one of $n$ different \textit{seed points} $\vec{P}_i$. These regions consists of the set of all points that are closer to a particular seed point than to any other,
+In order to conduct numerical analyses of materials with a polycrystalline structure the geometrical properties of the grains in the material must be modeled. Relevant properties to model are the distribution of grain sizes and the geometrical shape of the grains.
+One possibility is to extract the three dimensional microstructure from experiments in which for example X-ray microtomography is used. 
+The images generated from such an experiment can be analyzed resulting in a digital representation of the microstructure, see for example \cite{Bhandari2007222}.
+ This is however a complicated process. The experiments required are extensive and expensive and the post processing of the data is also non trivial. 
+ In order to know if the size of the model used is large enough to be a RVE multiple runs have do be done and the variance in the results have to be compared. It can therefore be said that it is necessary to to be able to generate different realisations of microstructures of different sizes. Ideally, one would want a mathematically analytic description of a microstructure that is similar enough to the real structure of the material such that meaningful analysis can be done. One common way of approximating the microstructure in polycrystalline materials is with the Voronoi tesselation. 
+ 
+A Voronoi tessellation is a partition of a domain $D \in \mathbb{R}^d$ into $n$ regions $R_i$ in $D$, each corresponding to one of $n$ different \textit{seed points} $\vec{P}_i$. 
+These regions consists of the set of all points that are closer to a particular seed point than to any other,
 %
 \[R_i = \{ \vec{x} \in D : \left|\left| \vec{P}_i - \vec{x} \right|\right| < \left|\left| \vec{P}_j - \vec{x} \right|\right| \quad  \forall i \neq j, \quad i,j = 1, \ldots, n \}. \]
 %
-In this thesis the norm used is the Euclidean distance, the dimension of the space is 3 and the bounding domain is a cube. In this case, the resulting regions will have the shape of convex polyhedrons which is referred to as \textit{grains}. This is the grain structure that would exist in a material where the grains started to nucleate at the seed points and all grew isotropically at the same rate. In a Voronoi tesselation two grains will intersect over a plane called a \textit{face},
-three along a line called an \textit{edge} and four will intersect in a point called a \textit{vertex}. A common way to set the locations of the seed points is to randomly assign them to different positions in $D$. 
-This is known as a "Poisson-Voronoi tesselation". An example of such a tessellation can be seen in figure \ref{fig:pois_voronoi} where 100 seed points have been used. The generation of the tessellation can easily be done in for example the commonly used software MATLAB \cite{matlab:voronoi}. In this thesis the open source software Neper \cite{Quey20111729} was used to generate the tessellation since this software is also capable of meshing the generated structure. 
-
-
+In this thesis the norm used is the Euclidean distance, the dimension of the space is 3 and the bounding domain is a cube.
+In this case, the resulting regions will have the shape of convex polyhedrons which is referred to as \textit{grains}. 
+This is the grain structure that would exist in a material that nucleates in the following way:
 \begin{itemize}
-\item Relevant examples where Voronoi has been used
-\item Mention periodic Voronoi?
-\item Mention hardcore Voronoi?
+\item Starts to nucleate at all the seed points at the same time.
+\item The grains grows isotropically at the same rate.
+\item A grain boundary is created at the contact between two different grains, that is no interpenetration occurs.
 \end{itemize}
-
-\textbf{Show slice of microstructure as example \ref{fig:slice}}
-\cite{Fritzen2009}
-
+In such a Voronoi tesselation two grains will intersect over a plane called a \textit{face},
+three along a line called an \textit{edge} and four will intersect in a point called a \textit{vertex}. A common way to set the locations of the seed points is to randomly assign them to different positions in $D$. This is known as a "Poisson-Voronoi tesselation". One extra requirement that can be used is that 
+%
+\[ \min \left( |\vec{P}_i - \vec{P}_j| \right) < d, \quad \forall i \neq j, \quad d \in \mathbb{R}^+ \]
+%
+This means that two seed points must at least be separated by a distance $d$. This is called \textit{hardcore Voronoi tessellation}. The physical interpretation of this is that nucleation can not start to occur arbitrarily close to each other. This is however not used in this thesis. An example of a tessellation can be seen in figure \ref{fig:pois_voronoi} where 100 seed points have been used. A comparison between a cross section of a Voronoi tessellation and a polycrystalline material can be seen in figure \ref{fig:slice}.
 
 
 \begin{figure}
@@ -45,6 +50,9 @@ This is known as a "Poisson-Voronoi tesselation". An example of such a tessellat
 \label{fig:pois_voronoi}
 \end{figure}
 
+
+ The actual generation of the tessellation can easily be done in for example the commonly used software MATLAB \cite{matlab:voronoi}. The computational time required to generate such a tessellation is negligible for any number of grains that would be reasonable for a similar analysis that is performed in this thesis. In this thesis the open source software Neper \cite{Quey20111729} was used to generate the tessellation since this software also has a module capable of meshing the generated structure.
+
 \begin{figure}
 \centering
 \begin{subfigure}[b]{.5\textwidth}
@@ -59,13 +67,8 @@ This is known as a "Poisson-Voronoi tesselation". An example of such a tessellat
   \caption{}
   \label{fig:slice_b}
 \end{subfigure}
-\caption{a) Slice through a voronoi tesselation.  b) Micrograph of a polycrystalline metal.\cite{wiki:grain}}
+\caption{a) Slice through a voronoi tesselation.  b) Micrograph image of a polycrystalline metal.\cite{wiki:grain}}
 \label{fig:slice}
-\end{figure}
-
-
-\begin{figure}
-
 \end{figure}
 
 

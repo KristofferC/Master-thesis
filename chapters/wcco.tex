@@ -1,9 +1,43 @@
 % Sample file on how to use subfiles.
-\documentclass[convergence.tex]{subfiles}
+\documentclass[wcco.tex]{subfiles}
 
 \begin{document}
 
 \chapter{Results}
+
+
+\textbf{Much of these need to be moved before the crystal plasticity chapter since stuff here is used there.}
+
+
+\textbf{This is WC-CO and should be moved to a separate chapter}
+
+The way Cobolt (Co) and Tungsten Carbide (WC) is assigned to different grains is as follows. The smallest grains are set to contain Cobolt until they constitute the desired volume fraction. The rest of the grains are set to Tungsten Carbide. Cohesive elements are then inserted in the faces that are shared by either two WC grains or one WC grain and one Co grain. There are thus no cohesive element between two Co grains. The reasoning behind this is that the Co grains are usually smaller than the WC grans.  An example of the assignments of materials to a microstructure can be seen in figure \ref{fig:cowc}.
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/100_grain_diff_col}
+  \caption{}
+  \label{fig:cowc_a}
+\end{subfigure}%
+\hspace{-10mm}
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/100_grain_wcco}
+  \caption{}
+  \label{fig:cowc_b}
+\end{subfigure}%
+\hspace{-10mm}
+\begin{subfigure}[b]{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{./figures/100_grain_co}
+  \caption{}
+  \label{fig:cowc_c}
+\end{subfigure}
+\caption{(a) The generated microstructure. (b) Assignment of materials to grains. This is with 10\%/90\% WC/Co. (c). The grains containing WC hidded.}
+\label{fig:cowc}
+\end{figure}
 
 
 
@@ -75,34 +109,6 @@ Managed to get to: 0.007865 D for failing 0.0005
  
  
 \newpage
-\textbf{How calculation of stress is done}
-
-We want the volume averages stress. This could be done by summing the volume weighted stress from all the elements. This would however require us to save data for all the elements in the model. It is possible to by using the following reasoning:
-
-Using the divergence theorem the following relation can be written.
-
-\begin{equation}
-\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
-\end{equation}
-
-Using the product rule we can write
-
-\begin{equation}
-\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
-\end{equation}
-
-
-
-\begin{equation}
-\int_\Omega ( \sigma_{ij} x_k )_i \id x = \int_\Omega \sigma_{ij,i} x_k + \overbrace{\sigma_{ij} \underbrace{x_{k,i}}_{\delta_{ki}}}^{\sigma_{kj}} \id V 
-\end{equation}
-
-\begin{equation}
-= \int_V \sigma_{kj} \id V = V \overline{\sigma_{kj}}
-\end{equation}
-
-
-\[ \overline{\sigma}_{zz} = \frac{1}{V} \int_\Omega \sigma_{zz} dV = \frac{1}{A} \int_\Gamma F_{z} dA? \]
 
 \textbf{Stress strain curves for different percentage of WC/Co.}
 
