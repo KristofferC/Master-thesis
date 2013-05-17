@@ -3,19 +3,20 @@
 
 \begin{document}
 
-\chapter{Cohesive elements}
+\chapter{Grain boundary mechanisms}
 
-\textbf{Should move some of the stuff here that only refers to WC-CO to a chapter after it}
 
 In polycrystalline materials \cite[p. 11]{Buss04}
 
-The finite element analysis software Abaqus, used in this thesis, has support for \textit{cohesive elements}. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis these cohesive elements are used to model the grain boundary law calculated in the atomic simulations.
+\section{Cohesive elements}
 
-The difference between cohesive elements and normal elements are that cohesive elements are not supposed to model any material but instead they are supposed to model the actual interface between two materials. The state of the element does not contain a stress tensor like in normal elements but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$. The normal direction is defined from the node numbering of the element. An illustration of this can be seen in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
+The finite element analysis software Abaqus, used in this thesis, has support for \textit{cohesive elements}. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary mechanisms that can exist between grains.
+
+The difference between cohesive elements and normal elements are that cohesive elements are not supposed to model any material but instead they are supposed to model the actual interface between two materials. The state of the element does not contain a stress tensor like in normal elements but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$. The normal direction is defined from the order of the nodes defining the vertices of the element. An illustration of this can be seen in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
 %
 \[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
 %
-The $T_0$ here is not the thickness of the cohesive element but a constitutive thickness that when put to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
+The $T_0$ here is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
 
 
 
@@ -27,14 +28,14 @@ The $T_0$ here is not the thickness of the cohesive element but a constitutive t
 \end{figure}
 
 
-When modeling damage and failure of a material using cohesive element there are three main \textbf{things} that need to be defined:
+When modeling damage and failure of a material using cohesive element there are three main areas of interest:
 
 \begin{enumerate}
-\item The properties of the material before damage has taken place. Abaqus only has support for a a linear elastic traction-separation law prior to damage. This is however what the atomic simulations have shown so this is not a limitation in this case.
+\item The properties of the material before damage has taken place. Abaqus only has support for a a linear elastic traction-separation law prior to damage. This is however not a major limitation since many materials have a linear response before damage occurs. 
 
-\item The criteria that defines when the material is said to start to experience damage. This is called the \textit{damage initiation criteria}.
+\item The criteria that defines when the material is said to start experiencing damage. This is called the \textit{damage initiation criteria}.
 
-\item The properties of the material after the damage initiation criteria has been fulfilled need to be prescribed. This is called the \textit{damage evolution}, it describes how the degradation of the material stiffness is changing as the material is experience more and more damage.
+\item The properties of the material after the damage initiation criteria has been fulfilled need to be prescribed. This is called the \textit{damage evolution}, it describes how the degradation of the material stiffness is changing as the material experience more and more damage.
 \end{enumerate}
 %
 A possible scenario for the damage initiation and evolution can be seen in figure \ref{fig:tract_sep}.
@@ -48,10 +49,10 @@ A possible scenario for the damage initiation and evolution can be seen in figur
 \label{fig:tract_sep}
 \end{figure}
 
-\section{Undamaged behavior}
+\subsection{Undamaged behavior}
  
- The behaviour of the material before damage is assumed to be elastic and is written in term of a constitutive matrix as
- 
+The behavior of the material before damage is assumed to be elastic and is written in term of a constitutive matrix as
+ %
  \[ \vec{t} = 
  \left[
 \begin{array}{c c c}
@@ -74,29 +75,26 @@ K_{sn} & K_{st} & K_{ss} \\
 \end{array} \right]
 = \vec{K} \vec{\epsilon}.
 \]
+%
+As can be seen from the matrix coupled behavior of all components are supported. However, in this thesis only uncoupled behavior will be used and thus only the diagonal elements will be non zero in this analysis. Difference between the shear directions will also not be considered which means $K_{tt} = K_{ss}$.
 
-As can be seen from the matrix coupled behaviour of all components are supported. However, since we only have experimental data for pure shear and normal strains only the diagonal elements will be non zero in this analysis. There is also no difference between the shear directions which means $K_{tt} = K_{ss}$. From the atomistic simulations we can see that $K_{nn} = XXX$ and $K_{tt} = XXX$.
-
- 
- 
-
-\section{Damage initiation}
+\subsection{Damage initiation}
 
 The damage initiation criteria is the point when the degradation of the material starts to occur. This can either be described as a function of the strain or the traction. There are two possible functions that can be used, one is based on the maximum strain or traction component and one is based on length of the strain or traction vector. For the traction criteria these functions can be expressed as
-
+%
 \[ \max \left( \frac{\langle t_n \rangle}{t_n^0} ,\frac{ t_s }{t_s^0} ,  \frac{ t_t }{t_t^0}  \right) = 1,  \] 
 
 \[  \left( \frac{\langle t_n \rangle}{t_n^0} \right)^2 +   \left( \frac{ t_s }{t_s^0} \right)^2 +   \left( \frac{ t_t }{t_t^0} \right)^2 = 1.   \]	
 %
-Here $t_n^2, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compression (negative normal traction) do not lead to any damage. The functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criteria is used. From the atomic simulations in figure XXX we can identify $\epsilon_n^0 = XXX$ and $\epsilon_t = \epsilon_s = XXX$.
+Here $t_n^0, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compression (negative normal traction) do not lead to any damage. The functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criteria is used. 
 
-\section{Damage evolution}
+\subsection{Damage evolution}
 
 The damage evolution describes the rate of the degradation of the material based on the separation. The current degradation of the material is completely captured in one scalar $D$. The traction vector are then calculated as 
 %
 \[ \vec{t} = (1 - D) \overline{\vec{t}} \]
 %
- where $\overline{\vec{t}}$ is the traction in the element that would have occurred if there was no damage in the material. Before the damage initiation criteria has been fulfilled $D = 0$. Having the damage completely described by only a scalar is one of the major limitation to the cohesive elements. This means it is hard to capture the difference in the traction separation law for normal and shear separations that the atomic simulations have shown exist. It would be useful if the damage in the material could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user made material where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UMAT}) but doing this out of scope for this thesis.
+ where $\overline{\vec{t}}$ is the traction in the element that would have occurred if there was no damage in the material. Before the damage initiation criteria has been fulfilled $D = 0$. Having the damage completely described by only a scalar is one of the major limitation to the cohesive elements. This means it is hard to capture the difference in the traction separation law for normal and shear separations. It would be useful if the damage in the material could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user made material where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UMAT}) but doing this out of scope for this thesis.
 
 If we firstly assume that we only have separations in the normal direction and want to give $D$ in table form the following procedure would be used. $K_{nn}$ is calculated as the slope of the initial elastic response. For separations larger than the damage initiation, at a specific point $(\delta_n, \sigma_n)$, $D$ is calculated as $D_f(K_{nn}, \delta_n, \sigma_n)$ where $D_f$ is the function:
 %
@@ -121,8 +119,7 @@ We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sig
 %
 \[ D = 1 - (1 - D_n)(1 - D_t). \]
 %
-For mixed separation it is always smaller than the individual $D_n$ and $D_t$ This way is similar to how Abaqus calculates the total damage when multiple criteria of damage are active, see section 23.2.3 in the Abaqus manual. Using this method would give traction separation laws as in figure \ref{fig:mixed_tract_sep} for different $\phi_1$. It can be seen that the border cases of pure shear and pure normal displacements are respected.
-
+For mixed separation it is always smaller than the individual $D_n$ and $D_t$ This way is similar to how Abaqus calculates the total damage when multiple criteria of damage are active, see section 23.2.3 in the Abaqus manual. 
 \begin{figure}[h]
 \centering
   \includegraphics[width=.6\linewidth]{./figures/mixed_tract_sep}
@@ -131,14 +128,23 @@ For mixed separation it is always smaller than the individual $D_n$ and $D_t$ Th
 \end{figure}
 
 
+\subsection{Insertion of cohesive elements into mesh}
 
-\section{Insertion of cohesive elements into mesh}
+
+From Neper we get a mesh of the generated microstructure but it does not have the possibility of inserting the cohesive elements between all the grains so this has to be done. A script was written that parsed the generated mesh file and inserted the elements. In order to facilitate describing the process the elements are inserted some notation will be given here.
+
+\begin{itemize}
+\item Nodes have an id and three coordinates describing their spatial location. The notation used is $n_i(x,y,z)$ where $i \in \mathbb{N}$ is the identifier of the node and $(x,y,z)$ is
+\item Triangle element have an id and $T_i(n_1, n_2, n_3)$.
+\item Cohesive elements can be defined from two triangles $C_i(T_1, T_2)$
+\end{itemize}
 
 
-From Neper we get a mesh of the generated microstructure but it does not have the possibility of inserting the cohesive elements between all the grains so this has to be done. A script was written that parsed the generated mesh file and inserted the elements. In order to facilitate describing the process the elements are inserted some notation will be given here. A node  This was done in the following way. 
+\[ \{ T_i(n_1, n_2, n_3) \}_{T_i \in \text{face}} \]
+
 %
 \begin{itemize}
-\item Every face is shared by two grains except faces in the boundary which are ignored. What we want to do is create two separate faces, one for both grains and then have cohesive elements connect the two faces. From the Neper mesh file, element sets with triangles in all faces can be extracted. Each node $n$ in the face are duplicated twice into two sets of nodes ${n_i}
+\item Every face is shared by two grains except faces in the boundary which are ignored. What we want to do is create two separate faces, one for both grains and then have cohesive elements connect the two faces. From the Neper mesh file, element sets with triangles in all faces can be extracted. Each node $n$ in the face are duplicated twice into two sets of nodes ${n_i}$
 
  that will constitute the new faces. The nodes in one of these sets are connected with triangles  all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes.
 \item The two new faces are then connected to each other using six node cohesive wedge elements. This is repeated for all faces in the microstructure. 
