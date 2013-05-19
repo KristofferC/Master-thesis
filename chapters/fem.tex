@@ -12,7 +12,7 @@ Here follows a short introduction to the basic principles behind the Galerkin fi
 
 In general the steps in the Galerkin method are:
 \begin{enumerate}
-\item \emph{Find the weak formulation of the problem.} The weak formulation does not required the solution to the equation to hold pointwise but instead it should hold with respect to certain test functions. An example to illustrate this is useful. Consider the Poisson equation on a bounded domain $\Omega \subset \mathbb{R}^d$ with a boundary $\Gamma$, and
+\item \emph{Find the weak formulation of the problem.} The weak formulation does not require the solution to the equation to hold pointwise but instead it should hold with respect to certain arbitrary test functions. An example to illustrate this is useful. Consider the Poisson equation on a bounded domain $\Omega \subset \mathbb{R}^d$ with a boundary $\Gamma$, and
 
 
 \begin{equation}
@@ -55,7 +55,7 @@ Since this should hold for all admissible $v$ it should hold true componentwise:
 %
 Representing $u_h$ in the new basis gives
 \begin{equation} 
-    a \left(a_\beta N_\alpha, N_\beta \right) = f(N_\beta ) \quad a_\alpha \in \mathbb{R}
+    a \left(a_\alpha N_\alpha, N_\beta \right) = f(N_\beta ) \quad a_\alpha \in \mathbb{R}
     \label{eqn:u_new_base}
 \end{equation}
 %
@@ -83,7 +83,7 @@ The way the subspace $V_h$ is constructed deserves some more attention.   A comm
     \Omega = \bigcup_{i = 1}^D K_i
 \end{equation}
 %
-If the dimension of $\Omega$ is 2 and the boundary $\Gamma$ is piecewise linear, one way of constructing such a mesh is by triangles where no vertex lies on the edge of another triangle. The vertices of the triangles are called \textit{nodes}. These nodes are assigned a unique number $P_i \in \mathbb{N}$ as an identifier. $P_i$ can then be used as a parameter to describe the function $v$. The space $V_h$ can be constructed as for example the set of all linear functions on every triangle $P_o$ satisfying the boundary conditions on $\Gamma$. The basis can be written as
+If the dimension of $\Omega$ is 2 and the boundary $\Gamma$ is piecewise linear, one way of constructing such a mesh is by triangles where no vertex lies on the edge of another triangle. The vertices of the triangles are called \textit{nodes}. These nodes are assigned a unique number $P_i \in \mathbb{N}$ as an identifier. $P_i$ can then be used as a parameter to describe the function $v$. The space $V_h$ can be constructed as for example the set of all linear functions on every triangle $P_i$ satisfying the boundary conditions on $\Gamma$. The basis can be written as
 %
 \begin{equation} 
     N_i(P_j) = \delta_{ij}, \quad i,j = 1,\ldots, D
@@ -114,7 +114,6 @@ As described before the equation is multiplied by a kinetically admissible funct
 %
 \begin{equation} 
   \int_\Omega  v_i\sigma_{ji,j} \id x + \int_\Omega v_i f_i \id x = 0, 
-  \int
     \label{eqn:cond}
 \end{equation}
 %
@@ -161,7 +160,7 @@ K_{\beta i \alpha k} = \int_\Omega  N_{\beta,j}C_{ijkl}N_{\alpha,l}  \id x , \qu
 \end{equation}
 Since this should hold for every kinematically admissible $v_i$ we have the following linear equations to solve:
 \begin{equation} 
-K_{\beta i \alpha k}u_{\alpha k} - f_{\beta i} = 0
+K_{\beta i \alpha k}u_{\alpha k} - f_{\beta i} = 0.
 \end{equation}
 
 

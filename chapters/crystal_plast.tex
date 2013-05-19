@@ -8,6 +8,19 @@
 
 \section{Governing equations}
 
+.
+
+.
+
+.
+
+.
+
+\textbf{Equations describing what the parameters in the table mean. }
+
+In this thesis the two set of parameters used can be seen in table \ref{tbl:mat_par}. They are supposed to represent 
+
+
 \begin{table}
 \caption {Material parameters used in the analysis.}
 \label{tbl:mat_par}
@@ -25,10 +38,11 @@
 
 \section{Loading case}
 
+This section describes the way th
+
 
 \subsection{Bondary conditions}
 The FEM analysis that is to performed is to simulate cubic piece inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the cubic microstructure. The boundary conditions are set by explicitly setting the displacements of different nodes in the model. In the analysis performed in this section the nodes at the bottom face of the cube where fixed such that they could not move in the vertical direction. The nodes in two of the edges have the additional boundary condition that they can only move parallel to their edge. Stresses in the models are induced by having the nodes in the top face of the cube move at a fixed rate in the vertical direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case}. 
-
 
 
 \begin{figure}[ht]
@@ -40,13 +54,18 @@ The FEM analysis that is to performed is to simulate cubic piece inside a larger
 
 \subsection{Material assignment}
 
+In order to do a FEM-analysis each element in the model need to be assigned properties that describes how the element should deform given an applied load and how the stress in the element should be calculated. In the analysis to be performed we want to be able to assign a certain material to any specific grain. In the meshed model a grain is just a collection of finite elements. These collections are however available so instead of having to assign the material to each and every finite element one by one it is possible to to the assignment to a batch of finite elements representing one grain.
+
+In this thesis the two phases are assigned to random grains such that the equal volume fractions is obtained. Each grain is then assigned a random slip direction. A figure of the model after the materials have been assigned to grains can be seen in figure \ref{fig:ausferr}. 
+
+
 
 
  \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{./figures/500_grains_aus_ferr}
+  \includegraphics[width=.75\linewidth]{./figures/250_grains_ausferr}
   \caption{}
   \label{fig:ausferr_3d}
 \end{subfigure}%
@@ -56,9 +75,11 @@ The FEM analysis that is to performed is to simulate cubic piece inside a larger
   \caption{}
   \label{fig:ausferr_2d}
 \end{subfigure}
-\caption{a) One example of a three dimensional  with X grains.  b) Two dimensional grain structure used in \cite{lillbacka2007multiscale}, reprinted with permission.}
+\caption{a) One example of a three dimensional microstructure with Austenite and Ferrite assigned to the grains.  b) Two dimensional grain structure used in \cite{lillbacka2007multiscale}, reprinted with permission.}
 \label{fig:ausferr}
 \end{figure}
+
+
 
 
 \textbf{How calculation of stress is done}
@@ -96,6 +117,9 @@ Using the product rule we can write
 
 \textbf{Only figures so far}
 
+Five finite element analysis each were done for modes with different number of grains. The number of grains used in the different models were 5, 20, 50, 100, 250 and 500. The nodes in the upper boundary of the cube was displaced at a rate that corresponds to a change in strain of $\unit[3.125 \cdot 10^{-3}]{s^{-1}}$ until a total strain in the model of 0.05 was obtained.
+
+\cite{Nygårds2002513}
 
 
 \begin{figure}[ht]
@@ -110,6 +134,25 @@ Using the product rule we can write
 \includegraphics[width = 0.75\textwidth]{figures/avg}
 \caption{Averages}
 \label{fig:avg}
+\end{figure}
+
+ \begin{figure}
+\centering
+\begin{subfigure}{.7\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{./figures/250_ausferr_stress}
+  \caption{}
+  \label{fig:ausferr_stress}
+\end{subfigure}%
+
+\begin{subfigure}{.7\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{./figures/250_ausferr_plast}
+  \caption{}
+  \label{fig:ausferr_plast}
+\end{subfigure}
+\caption{Plastic and stress}
+\label{fig:ausferr}
 \end{figure}
 
 

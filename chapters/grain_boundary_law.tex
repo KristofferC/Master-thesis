@@ -6,17 +6,17 @@
 \chapter{Grain boundary mechanisms}
 
 
-In polycrystalline materials \cite[p. 11]{Buss04}
+In polycrystalline materials different mechanisms in the boundary between two grains can have major effects on the macroscopic behavior of the material. Investigations of grain boundary effects in different materials can for example be seen in \cite{eff_grain}, \cite{grain_poly}. In order to improve the modeling of materials on a mesoscopic scale there is a need to be able to include these effects into for example a finite element model. This is done in this thesis by something called \textit{cohesive elements}.
 
 \section{Cohesive elements}
 
-The finite element analysis software Abaqus, used in this thesis, has support for \textit{cohesive elements}. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary mechanisms that can exist between grains.
+The finite element analysis software Abaqus, used in this thesis, has support for cohesive elements. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary mechanisms that can exist between grains.
 
 The difference between cohesive elements and normal elements are that cohesive elements are not supposed to model any material but instead they are supposed to model the actual interface between two materials. The state of the element does not contain a stress tensor like in normal elements but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$. The normal direction is defined from the order of the nodes defining the vertices of the element. An illustration of this can be seen in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
 %
 \[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
 %
-The $T_0$ here is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
+The parameter $T_0$ is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
 
 
 
@@ -39,8 +39,6 @@ When modeling damage and failure of a material using cohesive element there are 
 \end{enumerate}
 %
 A possible scenario for the damage initiation and evolution can be seen in figure \ref{fig:tract_sep}.
-
-
 
 \begin{figure}
 \centering
@@ -120,37 +118,44 @@ We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sig
 \[ D = 1 - (1 - D_n)(1 - D_t). \]
 %
 For mixed separation it is always smaller than the individual $D_n$ and $D_t$ This way is similar to how Abaqus calculates the total damage when multiple criteria of damage are active, see section 23.2.3 in the Abaqus manual. 
-\begin{figure}[h]
-\centering
-  \includegraphics[width=.6\linewidth]{./figures/mixed_tract_sep}
-\caption{The resulting traction for different $\phi_1$. The limiting cases of pure shear and pure normal displacement is shown in blue. It can be seen that the earliest fracture possible is in the case of pure normal separation which is expected. }
-\label{fig:mixed_tract_sep}
-\end{figure}
 
 
 \subsection{Insertion of cohesive elements into mesh}
 
 
-From Neper we get a mesh of the generated microstructure but it does not have the possibility of inserting the cohesive elements between all the grains so this has to be done. A script was written that parsed the generated mesh file and inserted the elements. In order to facilitate describing the process the elements are inserted some notation will be given here.
+
+From Neper we get a mesh of the generated microstructure but it does not have the capability of inserting the cohesive elements between all the grains so this has to be done by some sort of post processing of the generated mesh. A script was written that parsed the mesh file and inserted the cohesive elements. In order to facilitate describing the process the elements are inserted some notation will be given here. 
 
 \begin{itemize}
-\item Nodes have an id and three coordinates describing their spatial location. The notation used is $n_i(x,y,z)$ where $i \in \mathbb{N}$ is the identifier of the node and $(x,y,z)$ is
-\item Triangle element have an id and $T_i(n_1, n_2, n_3)$.
-\item Cohesive elements can be defined from two triangles $C_i(T_1, T_2)$
+\item A node $n$ is represented by a unique identifier $i \in \mathbb{N}$ among the nodes and three coordinates indicating its location in space $x_i,y_i,z_i$. It is denoted as $n_i(x_i,y_i,z_i)$.
+\item A first order triangle element $T$ is represented by a unique identifier $j \in \mathbb{N}$ among all the elements and the three nodes used as its vertices. It is denoted as $T_j(n_{j_1}, n_{j_2}, n_{j_3})$. 
+\item A cohesive element $C$ also has a unique identifier but instead of being defined by nodes it is defined in terms of two triangles which prescribes the two faces perpendicular to the normal of the cohesive element, it is written as $C_j(T_{j_1}, T_{j_2})$.
 \end{itemize}
-
-
-\[ \{ T_i(n_1, n_2, n_3) \}_{T_i \in \text{face}} \]
-
+The algorithm can now be described in two main steps. The algorithm is described for one grain boundary but the exact same method is used for all boundaried.
+\begin{enumerate}
+\item \textit{Disjoin the shared face in a grain boundary.} - In the generated mesh each face is shared by two grains except faces in the boundary of the cube which are ignored. An example of two grains with a shared face can be seen in \ref{fig:cohs_2_a}. What we want to do is create two separate faces, one for each grain, like in figure \ref{fig:cohs_2_a}. From the Neper mesh file, element sets with triangles in the current face can be extracted. The following method is used to separate the faces between two grains. To identify the grains they are assigned a number $G = 1,\ldots , n_g$ where $n_g$ is the total number of grains in the microstructure. The identifiers for the two grains in the current grain boundary will be denoted $G_1$ and $G_2$. From each node $n_i (x_i, y_i, z_i)$ in the face two new nodes are created, $n_{f(G_1,i)} (x_i, y_i, z_i)$ and $n_{f(G_2,i)} (x_i, y_i, z_i)$. These new nodes need a unique idenifier and this is what the function $f$ is for. It should take an identifier for a grain and a node such that:
 %
-\begin{itemize}
-\item Every face is shared by two grains except faces in the boundary which are ignored. What we want to do is create two separate faces, one for both grains and then have cohesive elements connect the two faces. From the Neper mesh file, element sets with triangles in all faces can be extracted. Each node $n$ in the face are duplicated twice into two sets of nodes ${n_i}$
-
- that will constitute the new faces. The nodes in one of these sets are connected with triangles  all the elements from the first grain that have nodes in the face are reconnected to the first batch of the duplicated nodes.  The same is done for the elements in the second grain but these elements are connected to the second batch of new nodes. The grains that was previously sharing a face now have two separate faces that do not share any nodes.
-\item The two new faces are then connected to each other using six node cohesive wedge elements. This is repeated for all faces in the microstructure. 
-\end{itemize}
+\begin{align}&  f: (\mathbb{N},\mathbb{N}) \rightarrow \mathbb{N} \\
+ & f(G_1, i) = f(G_2, j) \Leftrightarrow G_1 = G_2 \text{ and }  i = j  
+\end{align}
 %
-An example of the insertion of these cohesive elements between two grains can be seen in figure \ref{fig:cohs_2}. The grains have for clarity of the figure been separated. In the start of an actual analysis the cohesive element have no width. A figure of the insertion of cohesive element for a complete micro structure is shown in figure \ref{fig:cohs_large}.
+If this property does not hold then the newly created nodes are at risk of having the same identifier as other nodes which would cause problems since each identifier needs to be unique. One simpler way of always having a unique identifier for the new nodes it to increment the identifier by one each time a new node is added. However, this does not work since nodes in the edges of grains are part of multiple faces. Duplicated nodes for these faces would then have different identifiers even though they are part of the same grain and originating from the same node. This would cause hanging nodes. A suitable function which was used in this thesis is
+%
+\begin{align} 
+  f(G, i) = G \cdot n_\text{tot} + i,
+\end{align}
+%
+where $n_\text{tot}$ is the total number of nodes in the original mesh. This has the effect that some of the identifiers for the newly created node can become quite large. However, the identifiers are sparse in the sense that there are many numbers between different identifiers that are not used by any other node as an identifier. This means that after the insertion of cohesive elements are done the identifiers can be renumbered in such a way that they are dense and at this point they are no longer larger than necessary.
+
+With the new nodes in the mesh, new triangles can be made. From the set of triangles in the face $\{ T_j(n_{j_1}, n_{j_2}, n_{j_3}) | \forall j: T_j \in \text{face} \}$, two new sets are created, one for each grain 
+\[ \{ T_{j_1}(n_{f(G_1,j_1)}, n_{f(G_1,j_2)}, n_{f(G_1,j_3)}) | \forall j: {T_{j_1} \in \text{face} \}} \]
+ and 
+\[ \{ T_{j_2}(n_{f(G_2,j_1)}, n_{f(G_2,j_2)}, n_{f(G_2,j_3)}) | \forall j: {T_{j_1} \in \text{face} \}}.\]  
+ These two sets of triangles represent two new faces that do not share any nodes but are at the same location in space as the original face. What needs to be done now is to connect the tetrahedral element that where part of the original face to to the newly created faces. This is done by searching each tetrahedral inside the first and second grain, with identifier $G_1$ and $G_2$ respectively, for nodes $n_i \in \text{face}$ and swap these nodes for the newly created nodes  $n_{f(G_1, i)}$ and $n_{f(G_2, i)}$.
+
+\item \textit{Connect the new faces with cohesive elements}. At this point we have two faces that have no connection of elements to each other. These are now easily connected by creating the set of cohesive elements $ \{ C_j(T_{j_1},T_{j_2}) |  \forall j: T_j \in \text{face}  \} $. This can be seen in figure \ref{fig:cohs_2_c}. 
+\end{enumerate}
+
 
 \begin{figure}
 \centering
@@ -178,6 +183,8 @@ An example of the insertion of these cohesive elements between two grains can be
 \label{fig:cohs_2}
 \end{figure}
 
+After this procedure has been done for all faces the cohesive elements are inserted. The new mesh can then be exported and be used. A figure of cohesive elements inserted between grains a full microstructure can be seen in figure \ref{fig:cohs_large}. In the figure the grains have been pulled apart from each other in order for the cohesive elements to have a finite width and be visible.
+
 
 
 \begin{figure}
@@ -185,16 +192,16 @@ An example of the insertion of these cohesive elements between two grains can be
 \begin{subfigure}[b]{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{./figures/cohs_with_poly}
-  \caption{Course structured mesh.}
+  \caption{}
   \label{fig:cohs_large_a}
 \end{subfigure}%
 \begin{subfigure}[b]{.5\textwidth}
   \centering
   \includegraphics[width=.7\linewidth]{./figures/cohs_without_poly}
-  \caption{More refined structured mesh.}
+  \caption{}
   \label{fig:cohs_large_b}
 \end{subfigure}
-\caption{Structured mesh of different coarseness.}
+\caption{Cohesive elements for with a) grains shoed and b) grains hidden.}
 \label{fig:cohs_large}
 \end{figure}
 
