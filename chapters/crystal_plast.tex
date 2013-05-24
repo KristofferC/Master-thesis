@@ -2,9 +2,12 @@
 \documentclass[crystal_plast.tex]{subfiles}
 
 \begin{document}
-\newpage
+
 \chapter{Crystal plasticity in duplex steel}
 
+A finished material model for crystal plasticity in two phase duplex steel has already been developed in \cite{lillekh}. However, the analysis done on that material model has only been performed in two dimensions with plain stress conditions. It is therefore interesting to see how the same model behaves in the three dimensional case and if significant changes in the stress strain curves are obtained for similar loadings compared to the two dimensional case.
+
+A short summary of the governing equations used in the material model are first presented. Then the way strains are induced into the model is showed by stating the different boundary conditions. Last the different strain stress curves obtained are shown and it can be seen that a model with a larger amount of grains have a smaller variance between analysis with different microstructures with the same number of grains.
 
 \section{Governing equations}
 
@@ -17,8 +20,6 @@
 .
 
 \textbf{Equations describing what the parameters in the table mean. }
-
-In this thesis the two set of parameters used can be seen in table \ref{tbl:mat_par}. They are supposed to represent 
 
 
 \begin{table}
@@ -38,7 +39,7 @@ In this thesis the two set of parameters used can be seen in table \ref{tbl:mat_
 
 \section{Loading case}
 
-This section describes the way th
+This section describes the way the finite element analysis was performed.
 
 
 \subsection{Bondary conditions}
@@ -80,47 +81,34 @@ In this thesis the two phases are assigned to random grains such that the equal 
 \end{figure}
 
 
-
-
-\textbf{How calculation of stress is done}
-
-We want the volume averages stress. This could be done by summing the volume weighted stress from all the elements. This would however require us to save data for all the elements in the model. It is possible to by using the following reasoning:
-
-Using the divergence theorem the following relation can be written.
-
-\begin{equation}
-\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
-\end{equation}
-
-Using the product rule we can write
-
-\begin{equation}
-\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
-\end{equation}
-
-
-
-\begin{equation}
-\int_\Omega ( \sigma_{ij} x_k )_i \id x = \int_\Omega \sigma_{ij,i} x_k + \overbrace{\sigma_{ij} \underbrace{x_{k,i}}_{\delta_{ki}}}^{\sigma_{kj}} \id V 
-\end{equation}
-
-\begin{equation}
-= \int_V \sigma_{kj} \id V = V \overline{\sigma_{kj}}
-\end{equation}
-
-
-\[ \overline{\sigma}_{zz} = \frac{1}{V} \int_\Omega \sigma_{zz} dV = \frac{1}{A} \int_\Gamma F_{z} dA? \]
+%\subsection{Calculation of average stress}
+%We want the volume averaged stress in the $z$ direction. This could be done by summing the stress from all the elements:
+%
+%\[  \overline{\sigma_{zz}} = \frac{1}{V} \int_\Omega \sigma_{zz} \id V \]
+%
+%This would however require saving of data for all the elements in the model. It is possible to extract the same information by only saving the force in the
+%nodes of the top boundary of the cube. The following calculation justifies this. Using the divergence theorem the following relation can be written.
+%$ \int_\Omega ( \sigma_{ij} x_k )_i \id x = \int_\Omega \sigma_{ij,i} x_k + \overbrace{\sigma_{ij} \underbrace{x_{k,i}}_{\delta_{ki}}}^{\sigma_{kj}} \id V $
+%\begin{equation}
+%\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
+%\end{equation}
+%Using the product rule we can write
+%\begin{equation}
+%\int_\Omega \sigma_{ij,i} x_k \id x = \int_\Gamma \sigma_{ij}  x_k \hat{n}_i \id s
+%\end{equation}
+%\begin{equation}
+%\int_\Omega ( \sigma_{ij} x_k )_i \id x = \int_\Omega \sigma_{ij,i} x_k + \overbrace{\sigma_{ij} \underbrace{x_{k,i}}_{\delta_{ki}}}^{\sigma_{kj}} \id V 
+%\end{equation}
+%\begin{equation}
+%= \int_V \sigma_{kj} \id V = V \overline{\sigma_{kj}}
+%\end{equation}
+%\[ \overline{\sigma}_{zz} = \frac{1}{V} \int_\Omega \sigma_{zz} dV = \frac{1}{A} \int_\Gamma F_{z} dA? \]
 
 
 
 \section{Results}
 
-\textbf{Only figures so far}
-
-Five finite element analysis each were done for modes with different number of grains. The number of grains used in the different models were 5, 20, 50, 100, 250 and 500. The nodes in the upper boundary of the cube was displaced at a rate that corresponds to a change in strain of $\unit[3.125 \cdot 10^{-3}]{s^{-1}}$ until a total strain in the model of 0.05 was obtained.
-
-\cite{Nygårds2002513}
-
+Five finite element analysis each were done for models with different number of grains. The number of grains used in the different models were 5, 20, 50, 100, 250 and 500. The nodes in the upper boundary of the cube was displaced at a rate that corresponds to a change in strain of $\unit[3.125 \cdot 10^{-3}]{s^{-1}}$ until a total strain in the model of 0.05. The obtained strain stress curves can be seen for the different analysis in figure \ref{fig:sep}. There are a few observations that can be made. Before any plastic strain all different analysis have the exact same stress strain curve. This is to be expected since at this amount of strain the crystal orientation in the has no effect and the whole model can be seen as one big homogeneous cube. The variance between runs with the same number of grains is also seen to be reduced when the number of grains is increased. With a larger model the heterogeneity in the model tends to cancel out giving a more representative result for a macroscopic model.
 
 \begin{figure}[ht]
 \centering
@@ -129,25 +117,28 @@ Five finite element analysis each were done for modes with different number of g
 \label{fig:sep}
 \end{figure}
 
+The average stress between the runs for the same number of grains can be seen in figure \ref{fig:avg}. It can be seen that the stress tend to increase with more grains and a satisfying convergence is not achieved. This could mean that an even larger number of grains are required. It could also mean that the material model used is not suitable to be used to be used unmodified in a three dimensional analysis. It can be argued that five runs per grain number is not enough and that the avera.
+
 \begin{figure}[ht]
 \centering
-\includegraphics[width = 0.75\textwidth]{figures/avg}
+\includegraphics[width = 0.65\textwidth]{figures/avg}
 \caption{Averages}
 \label{fig:avg}
 \end{figure}
 
+In order to highlight the heterogeneity at the mesoscopic level the \textbf{accumulated plastic strain?????????} and the stress of the whole model is shown for one analysis in figure \ref{fig:ausferr}. 
+
  \begin{figure}
 \centering
-\begin{subfigure}{.7\textwidth}
+\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{./figures/250_ausferr_stress}
+  \includegraphics[width=.8\linewidth]{./figures/250_ausferr_stress}
   \caption{}
   \label{fig:ausferr_stress}
 \end{subfigure}%
-
-\begin{subfigure}{.7\textwidth}
+\begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{./figures/250_ausferr_plast}
+  \includegraphics[width=.8\linewidth]{./figures/250_ausferr_plast}
   \caption{}
   \label{fig:ausferr_plast}
 \end{subfigure}
