@@ -3,24 +3,26 @@
 
 \begin{document}
 
+\FloatBarrier
+
 \chapter{Grain boundary mechanisms}
 
 
-In polycrystalline materials different mechanisms in the boundary between two grains can have major effects on the macroscopic behavior of the material. Investigations of grain boundary effects in different materials can for example be seen in \cite{eff_grain}, \cite{grain_poly}. In order to improve the modeling of materials on a mesoscopic scale there is a need to be able to include these effects into for example a finite element model. This is done in this thesis by something called \textit{cohesive elements}.
+In polycrystalline materials different mechanisms in the boundary between two grains can have major effects on the macroscopic behavior of the material. Investigations of grain boundary effects in different materials can for example be found in \cite{eff_grain}, \cite{grain_poly}. In order to improve the modeling of materials on a mesoscopic scale there is a need to include these effects into for example a finite element model. This is done in this thesis by something called \textit{cohesive elements}.
 
 \section{Cohesive elements}
 
-The finite element analysis software Abaqus, used in this thesis, has support for cohesive elements. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary mechanisms that can exist between grains.
+The finite element analysis software Abaqus, used in this thesis, has support for cohesive elements. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary deformation mechanisms that can exist between grains.
 
-The difference between cohesive elements and normal elements are that cohesive elements are not supposed to model any material but instead they are supposed to model the actual interface between two materials. The state of the element does not contain a stress tensor like in normal elements but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$. The normal direction is defined from the order of the nodes defining the vertices of the element. An illustration of this can be seen in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
+The difference between cohesive elements and solid elements are that cohesive elements do not model any material but instead they model the actual interface between two material surfaces.Since the cohesive elements do not contain any material there is no stress tensor like in solid elements. Instead when the cohesive element is subjected to deformations then  but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$ is the output. The normal direction is defined from the order of the nodes defining the vertices of the element as shown in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
 %
 \[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
 %
-The parameter $T_0$ is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 makes the strain and the separation equal. For a more detailed description of the how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
+The parameter $T_0$ is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 it yields the strain and the separation become equal. For a more detailed description of how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
 
 
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
  \includegraphics[width=.4\linewidth]{./figures/cohs_ele}
 \caption{Orientation of a cohesive element. The order of the nodes is used to determine the bottom and top face as well as the positive normal direction. In order for the normal direction to point upwards the nodes should be given in a counter clockwise direction.}
@@ -28,28 +30,28 @@ The parameter $T_0$ is not the thickness of the cohesive element but a constitut
 \end{figure}
 
 
-When modeling damage and failure of a material using cohesive element there are three main areas of interest:
+When modeling damage and failure of a material,or rather an interface surface, by using cohesive element there are three main areas of interest:
 
 \begin{enumerate}
-\item The properties of the material before damage has taken place. Abaqus only has support for a a linear elastic traction-separation law prior to damage. This is however not a major limitation since many materials have a linear response before damage occurs. 
+\item The properties of the material interface before damage has taken place. Abaqus only supports a linear elastic traction-separation law prior to damage. This is however not a major limitation since many materials have a linear response before damage occurs. 
 
-\item The criteria that defines when the material is said to start experiencing damage. This is called the \textit{damage initiation criteria}.
+\item The criterion that defines when the material starts experiencing damage. This is called the \textit{damage initiation criterion}.
 
-\item The properties of the material after the damage initiation criteria has been fulfilled need to be prescribed. This is called the \textit{damage evolution}, it describes how the degradation of the material stiffness is changing as the material experience more and more damage.
+\item The properties of the material interface after that the damage initiation criteria has been fulfilled need to be prescribed. This is done by \textit{damage evolution} which describes how the degradation of the material stiffness develops as the material interface experience more and more separation.
 \end{enumerate}
 %
 A possible scenario for the damage initiation and evolution can be seen in figure \ref{fig:tract_sep}.
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
   \includegraphics[width=.6\linewidth]{./figures/tract_sep}
-\caption{An example of a traction separation law. The point $a$ is the damage initation point where the stiffness of the material start to degrade. The damage evolution is the interval covered at $b$ showing how the damage is evolving with increasing separation. In this figure a linear damage evolution. At the separation point $\delta_n^t$ the material is at a complete failure and a fracture has occurred.}
+\caption{An example of a traction separation law. The point $a$ is the damage imitation point where the stiffness of the material interface start to degrade. The damage evolution is the interval covered by $b$ showing how the damage is evolving with increasing separation. In this figure a linear damage evolution is assumed. At the separation point $\delta_n^t$ the material interface experience a complete failure and fracture occurs.}
 \label{fig:tract_sep}
 \end{figure}
 
 \subsection{Undamaged behavior}
  
-The behavior of the material before damage is assumed to be elastic and is written in term of a constitutive matrix as
+The behavior of the material before damage initiation is assumed to be elastic and is written in term of a constitutive matrix as
  %
  \[ \vec{t} = 
  \left[
@@ -74,90 +76,90 @@ K_{sn} & K_{st} & K_{ss} \\
 = \vec{K} \vec{\epsilon}.
 \]
 %
-As can be seen from the matrix coupled behavior of all components are supported. However, in this thesis only uncoupled behavior will be used and thus only the diagonal elements will be non zero in this analysis. Difference between the shear directions will also not be considered which means $K_{tt} = K_{ss}$.
+As can be seen from the matrix it is possible to allow for a coupling between normal and shear components. However, in this thesis only uncoupled behavior will be used and thus only the diagonal elements of $K$ will be non zero in this analysis. Any difference between the shear directions will not be considered which means that $K_{tt} = K_{ss}$.
 
 \subsection{Damage initiation}
 
-The damage initiation criteria is the point when the degradation of the material starts to occur. This can either be described as a function of the strain or the traction. There are two possible functions that can be used, one is based on the maximum strain or traction component and one is based on length of the strain or traction vector. For the traction criteria these functions can be expressed as
+The damage initiation criterion is the point when the degradation of the material interface starts to occur. This criterion can either be described as a function of the strain or the traction. There are two possible functions that can be used in Abaqus, one that is based on the maximum strain or traction component and one that is based on length of the strain or traction vector. For the traction criteria these functions can be expressed as
 %
 \[ \max \left( \frac{\langle t_n \rangle}{t_n^0} ,\frac{ t_s }{t_s^0} ,  \frac{ t_t }{t_t^0}  \right) = 1,  \] 
 
 \[  \left( \frac{\langle t_n \rangle}{t_n^0} \right)^2 +   \left( \frac{ t_s }{t_s^0} \right)^2 +   \left( \frac{ t_t }{t_t^0} \right)^2 = 1.   \]	
 %
-Here $t_n^0, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compression (negative normal traction) do not lead to any damage. The functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criteria is used. 
+Here $t_n^0, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langle \rangle$ denotes the Macaulay brackets which is non zero only if the quantity inside the bracket is positive. This has the effect that pure compression (negative normal traction) do not lead to any damage. The corresponding functions for the strains are found by trivial modifications to the above functions. In the analysis used in this thesis the quadratic strain criterion is used. 
 
 \subsection{Damage evolution}
 
-The damage evolution describes the rate of the degradation of the material based on the separation. The current degradation of the material is completely captured in one scalar $D$. The traction vector are then calculated as 
+The damage evolution describes the degradation of the material interface as a function of the separation. The current degradation of the material is completely captured by one scalar damage variable $D$. The traction vector is then calculated as 
 %
 \[ \vec{t} = (1 - D) \overline{\vec{t}} \]
 %
- where $\overline{\vec{t}}$ is the traction in the element that would have occurred if there was no damage in the material. Before the damage initiation criteria has been fulfilled $D = 0$. Having the damage completely described by only a scalar is one of the major limitation to the cohesive elements. This means it is hard to capture the difference in the traction separation law for normal and shear separations. It would be useful if the damage in the material could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user made material where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UMAT}) but doing this out of scope for this thesis.
+ where $\overline{\vec{t}}$ is the traction in the element if there was no damage in the material interface. Before the damage initiation criterion has been fulfilled, $D = 0$. Having the damage completely described by only a scalar is one of the major limitations of the cohesive elements that are available in Abaqus. This means it is hard to capture the difference in the traction separation law for normal and shear separations. It would be useful if the damage in the material interface could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user defined element where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UEL}) but doing this out of scope for this thesis.
 
-If we firstly assume that we only have separations in the normal direction and want to give $D$ in table form the following procedure would be used. $K_{nn}$ is calculated as the slope of the initial elastic response. For separations larger than the damage initiation, at a specific point $(\delta_n, \sigma_n)$, $D$ is calculated as $D_f(K_{nn}, \delta_n, \sigma_n)$ where $D_f$ is the function:
+If we first assume that we only have separations in the normal direction and want to give $D$ in table form as an input to Abaqus, the following procedure would be used. $K_{nn}$ is calculated as the slope of the initial elastic response. For separations larger than the damage initiation $\delta_n^0$,  at a specific point $(\delta_n, \sigma_n)$, $D$ is calculated as $D_f(K_{nn}, \delta_n, \sigma_n)$ where $D_f$ is the function:
 %
 \[ D_f(K, \delta, \sigma) \mapsto   1 - \frac{\sigma}{K\delta}. \]
 %
-However, in general, we do not have pure normal or pure shear separations. From Abaqus software we can get get the a measure of the relation in magnitude between the normal and shearing traction components. This measure is in form of a number $\phi_1$ between 0 and 1 that is defined as
+However, in general, we do not have pure normal or pure shear separations. From Abaqus we can get a measure of the relation in magnitude between the normal and shearing traction components. This measure is a number $\phi_1$ between 0 and 1 that is defined as
 %
 \[ \phi_1 = \frac{2}{\pi} \arctan \left( \frac{ \tau}{\langle t_n \rangle} \right) \]
 %
-where $\tau$ is the effective shear traction $\sqrt{t_s^2 + t_t^2}$. It is also possible to get a number $\phi_2$ that gives a relation between the shear tractions but since there is no difference between the shear directions in this analysis this is not used. Using the equation for $\phi_1$ together with the equation for the effective separation,
+where $\tau$ is the effective shear traction $\sqrt{t_s^2 + t_t^2}$. It is also possible to get a number $\phi_2$ that gives a relation between the shear tractions but since we will not assume any difference between the shear directions in this thesis, this number is not used. Using the equation for $\phi_1$ together with the equation for the effective separation,
 %
 \[ d_m = \sqrt{d_n^2 + d_s^2 + d_t^2},  \]
 %
-we can solve for the normal separation $d_n$ and the effective shear separation $ d_\tau = \sqrt{d_s^2 + d_t^2}.$ in terms of the known $\phi_1$ and $d$. The results are:
+we can solve for the normal separation $d_n$ and the effective shear separation $ d_\tau = \sqrt{d_s^2 + d_t^2}.$ in terms of the known $\phi_1$ and $d$. The following results are obtained:
 %
 \begin{align}
  d_n & = \frac{d_m}{\sqrt{\left(\frac{PK_{nn}}{K_{tt}}\right)^2 + 1 }  }  \\
  d_\tau  & = d_m\sqrt{1 -\frac{1}{\left(\frac{PK_{nn}}{K_{tt}} \right)^2 + 1 }}.
 \end{align}
 %
-We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the damage scalars that for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. The issue now is how these should be combined to give an overall damage to the material. One way of doing this is by the formula,
+We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the correct damage scalars for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. The issue now is how these two damage scalars should be combined to give an overall damage of the interface. One way of doing this is by adopting the formula,
 %
 \[ D = 1 - (1 - D_n)(1 - D_t). \]
 %
-For mixed separation it is always smaller than the individual $D_n$ and $D_t$ This way is similar to how Abaqus calculates the total damage when multiple criteria of damage are active, see section 23.2.3 in the Abaqus manual. 
+For mixed separation conditions, $D$ is always smaller than the individual $D_n$ and $D_t$ This formula is similar to how Abaqus calculates the total damage when multiple damage criteria are active, see section 23.2.3 in the Abaqus manual. 
 
 
 \subsection{Insertion of cohesive elements into mesh}
 
 
 
-From Neper we get a mesh of the generated microstructure but it does not have the capability of inserting the cohesive elements between all the grains so this has to be done by some sort of post processing of the generated mesh. A script was written that parsed the mesh file and inserted the cohesive elements. In order to facilitate describing the process the elements are inserted some notation will be given here. 
+From Neper we get a mesh of the generated microstructure but Neper does not have the capability of inserting cohesive elements between the grains. Hence, this must be done as a post processing of the generated mesh. A script was written in the programming language Python that parsed the mesh file and inserted the cohesive elements. In order to facilitate the description of the algorithm the script uses to insert the cohesive elements, some notation will be given here. 
 
 \begin{itemize}
 \item A node $n$ is represented by a unique identifier $i \in \mathbb{N}$ among the nodes and three coordinates indicating its location in space $x_i,y_i,z_i$. It is denoted as $n_i(x_i,y_i,z_i)$.
-\item A first order triangle element $T$ is represented by a unique identifier $j \in \mathbb{N}$ among all the elements and the three nodes used as its vertices. It is denoted as $T_j(n_{j_1}, n_{j_2}, n_{j_3})$. 
-\item A cohesive element $C$ also has a unique identifier but instead of being defined by nodes it is defined in terms of two triangles which prescribes the two faces perpendicular to the normal of the cohesive element, it is written as $C_j(T_{j_1}, T_{j_2})$.
+\item A first order triangle element $T$ is represented by a unique identifier $j \in \mathbb{N}$ among all the elements and the three nodes that are used as its vertices. It is denoted as $T_j(n_{j_1}, n_{j_2}, n_{j_3})$. 
+\item A cohesive element $C$ also has a unique identifier but instead of being defined by nodes it is defined in terms of the two triangles which prescribes the two faces perpendicular to the normal of the cohesive element, it is written as $C_j(T_{j_1}, T_{j_2})$.
 \end{itemize}
-The algorithm can now be described in two main steps. The algorithm is described for one grain boundary but the exact same method is used for all boundaried.
+The algorithm can now be described in two main steps. The algorithm is described for one grain boundary but the same method is used for all boundaries.
 \begin{enumerate}
-\item \textit{Disjoin the shared face in a grain boundary.} - In the generated mesh each face is shared by two grains except faces in the boundary of the cube which are ignored. An example of two grains with a shared face can be seen in \ref{fig:cohs_2_a}. What we want to do is create two separate faces, one for each grain, like in figure \ref{fig:cohs_2_a}. From the Neper mesh file, element sets with triangles in the current face can be extracted. The following method is used to separate the faces between two grains. To identify the grains they are assigned a number $G = 1,\ldots , n_g$ where $n_g$ is the total number of grains in the microstructure. The identifiers for the two grains in the current grain boundary will be denoted $G_1$ and $G_2$. From each node $n_i (x_i, y_i, z_i)$ in the face two new nodes are created, $n_{f(G_1,i)} (x_i, y_i, z_i)$ and $n_{f(G_2,i)} (x_i, y_i, z_i)$. These new nodes need a unique idenifier and this is what the function $f$ is for. It should take an identifier for a grain and a node such that:
+\item \textit{Disjoin the shared face in a grain boundary.} - In the generated mesh each face is shared by two grains except the faces on the boundary of the cube which are ignored. An example of two grains with a shared face can be seen in \ref{fig:cohs_2_a}. What we want to do is create two separate faces, one for each grain, like in figure \ref{fig:cohs_2_a}. From the Neper mesh file, element sets with triangles in the current face can be extracted. The following method is used to separate the faces between two grains. To identify the grains they are assigned a number $G = 1,\ldots , n_g$ where $n_g$ is the total number of grains in the microstructure. The identifiers for the two grains on the current grain boundary will be denoted $G_1$ and $G_2$. From each node $n_i (x_i, y_i, z_i)$ in the face two new nodes are created, $n_{f(G_1,i)} (x_i, y_i, z_i)$ and $n_{f(G_2,i)} (x_i, y_i, z_i)$. These new nodes need unique identifiers and this is the purpose of the function $f$. The function $f$ should take an identifier for a grain and a node such that:
 %
 \begin{align}&  f: (\mathbb{N},\mathbb{N}) \rightarrow \mathbb{N} \\
- & f(G_1, i) = f(G_2, j) \Leftrightarrow G_1 = G_2 \text{ and }  i = j  
+ & f(G_1, i) = f(G_2, j) \Leftrightarrow (G_1, i) = (G_2, j) 
 \end{align}
 %
-If this property does not hold then the newly created nodes are at risk of having the same identifier as other nodes which would cause problems since each identifier needs to be unique. One simpler way of always having a unique identifier for the new nodes it to increment the identifier by one each time a new node is added. However, this does not work since nodes in the edges of grains are part of multiple faces. Duplicated nodes for these faces would then have different identifiers even though they are part of the same grain and originating from the same node. This would cause hanging nodes. A suitable function which was used in this thesis is
+If this property does not hold then the newly created nodes might have the same identifier as other nodes which would cause problems since each identifier needs to be unique. One simpler way of always obtaining a unique identifier for the new nodes it to increment the identifier by one each time a new node is added. However, this does not work since nodes in the edges of grains are part of multiple faces. Duplicated nodes for these faces would have different identifiers even though they are part of the same grain and originating from the same node. This would cause hanging nodes. A suitable function which was used in this thesis is
 %
 \begin{align} 
   f(G, i) = G \cdot n_\text{tot} + i,
 \end{align}
 %
-where $n_\text{tot}$ is the total number of nodes in the original mesh. This has the effect that some of the identifiers for the newly created node can become quite large. However, the identifiers are sparse in the sense that there are many numbers between different identifiers that are not used by any other node as an identifier. This means that after the insertion of cohesive elements are done the identifiers can be renumbered in such a way that they are dense and at this point they are no longer larger than necessary.
+where $n_\text{tot}$ is the total number of nodes in the original mesh. This has the effect that some of the identifiers for the newly created node can become quite large. However, the identifiers are sparse in the sense that there are many numbers between different identifiers that are not used by any other node as an identifier. This means that after the insertion of cohesive elements are done, then the identifiers can be renumbered in such a way that they are dense and at this point they are no longer a higher number than necessary.
 
-With the new nodes in the mesh, new triangles can be made. From the set of triangles in the face $\{ T_j(n_{j_1}, n_{j_2}, n_{j_3}) | \forall j: T_j \in \text{face} \}$, two new sets are created, one for each grain 
-\[ \{ T_{j_1}(n_{f(G_1,j_1)}, n_{f(G_1,j_2)}, n_{f(G_1,j_3)}) | \forall j: {T_{j_1} \in \text{face} \}} \]
+With the new nodes in the mesh, new triangles can be defined. From the set of triangles in the face $\{ T_j(n_{j_1}, n_{j_2}, n_{j_3}) | \forall j: T_j \in \text{face} \}$, two new sets are created, one for each grain 
+\[ \{ T_{j_1}(n_{f(G_1,j_1)}, n_{f(G_1,j_2)}, n_{f(G_1,j_3)}) | \forall j: {T_{j} \in \text{face} \}} \]
  and 
-\[ \{ T_{j_2}(n_{f(G_2,j_1)}, n_{f(G_2,j_2)}, n_{f(G_2,j_3)}) | \forall j: {T_{j_1} \in \text{face} \}}.\]  
- These two sets of triangles represent two new faces that do not share any nodes but are at the same location in space as the original face. What needs to be done now is to connect the tetrahedral element that where part of the original face to to the newly created faces. This is done by searching each tetrahedral inside the first and second grain, with identifier $G_1$ and $G_2$ respectively, for nodes $n_i \in \text{face}$ and swap these nodes for the newly created nodes  $n_{f(G_1, i)}$ and $n_{f(G_2, i)}$.
+\[ \{ T_{j_2}(n_{f(G_2,j_1)}, n_{f(G_2,j_2)}, n_{f(G_2,j_3)}) | \forall j: {T_{j} \in \text{face} \}}.\]  
+ These two sets of triangles represent two new faces that do not share any nodes but are at the same location in space as the original face. What needs to be done now is to connect the tetrahedral element that where part of the original face to the newly created faces. This is done by searching each tetrahedral inside the first and second grain, with identifier $G_1$ and $G_2$ respectively, for nodes $n_i \in \text{face}$ and swap these nodes for the newly created nodes  $n_{f(G_1, i)}$ and $n_{f(G_2, i)}$ respectively.
 
-\item \textit{Connect the new faces with cohesive elements}. At this point we have two faces that have no connection of elements to each other. These are now easily connected by creating the set of cohesive elements $ \{ C_j(T_{j_1},T_{j_2}) |  \forall j: T_j \in \text{face}  \} $. This can be seen in figure \ref{fig:cohs_2_c}. 
+\item \textit{Connect the new faces with cohesive elements}. At this point we have two faces that have no connection of elements to each other. These are now easily connected by creating the set of cohesive elements $ \{ C_j(T_{j_1},T_{j_2}) |  \forall j: T_j \in \text{face}  \} $. This is illustrated in figure \ref{fig:cohs_2_c}. 
 \end{enumerate}
 
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
 \begin{subfigure}[b]{.5\linewidth}
   \centering
@@ -183,11 +185,11 @@ With the new nodes in the mesh, new triangles can be made. From the set of trian
 \label{fig:cohs_2}
 \end{figure}
 
-After this procedure has been done for all faces the cohesive elements are inserted. The new mesh can then be exported and be used. A figure of cohesive elements inserted between grains a full microstructure can be seen in figure \ref{fig:cohs_large}. In the figure the grains have been pulled apart from each other in order for the cohesive elements to have a finite width and be visible.
+After this algorithm has been executed for all faces the cohesive elements are inserted. The new mesh can then be exported and used in FE analyses. A figure where cohesive elements have been inserted between grains in a full microstructure can be seen in figure \ref{fig:cohs_large}. In the figure the grains have been pulled apart from each other in order for the cohesive elements to have a finite width and be visible.
 
 
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
 \begin{subfigure}[b]{.5\textwidth}
   \centering
@@ -201,32 +203,50 @@ After this procedure has been done for all faces the cohesive elements are inser
   \caption{}
   \label{fig:cohs_large_b}
 \end{subfigure}
-\caption{Cohesive elements for with a) grains showing and b) grains hidden.}
+\caption{Cohesive elements with a) grains shown and b) grains hidden.}
 \label{fig:cohs_large}
 \end{figure}
 
 
-\section{Analysis with coh}
+\section{FE analyses of generated mesh with cohesive elements}
 
+In order to test the method of the insertion of cohessive elements as well as FE analyses were performed on a micro structure with material properties that were not set to simulate a real case.
+A microstructure with 50 grains was generated and meshed. Cohesive elements were then inserted into the mesh and the same uniaxial tensile loading as in section \ref was performed. 
+The exact cause of the convergence problems could not be deduced but it is likely that there is a discontinuity in the force displacement curve that leads to the implicit solver failing to find an equilibrium. A common advice to overcome the convergence problems associated with the softening of materials and implicit solvers is to introduce viscous regularization in the cohesive elements. 
+ 
+Youngs modulus 200 GPa, $\sigma_n^0 0.001$, $\sigma_n^t = 0.04$.
 
-\begin{figure}
+\subsection{Effect of mesh coarseness}
+
+\begin{figure}[htpb!]
 \centering
-\includegraphics[width=.7\linewidth]{./figures/mesh_coarse_coh.png}
-\caption{Cohesive elements for with a) grains showing and b) grains hidden.}
-\label{fig:cohs_large}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=.7\linewidth]{./figures/explicit_speed.png}
+\includegraphics[width=.7\linewidth]{./figures/mesh_course_coh}
 \caption{Mass scaling for a stable time increment of $1e-03,1e-04,1e-05$ .}
 \label{fig:cohs_large}
 \end{figure}
 
-\begin{figure}
+
+explicit solver here
+
+
+\subsection{Effect of mass scaling in explicit solver}
+
+
+
+\begin{figure}[htpb!]
 \centering
-\includegraphics[width=.7\linewidth]{./figures/impvsexp.png}
-\caption{Cohesive elements for with a) grains showing and b) grains hidden.}
+\includegraphics[width=.7\linewidth]{./figures/exptime}
+\caption{Mass scaling for a stable time increment of $1e-03,1e-04,1e-05$ .}
+\label{fig:cohs_large}
+\end{figure}
+
+\subsection{Comparison between explicit and implicit FE sovler}
+
+
+\begin{figure}[htpb!]
+\centering
+\includegraphics[width=.7\linewidth]{./figures/impvsexp}
+\caption{Different}
 \label{fig:cohs_large}
 \end{figure}
 

@@ -3,57 +3,19 @@
 
 \begin{document}
 
-\chapter{Results}
+\FloatBarrier
 
-\begin{figure}[h]
-\centering
-  \includegraphics[width=.6\linewidth]{./figures/mixed_tract_sep}
-\caption{The resulting traction for different $\phi_1$. The limiting cases of pure shear and pure normal displacement is shown in blue. It can be seen that the earliest fracture possible is in the case of pure normal separation which is expected. }
-\label{fig:mixed_tract_sep}
-\end{figure}
 
-\textbf{Much of these need to be moved before the crystal plasticity chapter since stuff here is used there.}
-
-Using this method would give traction separation laws as in figure \ref{fig:mixed_tract_sep} for different $\phi_1$. It can be seen that the border cases of pure shear and pure normal displacements are respected.
+\section{FE analysis of Tungsten Carbide with Cobolt dissipated }
 
 
 \textbf{This is WC-CO and should be moved to a separate chapter}
 
 The way Cobolt (Co) and Tungsten Carbide (WC) is assigned to different grains is as follows. The smallest grains are set to contain Cobolt until they constitute the desired volume fraction. The rest of the grains are set to Tungsten Carbide. Cohesive elements are then inserted in the faces that are shared by either two WC grains or one WC grain and one Co grain. There are thus no cohesive element between two Co grains. The reasoning behind this is that the Co grains are usually smaller than the WC grans.  An example of the assignments of materials to a microstructure can be seen in figure \ref{fig:cowc}.
 
-\begin{figure}
-\centering
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/100_grain_diff_col}
-  \caption{}
-  \label{fig:cowc_a}
-\end{subfigure}%
-\hspace{-10mm}
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/100_grain_wcco}
-  \caption{}
-  \label{fig:cowc_b}
-\end{subfigure}%
-\hspace{-10mm}
-\begin{subfigure}[b]{.5\textwidth}
-  \centering
-  \includegraphics[width=.5\linewidth]{./figures/100_grain_co}
-  \caption{}
-  \label{fig:cowc_c}
-\end{subfigure}
-\caption{(a) The generated microstructure. (b) Assignment of materials to grains. This is with 10\%/90\% WC/Co. (c). The grains containing WC hidded.}
-\label{fig:cowc}
-\end{figure}
 
 
-
-\section{Test}
-
-\textbf{Most of this is for WC-Co and should be rewritten to be general. Experiments should be redone with }
-
-In order to confirm that the data was entered correctly into Abaqus a simple test was done. The test was one with a model of two grains with the shape of rectangular prism. These were connected with cohesive elements and the top grain was displaced in different directions. The directions used where  In this test the grains were made very stiff such that only deformation in the cohesive elements took place. The model after displacement can be seen in figure \ref{2_grain_test_case}. The two white grains can be seen as well as the green cohesive elements binding them together. The displacement has been exaggerated for clarity of the figure.
+In order to confirm that the data was entered correctly into Abaqus a simple test was done. The test was one with a model of two grains with the shape of rectangular prism. The grains were connected with cohesive elements and the top grain was displaced in different directions. The directions used where  In this test the grains were made very stiff such that only deformation in the cohesive elements took place. The model after displacement can be seen in figure \ref{2_grain_test_case}. The two white grains can be seen as well as the green cohesive elements connecting them together. The displacement has been exaggerated for clarity of the figure.
 
 \begin{figure}[ht]
 \centering
@@ -66,61 +28,9 @@ In order to confirm that the data was entered correctly into Abaqus a simple tes
 \begin{figure}[ht]
 \centering
 \includegraphics[width=.75\linewidth]{figures/abaq_coh_test}
-\caption{Rresults for the traction in the cohesive zone elements for three different directions.}
-\label{fig:test_case}
+\caption{Results for the traction in the cohesive zone elements for three different directions. It can be seen that the traction law with pure normal and pure shear displacement is respected and reasonable results are shown for mixed separations. }
+\label{fig:test_cases}
 \end{figure}
-
-\section{Real}
-The analysis was done with a model of 100 grains and a reduction of the stiffness in the boundaries by a factor of 100. The nodes in the top boundary of the model are displaced as the figure blah blah.
-
-The overall strain in the model that we want to achieve is 1.5\%. At first the analysis was rune with course displacements step to see the point where the damage criteria for the first cohesive element is active. The analysis managed to complete a total displacement of the top layer by what would be a strain of 0.007 and then it failed to converge. This is expected since the cohesive zone law is over a short distance and shorter displacements per step are needed to explore the whole curve (bad formulation).
-
-With the knowledge that the damage criteria starts to get active at around 0.007 strain the model was run with the same step size as before up to that point and then finer steps were taken. The finer steps that were taken were of length 3e-6. With this method the analysis got a bit further but still failed to converge at one point. From the output file of the software the node with the largest change in reaction force and largest chance in the displacement can be seen. These two nodes are different but both in the same mesh element. In figure \ref{fig:test_case} a figure of the meshed microstructure can be seen. Only the cohesive elements between the grains are shown. Elements in blue means that their damage criteria has not been fulfilled. It can be seen that only one element has started to soften and this is the very element that contain the node that has the convergence problem. Convergence problems during softening is common and has been investigated goidfshngfd [REFERENCES].
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.75\linewidth]{figures/annoying_node}
-\caption{Showing the node that Abaqus is whining about}
-\label{fig:annoying_node}
-\end{figure}
-
-The traction separation curve for the cohesive element that contain the problem node can be seen in figure \ref{fig:prob_node_plot}.  In the zoomed part of the figure every second time step has been indicated with a dot on the line. It can be seen that the curve is explored very well and that we are not taking big steps on the traction separation law curve. 
-
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1.0]{figures/problem_node_plot}
-\caption{Traction in the cohesive zone element that are having the largest change in force in the iteration that failed to converge.}
-\label{fig:prob_node_plot}
-\end{figure}
-
-If we instead look at a plot for the damage criteria we can see that the analysis fail to converge exactly at the point where the second integration point hits the damage fulfilled criteria.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 1.0]{figures/problem_node_plot_quade}
-\caption{Damage criteria plot}
-\label{fig:prob_node_plot}
-\end{figure}
-
-0.1065 time
-Managed to get to: 0.007865 D for failing 0.0005
-
-\begin{itemize}
-\item Trying with another solver, Jacobi 8 iteration K reformulation, no change.
-\item Specify damping factor, no change.
-\item Use damping factors from previous general step 0.05, no change.
-\end{itemize}
-
- 
- 
- Changed it to linear, no mode mix. Very simple. Gets past the point before but fails in exactly the same manner for another element.
- 
- 
-\newpage
-
-\textbf{Stress strain curves for different percentage of WC/Co.}
-
-
 
 
 \end{document}

@@ -3,11 +3,13 @@
 
 \begin{document}
 
+\FloatBarrier
+
 \chapter{Crystal plasticity in duplex steel}
 
-A finished material model for crystal plasticity in two phase duplex steel has already been developed in \cite{lillekh}. However, the analysis done on that material model has only been performed in two dimensions with plain stress conditions. It is therefore interesting to see how the same model behaves in the three dimensional case and if significant changes in the stress strain curves are obtained for similar loadings compared to the two dimensional case.
+A material model based on crystal plasticity adopted for a two phase duplex steel has already been developed in \cite{lillekh}. However, the analyses done with that material model have only been performed using two dimensional RVE:s assuming plain stress conditions. It is therefore interesting to see how the same model behaves for a three dimensional RVE and study if significant changes in the stress strain curves are obtained for similar loading conditions.
 
-A short summary of the governing equations used in the material model are first presented. Then the way strains are induced into the model is showed by stating the different boundary conditions. Last the different strain stress curves obtained are shown and it can be seen that a model with a larger amount of grains have a smaller variance between analysis with different microstructures with the same number of grains.
+A short summary of the governing equations of the crystal plasticity model is first presented. Then the method of inducing macroscopic strains into the model is showed by stating the different boundary conditions. Last the different resulting stress strain curves are shown and convergence analyses are given where the influence of number of grains on the response of the RVE:s are studied.
 
 \section{Governing equations}
 
@@ -22,7 +24,7 @@ A short summary of the governing equations used in the material model are first 
 \textbf{Equations describing what the parameters in the table mean. }
 
 
-\begin{table}
+\begin{table}[htpb!]
 \caption {Material parameters used in the analysis.}
 \label{tbl:mat_par}
 \centering
@@ -39,30 +41,28 @@ A short summary of the governing equations used in the material model are first 
 
 \section{Loading case}
 
-This section describes the way the finite element analysis was performed.
+This section describes the way the FE analyses were performed.
 
 
 \subsection{Bondary conditions}
-The FEM analysis that is to performed is to simulate cubic piece inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the cubic microstructure. The boundary conditions are set by explicitly setting the displacements of different nodes in the model. In the analysis performed in this section the nodes at the bottom face of the cube where fixed such that they could not move in the vertical direction. The nodes in two of the edges have the additional boundary condition that they can only move parallel to their edge. Stresses in the models are induced by having the nodes in the top face of the cube move at a fixed rate in the vertical direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case}. 
+The FE analyses performed simulated an RVE (cube) inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the RVE. The boundary conditions are defined by prescribing the displacements of certain nodes of the model. To be specific, the nodes at the bottom face of the cube are fixed such that they cannot move in the $y$-direction. The nodes at the bottom face on two of the edges have the additional boundary condition that they can only move parallel to their edge, i.e. $u_x = 0$ at $z = 0$ and $u_z = 0$ at $x = 0$. Stresses in the model are induced by having the nodes in the top face of the cube move at a fixed rate in the $y$-direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case}. 
 
 
-\begin{figure}[ht]
+\begin{figure}[htpb!]
 \centering
 \includegraphics[width=0.6\linewidth]{figures/test_case}
-\caption{Illustration of the boundary conditions applied to the microstructure.}
+\caption{Illustration of the boundary conditions applied to the RVE.}
 \label{fig:test_case}
 \end{figure}
 
 \subsection{Material assignment}
 
-In order to do a FEM-analysis each element in the model need to be assigned properties that describes how the element should deform given an applied load and how the stress in the element should be calculated. In the analysis to be performed we want to be able to assign a certain material to any specific grain. In the meshed model a grain is just a collection of finite elements. These collections are however available so instead of having to assign the material to each and every finite element one by one it is possible to to the assignment to a batch of finite elements representing one grain.
+In order to perform an FE analysis each element in the model needs to be assigned properties that governs the stress strain behavior of the specific element. In the FE analysis to be performed we want to be able to assign certain material properties depending on what grain the element belongs to. In the meshed model a grain is just a collection of finite elements. These collections are available as element sets so that instead of having to assign the material to each and every finite element it is sufficient to assign the properties to the element set that represent one grain.
 
-In this thesis the two phases are assigned to random grains such that the equal volume fractions is obtained. Each grain is then assigned a random slip direction. A figure of the model after the materials have been assigned to grains can be seen in figure \ref{fig:ausferr}. 
-
-
+In this thesis the two phases are assigned to random grains such that equal volume fractions are obtained. Each grain is then assigned random slip directions. A figure of the RVE after the material properties have been assigned to the grains is given in figure \ref{fig:ausferr}. 
 
 
- \begin{figure}
+ \begin{figure}[htpb!]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -76,7 +76,7 @@ In this thesis the two phases are assigned to random grains such that the equal 
   \caption{}
   \label{fig:ausferr_2d}
 \end{subfigure}
-\caption{a) One example of a three dimensional microstructure with Austenite and Ferrite assigned to the grains.  b) Two dimensional grain structure used in \cite{lillbacka2007multiscale}, reprinted with permission.}
+\caption{a) One example of a three dimensional microstructure with austenite and ferrite assigned to the grains.  b) Two dimensional grain structure used in \cite{lillbacka2007multiscale}, reprinted with permission.}
 \label{fig:ausferr}
 \end{figure}
 
@@ -108,47 +108,59 @@ In this thesis the two phases are assigned to random grains such that the equal 
 
 \section{Results}
 
-Five finite element analysis each were done for models with different number of grains. The number of grains used in the different models were 5, 20, 50, 100, 250 and 500. The nodes in the upper boundary of the cube was displaced at a rate that corresponds to a change in strain of $\unit[3.125 \cdot 10^{-3}]{s^{-1}}$ until a total strain in the model of 0.05. The obtained strain stress curves can be seen for the different analysis in figure \ref{fig:sep}. There are a few observations that can be made. Before any plastic strain all different analysis have the exact same stress strain curve. This is to be expected since at this amount of strain the crystal orientation in the has no effect and the whole model can be seen as one big homogeneous cube. The variance between runs with the same number of grains is also seen to be reduced when the number of grains is increased. With a larger model the heterogeneity in the model tends to cancel out giving a more representative result for a macroscopic model.
+Five finite element analyses were conducted for models with different number of grains. The number of grains used in the different models were 5, 20, 50, 100, 250 and 500. The difference between analyses with the same number of grains is in the randomness of the seed points in the Voronoi tesselation and the random assignment of crystal slip directions in each grain.  The nodes on the upper boundary of the cube were displaced at a rate that corresponds to a change in strain of $\unit[3.125 \cdot 10^{-3}]{s^{-1}}$ until a total macroscopic strain of 0.05 was obtained. In order to highlight the heterogeneity at the mesoscopic level the accumulated plastic slip and the von Mises equivalent stress field of an RVE is shown for one analysis in figure \ref{fig:ausferr_col}. 
 
-\begin{figure}[ht]
+\begin{figure}[htpb!]
 \centering
-\includegraphics[width = 0.75\textwidth]{figures/sep}
-\caption{Separate runs}
-\label{fig:sep}
-\end{figure}
-
-The average stress between the runs for the same number of grains can be seen in figure \ref{fig:avg}. It can be seen that the stress tend to increase with more grains and a satisfying convergence is not achieved. This could mean that an even larger number of grains are required. It could also mean that the material model used is not suitable to be used to be used unmodified in a three dimensional analysis. It can be argued that five runs per grain number is not enough and that the avera.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width = 0.65\textwidth]{figures/avg}
-\caption{Averages}
-\label{fig:avg}
-\end{figure}
-
-In order to highlight the heterogeneity at the mesoscopic level the \textbf{accumulated plastic strain?????????} and the stress of the whole model is shown for one analysis in figure \ref{fig:ausferr}. 
-
- \begin{figure}
-\centering
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.8\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./figures/250_ausferr_stress}
   \caption{}
   \label{fig:ausferr_stress}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+
+\begin{subfigure}{.8\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{./figures/250_ausferr_plast}
   \caption{}
   \label{fig:ausferr_plast}
 \end{subfigure}
-\caption{Plastic and stress}
-\label{fig:ausferr}
+\caption{(a) The von Mises equivalent stress field and (b) the accumulated plastic slip for a mesomodel with 100 grains.}
+\label{fig:ausferr_col}
 \end{figure}
 
 
+The resulting stress strain curves can be seen for the different analyses in figure \ref{fig:sep}. From this figure there are a few observations that can be made. Before any plastic strain develops all the different analyses have exactly the same stress strain response. This is to be expected since at this amount of strain, the grains behave elastically and the crystal orientation has no effect. Therefore the and the whole model can be seen as one homogeneous cube. It can also be noted that the variance between the analyses with the same number of grains is reduced when the number of grains is increased. With a model with more grains, the heterogeneity in the model tends to cancel out giving a more representative result for a macroscopic model.
 
-\newpage
 
+ \begin{figure}[ht]
+\centering
+\includegraphics[width = 0.65\textwidth]{figures/sep}
+\caption{5 realizations (analyses) where slip directions are randomly varied of mesomodels with 5, 20, 50, 100, 250 and 500 grains.}
+\label{fig:sep}
+\end{figure}
+
+The average stress strain responses for the analyses with the same number of grains are compared for different number of grains figure \ref{fig:avg}.
+
+\begin{figure}[htpb!]
+\centering
+\includegraphics[width = 0.65\textwidth]{figures/avg}
+\caption{Average responses of 5 different realizations for 5, 20, 50, 100, 250 and 500 grains. The experimental result found in \cite{lillekh} for the two-phase stainless steel is given.}
+\label{fig:avg}
+\end{figure}
+
+It can be seen that the stress values tend to increase with more grains in the model and a satisfying convergence is not achieved. In order to determine the cause of this more analyses were conducted. To reduce the heterogeneity these analyses were performed with only ferrite in the RVE. Analyses with grains up to 2000 grains were conducted. The boundary conditions were the same as in the analyses with 50\% austenite and ferrite. The same general trend could be seen in these FE analyses, the stress response is slightly stiffer with increasing number of grains. To quantify this effect the stress at a macroscopic strain of 0.05 was plotted for the different analyses with respect to the effective sphere radius $\overline{r}_g$ defined as
+\begin{equation}
+ \overline{r} = \left( \frac{ \overline{V}}{5 \pi} \right)^{1/3},
+\end{equation}
+where $\overline{V}$ is the average volume of a grain. The result is shown in figure \ref{fig:avg_sphere_rad}.
+
+
+\begin{figure}[htpb!]
+\centering
+\includegraphics[width = 0.65\textwidth]{figures/avg_fig_sphere_rad}
+\caption{The stress response at a macroscopic strain of 0.05 with respect to the equivalent sphere radius.}
+\label{fig:avg_sphere_rad}
+\end{figure}
 
 \end{document}

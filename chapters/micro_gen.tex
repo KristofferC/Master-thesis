@@ -3,6 +3,8 @@
 
 \begin{document}
 
+\FloatBarrier
+
 \chapter{Microstructure generation}
 
 In order to conduct numerical analyses of materials with a polycrystalline structure the geometrical properties of the grains in the material must be modeled. Relevant properties to model are the distribution of grain size and the geometrical shape of the grains.
@@ -32,7 +34,7 @@ three grains will intersect along a line called an \textit{edge} and four grains
 This means that two seed points must at least be separated by a distance $d$. This is called \textit{hardcore Voronoi tessellation}. The physical interpretation of this is that two grains can not start nucleate arbitrarily close to each other. This is however not used in this thesis. An example of a tessellation that has been obtained can be seen in figure \ref{fig:pois_voronoi} where 100 seed points have been used. A comparison between a cross section of a Voronoi tessellation and a polycrystalline material can be seen in figure \ref{fig:slice}.
 
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
 \begin{subfigure}[b]{.5\textwidth}
   \centering
@@ -53,7 +55,7 @@ This means that two seed points must at least be separated by a distance $d$. Th
 
  The actual generation of the tessellation can easily be done in for example the commonly used software MATLAB \cite{matlab:voronoi}. The computational time required to generate such a tessellation is negligible for any number of grains that would be reasonable for an RVE of a polycrystalline material. In this thesis the open source software Neper \cite{Quey20111729} was used to generate the tessellation since this software also has a module capable of meshing the generated structure.
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
 \begin{subfigure}[b]{.5\textwidth}
   \centering

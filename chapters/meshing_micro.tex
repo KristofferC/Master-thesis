@@ -2,12 +2,13 @@
 \documentclass[meshing_micro.tex]{subfiles}
 
 \begin{document}
+\FloatBarrier
 
 \chapter{Meshing of microstructure}
 
 In order to perform a finite element analysis the generated microstructure needs to be meshed. One way of creating such a mesh, which would be computationally fast and simple to implement, would be to ignore the shape of the grains and use a structured mesh of hexahedral elements. Each element would then be said to be a part of that grain which occupies most of its volume. With a reduction in the size of the hexahedrons the shapes of the grains are better approximated. Example of such meshes can be seen in figure \ref{fig:pois_voronoi_mesh_cube}.
 
-\begin{figure}
+\begin{figure}[htpb!]
 \centering
 \begin{subfigure}[b]{.5\textwidth}
   \centering
@@ -36,7 +37,7 @@ This is the same software that was used to generated the Voronoi tessellation. N
 By connecting the edges with each other the faces are created and these are meshed using triangles. The nodes in the edges surrounding the face is used as seeds for these triangles. Finally, the faces are connected, defining the grains, which are meshed with tetrahedrons using the triangles on the faces as seeds. A figure illustrating the process is shown in figure \ref{fig:mesh_strat}. There are many different algorithms used to do the actual meshing from the lower dimensional seeds. 
 What Neper does is that it uses different algorithms in parallel and from the results chooses the one that generates the mesh with the overall highest quality.
 
- \begin{figure}
+ \begin{figure}[htpb!]
 \centering
   \includegraphics[width=.85\linewidth]{./figures/meshing_tact.pdf}
 \caption{Bottom up meshing strategy used by Neper. Grains are meshed from lower to higher dimensions.}
