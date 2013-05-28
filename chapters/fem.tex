@@ -16,10 +16,10 @@ In general the steps in the Galerkin method are:
 
 
 \begin{equation}
-\label{eqn:poisson}
 \left\{ \begin{array}{ll}
 u_{,ii} & = f, \quad \text{in } \Omega, \\
 u & = 0, \quad  \text{on } \Gamma. \end{array} \right.
+\label{eqn:poisson}
 \end{equation}
 Let $v \in V$ be an arbitrary function where $V$ is the Hilbert space $H_0^1(\Omega)$ where the zero in the subscript denotes that the functions should vanish on the boundary. Multiplying \ref{eqn:poisson} by $v$, integrating over $\Omega$ and using Green's identity gives:
 
@@ -29,7 +29,7 @@ Let $v \in V$ be an arbitrary function where $V$ is the Hilbert space $H_0^1(\Om
 
 The integral over the boundary is zero due to $v$ being zero everywhere on it. A function $u$ which satisfies this relation is called a weak solution to the original problem. In general the weak form can be written as
 \begin{equation}
-\label{eqn_weak}
+\label{eqn:weak_gen}
     a(u,v) = f(v), \quad \forall v \in V
 \end{equation}
 where $a(.,.)$ is of bilinear form and $f(.)$ is of linear form. The purpose of rewriting the equation in weak form is that the requirement on the smoothness of the function $u$ has been reduced. 
@@ -100,8 +100,9 @@ We can see that $N_i$ is only non zero for triangles having the node $P_i$ as on
 
 
 
-\section{FEM for linear elasticity}
-As a relevant example, the derivation of the stiffness matrix and load vector for a linear elastic mechanics problem is given. The equation that is to be solved is Cauchys momentum equation on a domain $\Omega$ with a given traction $t_i = \sigma_{ij} \hat{n}_j$ on the boundary $\Gamma$,
+\section{FEM for nonlinear and linear elasticity}
+\label{sec:femmech}
+As a relevant example, the derivation of the stiffness matrix and load vector for nonlinear and linear elastic mechanics problem is given. The equation that is to be solved is Cauchys momentum equation on a domain $\Omega$ with a given traction $t_i = \sigma_{ij} \hat{n}_j$ on the boundary $\Gamma$,
 \begin{equation} 
 \left\{
 \begin{array}{ll}
@@ -117,18 +118,24 @@ As described before the equation is multiplied by a kinetically admissible funct
     \label{eqn:cond}
 \end{equation}
 %
-Using Gauss identity and the boundary condition of the problem gives
+where $\sigma_{ji} = \sigma(\epsilon_{ij})$ and $\epsilon_{ij} = \frac{1}{2}\left(u_{i,j} + u_{j,i} \right)$. Using Gauss identity and the boundary condition of the problem gives
 %
 \begin{equation} 
-  \int_\Omega  v_{i,j} \sigma_{ji} \id x  - \int_\Omega v_i f_i \id x - \int_\Gamma v_i g_i \id s = 0
+  \underbrace{\int_\Omega  v_{i,j} \sigma_{ji} \id x}_{f_\text{int}(\overline{u})} - \underbrace{\int_\Omega v_i f_i \id x - \int_\Gamma v_i g_i \id s}_{f_\text{ext}} = 0
     \label{eqn:weak}
 \end{equation}
 %
- This is the weak formulation of the original problem. If we assume linear elasticity we can write the constitutive relations between the stress and strain and the relation between strain and displacement as
+ This is the weak formulation of the original problem. It can be interpreted as equilibrium equations in all the nodes of the FE mesh. It is commonly solved with the Newton-Raphsons method. It is usually written in matrix notation as:
+ %
+ \begin{equation} 
+ \vec{K}\vec{u} - \vec{R} = 0
+\end{equation}
+ %
+ If linear elasticity is assumed the constitutive relations between the stress and strain can be rewritten as
 %
 \begin{equation}
 \label{eqn:const} 
-\sigma_{ij} = C_{ijkl} \epsilon_{kl} \quad  \epsilon_{kl}(u) = \frac{1}{2} \left(u_{k,l} + u_{l,k}\right). 
+\sigma_{ij} = C_{ijkl} \epsilon_{kl}
 \end{equation}
 %
 Due to symmetry in $\sigma_{ij}$ and $\epsilon_{ij}$ the stiffness tensor must satisfy $C_{ijkl} = C_{ijlk}$ and thus we have the following relation.

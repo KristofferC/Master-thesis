@@ -6,6 +6,7 @@
 \FloatBarrier
 
 \chapter{Crystal plasticity in duplex steel}
+\label{chap:cryst_plast}
 
 A material model based on crystal plasticity adopted for a two phase duplex steel has already been developed in \cite{lillekh}. However, the analyses done with that material model have only been performed using two dimensional RVE:s assuming plain stress conditions. It is therefore interesting to see how the same model behaves for a three dimensional RVE and study if significant changes in the stress strain curves are obtained for similar loading conditions.
 
@@ -151,7 +152,7 @@ The average stress strain responses for the analyses with the same number of gra
 
 It can be seen that the stress values tend to increase with more grains in the model and a satisfying convergence is not achieved. In order to determine the cause of this more analyses were conducted. To reduce the heterogeneity these analyses were performed with only ferrite in the RVE. Analyses with grains up to 2000 grains were conducted. The boundary conditions were the same as in the analyses with 50\% austenite and ferrite. The same general trend could be seen in these FE analyses, the stress response is slightly stiffer with increasing number of grains. To quantify this effect the stress at a macroscopic strain of 0.05 was plotted for the different analyses with respect to the effective sphere radius $\overline{r}_g$ defined as
 \begin{equation}
- \overline{r} = \left( \frac{ \overline{V}}{5 \pi} \right)^{1/3},
+ \overline{r} = \left( \frac{ \overline{3V}}{4 \pi} \right)^{1/3},
 \end{equation}
 where $\overline{V}$ is the average volume of a grain. The result is shown in figure \ref{fig:avg_sphere_rad}.
 
