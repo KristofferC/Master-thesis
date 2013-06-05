@@ -259,7 +259,7 @@ This can be solved by for example the central different method as
 \begin{equation}
 \frac{1}{\Delta t^2} \vec{M} \vec{u}^{t + \Delta t} = \vec{R}^t - \vec{K} \vec{u}^t + \frac{1}{\Delta t^2} \left(2 \vec{M} \vec{u}^{t} - \vec{u}^{t-\Delta t} \right)
 \end{equation}
-This is however conditionally stable on the time step $\Delta t$ used, c.f \cite{Park1977343}. A necessary condition for convergence is the  Courant–Friedrichs–Lewy condition. In FE analyses this condition can be stated that he distance travelled by the fastest wave in the material in one time step should be smaller than the characteristic size of the element $L$. The speed of the waves are related to the stiffness $k$ and mass $m$ of the material. The condition can be written as
+This is however conditionally stable on the time step $\Delta t$ used, c.f \cite{Park1977343}. A necessary condition for convergence is the  Courant–Friedrichs–Lewy condition. In FE analyses this condition can be stated that he distance traveled by the fastest wave in the material in one time step should be smaller than the characteristic size of the element $L$. The speed of the waves are related to the stiffness $k$ and mass $m$ of the material. The condition can be written as
 \begin{equation}
 \Delta t \leq \alpha \frac{L \sqrt{m}}{\sqrt{k}}
 \end{equation}
