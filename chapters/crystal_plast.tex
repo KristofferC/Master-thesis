@@ -150,12 +150,16 @@ The average stress strain responses for the analyses with the same number of gra
 \label{fig:avg}
 \end{figure}
 
-It can be seen that the stress values tend to increase with more grains in the model and a satisfying convergence is not achieved. In order to determine the cause of this more analyses were conducted. To reduce the heterogeneity these analyses were performed with only ferrite in the RVE. Analyses with grains up to 2000 grains were conducted. The boundary conditions were the same as in the analyses with 50\% austenite and ferrite. The same general trend could be seen in these FE analyses, the stress response is slightly stiffer with increasing number of grains. To quantify this effect the stress at a macroscopic strain of 0.05 was plotted for the different analyses with respect to the effective sphere radius $\overline{r}_g$ defined as
+It can be seen that the stress values tend to increase with more grains in the model and a satisfying convergence is not achieved. In order to determine the cause of this more analyses were conducted. To reduce the heterogeneity these analyses were performed with only ferrite in the RVE. Analyses with grains up to 2000 grains were conducted. The boundary conditions were the same as in the analyses with 50\% austenite and ferrite. The same general trend could be seen in these FE analyses, the stress response is slightly stiffer with increasing number of grains. To quantify this effect the stress at a macroscopic strain of 0.05 was plotted for the different analyses with respect to the effective sphere diameter $\overline{D}_g$ defined as
 \begin{equation}
- \overline{r} = \left( \frac{ \overline{3V}}{4 \pi} \right)^{1/3},
+ \overline{D} = \left( 2\cdot \frac{ \overline{3V}}{4 \pi} \right)^{1/3},
 \end{equation}
-where $\overline{V}$ is the average volume of a grain. The result is shown in figure \ref{fig:avg_sphere_rad}.
-
+where $\overline{V}$ is the average volume of a grain. The result is shown in figure \ref{fig:avg_sphere_rad}. A line is also shown in the figure where the two parameters $\sigma_0$ and $k_y$ have been fitted to the data to best fit the curve
+\begin{equation}
+ \sigma_{zz} = \sigma_0 + \frac{k_y}{\sqrt{D}}
+ \label{eq:hallpetch}
+\end{equation}
+with the results $\sigma_0 \approx 650$ and $k_y \approx 27$. Equation \ref{eq:hallpetch} is the Hall-Petch relation. It is not yet clear if the material model follows this relation but what is clear is that there is some relation between the grain size and the stress in the model.
 
 \begin{figure}[htpb!]
 \centering
