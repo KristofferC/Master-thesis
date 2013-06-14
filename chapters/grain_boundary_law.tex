@@ -14,7 +14,7 @@ In polycrystalline materials different mechanisms in the boundary between two gr
 
 The finite element analysis software Abaqus, used in this thesis, has support for cohesive elements. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary deformation mechanisms that can exist between grains.
 
-The difference between cohesive elements and solid elements are that cohesive elements do not model any material but instead they model the actual interface between two material surfaces.Since the cohesive elements do not contain any material there is no stress tensor like in solid elements. Instead when the cohesive element is subjected to deformations then  but instead a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$ is the output. The normal direction is defined from the order of the nodes defining the vertices of the element as shown in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
+The difference between cohesive elements and solid elements are that cohesive elements do not model any material but instead they model the actual interface between two material surfaces. Since the cohesive elements do not contain any material there is no stress tensor like in solid elements. Instead, when the cohesive element is subjected to deformations a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$ is the output. The normal direction is defined from the order of the nodes defining the vertices of the element as shown in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
 %
 \[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
 %
@@ -30,7 +30,7 @@ The parameter $T_0$ is not the thickness of the cohesive element but a constitut
 \end{figure}
 
 
-When modeling damage and failure of a material,or rather an interface surface, by using cohesive element there are three main areas of interest:
+When modeling damage and failure of a material, or rather an interface surface, by using cohesive element there are three main areas of interest:
 
 \begin{enumerate}
 \item The properties of the material interface before damage has taken place. Abaqus only supports a linear elastic traction-separation law prior to damage. This is however not a major limitation since many materials have a linear response before damage occurs. 
@@ -115,7 +115,7 @@ we can solve for the normal separation $d_n$ and the effective shear separation 
  d_\tau  & = d_m\sqrt{1 -\frac{1}{\left(\frac{PK_{nn}}{K_{tt}} \right)^2 + 1 }}.
 \end{align}
 %
-We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the correct damage scalars for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. The issue now is how these two damage scalars should be combined to give an overall damage of the interface. One way of doing this is by adopting the formula,
+where $P = \tan(2 \phi_1 / 2)$. We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the correct damage scalars for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. The issue now is how these two damage scalars should be combined to give an overall damage of the interface. One way of doing this is by adopting the formula,
 %
 \[ D = 1 - (1 - D_n)(1 - D_t). \]
 %

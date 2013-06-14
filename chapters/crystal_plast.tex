@@ -46,14 +46,14 @@ This section describes the way the FE analyses were performed.
 
 
 \subsection{Bondary conditions}
-The FE analyses performed simulated an RVE (cube) inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the RVE. The boundary conditions are defined by prescribing the displacements of certain nodes of the model. To be specific, the nodes at the bottom face of the cube are fixed such that they cannot move in the $y$-direction. The nodes at the bottom face on two of the edges have the additional boundary condition that they can only move parallel to their edge, i.e. $u_x = 0$ at $z = 0$ and $u_z = 0$ at $x = 0$. Stresses in the model are induced by having the nodes in the top face of the cube move at a fixed rate in the $y$-direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case}. 
+The FE analyses performed simulated an RVE (cube) inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the RVE. The boundary conditions are defined by prescribing the displacements of certain nodes of the model. To be specific, the nodes at the bottom face of the cube are fixed such that they cannot move in the $y$-direction. The nodes at the bottom face on two of the edges have the additional boundary condition that they can only move parallel to their edge, i.e. $u_x = 0$ at $z = 0$ and $u_z = 0$ at $x = 0$. Stresses in the model are induced by having the nodes in the top face of the cube move at a fixed rate in the $y$-direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case_cryst}. 
 
 
 \begin{figure}[htpb!]
 \centering
 \includegraphics[width=0.6\linewidth]{figures/test_case}
 \caption{Illustration of the boundary conditions applied to the RVE.}
-\label{fig:test_case}
+\label{fig:test_case_cryst}
 \end{figure}
 
 \subsection{Material assignment}
@@ -131,7 +131,7 @@ Five finite element analyses were conducted for models with different number of 
 \end{figure}
 
 
-The resulting stress strain curves can be seen for the different analyses in figure \ref{fig:sep}. From this figure there are a few observations that can be made. Before any plastic strain develops all the different analyses have exactly the same stress strain response. This is to be expected since at this amount of strain, the grains behave elastically and the crystal orientation has no effect. Therefore the and the whole model can be seen as one homogeneous cube. It can also be noted that the variance between the analyses with the same number of grains is reduced when the number of grains is increased. With a model with more grains, the heterogeneity in the model tends to cancel out giving a more representative result for a macroscopic model.
+The resulting stress strain curves can be seen for the different analyses in figure \ref{fig:sep}. From this figure there are a few observations that can be made. Before any plastic strain develops all the different analyses have exactly the same stress strain response. This is to be expected since at this amount of strain, the grains behave elastically and the crystal orientation has no effect. Therefore the whole model can be seen as one homogeneous cube. It can also be noted that the variance between the analyses with the same number of grains is reduced when the number of grains is increased. With a model with more grains, the heterogeneity in the model tends to cancel out giving a more representative result for a macroscopic model.
 
 
  \begin{figure}[ht]
@@ -152,7 +152,7 @@ The average stress strain responses for the analyses with the same number of gra
 
 It can be seen that the stress values tend to increase with more grains in the model and a satisfying convergence is not achieved. In order to determine the cause of this more analyses were conducted. To reduce the heterogeneity these analyses were performed with only ferrite in the RVE. Analyses with grains up to 2000 grains were conducted. The boundary conditions were the same as in the analyses with 50\% austenite and ferrite. The same general trend could be seen in these FE analyses, the stress response is slightly stiffer with increasing number of grains. To quantify this effect the stress at a macroscopic strain of 0.05 was plotted for the different analyses with respect to the effective sphere diameter $\overline{D}_g$ defined as
 \begin{equation}
- \overline{D} = \left( 2\cdot \frac{ \overline{3V}}{4 \pi} \right)^{1/3},
+ \overline{D} = 2\cdot\left( \frac{ 3\overline{V}}{4 \pi} \right)^{1/3},
 \end{equation}
 where $\overline{V}$ is the average volume of a grain. The result is shown in figure \ref{fig:avg_sphere_rad}. A line is also shown in the figure where the two parameters $\sigma_0$ and $k_y$ have been fitted to the data to best fit the curve
 \begin{equation}
