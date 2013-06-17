@@ -210,9 +210,9 @@ After this algorithm has been executed for all faces the cohesive elements are i
 
 \section{FE analyses with cohesive elements}
 
-In order to test the generated mesh including cohesive elements FE analyses were performed on a micro structure with material properties that were not set to simulate a real case.
+In order to test the generated mesh that includes cohesive elements, FE analyses were performed on a micro structure with material properties that were not set to simulate a real case.
 
-One Voronoi tesselation of 50 grains was generated and meshed. Cohesive elements were then inserted into the mesh. The grains were set to behave elastically with a Young's modulus of $E = \unit[200]{GPa}$. Cohesive elements were set to initially be mode independent with an elasticity equal to the one in the solid elements. The damage initiation criteria used was $\sigma_n^0 = 0.001$ and a linear damage evolution law was used with fracture at $\sigma_n^t = 0.04$. The same method of inducing strain as in section \ref{chap:cryst_plast} was used. The analysis was run for meshes of different coarseness to see if there was any mesh dependence in the results. The resulting strain stress curves can be seen in figure \ref{fig:coarse_coh}.
+One Voronoi tesselation of 50 grains was generated and meshed. Cohesive elements were then inserted into the mesh. The grains were set to behave elastically with a Young's modulus of E $= \unit[200]{GPa}$ and Poisson ratio $\nu = 0.3$. Cohesive elements were set to initially be mode independent with an elasticity equal to the one in the solid elements. The damage initiation criteria used was $\sigma_n^0 = 0.001$ and a linear damage evolution law was used with fracture at $\sigma_n^t = 0.04$. The same method of inducing strain as in section \ref{chap:cryst_plast} was used. The analysis was run for meshes of different coarseness to see if there was any mesh dependence in the results. The resulting stress strain curves can be seen in figure \ref{fig:coarse_coh}.
 %
 %
 \begin{figure}[htpb!]
@@ -222,7 +222,7 @@ One Voronoi tesselation of 50 grains was generated and meshed. Cohesive elements
 \label{fig:coarse_coh}
 \end{figure}
 %
- The analyses was set to run until a macroscopic strain of 0.05 of the RVE. However, at different points in the analysis convergence problems with the implicit solver caused the analysis to abort. This happened at different points during the analysis. Implicit solvers generally have difficulties with softening in materials and the discontinuous nature in the gradient of the traction separation law in cohesive elements probably make things worse. It is likely that there is a discontinuity in the force displacement curve causing the Newton Rhapson method to not converge to an equilibrium point. A common advice given to overcome the convergence problems with implicit solvers associated with the softening of materials due to cohesive elements is to introduce viscous regularization in the cohesive elements. The viscous stiffness degradation variable $D_v$ is defined as
+ The analyses were set to run until a macroscopic strain of 0.05 of the RVE. However, at different points in the analysis convergence problems with the implicit solver caused the analysis to abort. This happened at different points during the analysis. Implicit solvers generally have difficulties with softening in materials and the discontinuous nature in the gradient of the traction separation law in cohesive elements probably makes things worse. It is likely that there is a discontinuity in the force displacement curve causing the Newton Raphson method to not converge to an equilibrium point. A common advice given to overcome the convergence problems with implicit solvers associated with the softening of materials due to cohesive elements is to introduce viscous regularization in the cohesive elements. The viscous stiffness degradation variable $D_v$ is defined as
  
 \begin{equation}
   \dot{D}_v = \frac{1}{\mu} (D - D_v)
@@ -236,10 +236,9 @@ where $\mu$ is the viscosity parameter. The response of the damaged cohesive int
 %
 This should have the effect of smoothing out the damage in the cohesive element making it less likely that the implicit solver fails in finding an equilibrium point. This was attempted but it had little to no effect in terms of convergence. The exact cause for the convergence problem is yet to be pinpointed.
 
-There is however another way of solving the FE problem. In an implicit solver the equilibrium equation that tries to be solved aer
-%
+There is however another way of solving the FE problem. In an implicit solver the equilibrium equation that is solved is
 \begin{equation}
-  \vec{K} \vec{u} - \vec{R} = 0.
+  \underbrace{\vec{K} \vec{u}}_{\vec{f}_\text{int}(u)} - \undebrrace{\vec{R}} _{\vec{f}_\text{ext}} = 0.
 \end{equation}
 %
 For notation see section \ref{sec:femmech}. Instead of solving the equilibrium equation we can take into account acceleration giving the equation
@@ -259,13 +258,13 @@ This can be solved by e.g. the central different method as
 \begin{equation}
 \frac{1}{\Delta t^2} \vec{M} \vec{u}^{t + \Delta t} = \vec{R}^t - \vec{K} \vec{u}^t + \frac{1}{\Delta t^2} \left(2 \vec{M} \vec{u}^{t} - \vec{u}^{t-\Delta t} \right)
 \end{equation}
-This is however conditionally stable on the time step $\Delta t$ used, c.f \cite{Park1977343}. A necessary condition for convergence is the  Courant–Friedrichs–Lewy condition. In FE analyses this condition can be stated that he distance traveled by the fastest wave in the material in one time step should be smaller than the characteristic size of the element $L$. The speed of the waves are related to the stiffness $k$ and mass $m$ of the material. The condition can be written as
+This is however conditionally stable depending on the time step $\Delta t$ used, c.f \cite{Park1977343}. A necessary condition for convergence is the  Courant–Friedrichs–Lewy condition. In FE analyses this condition can be stated that the distance traveled by the fastest wave in the material in one time step should be smaller than the characteristic size of the element $L$. The speed of the waves are related to the stiffness $k$ and mass $m$ of the material. The condition can be written as
 \begin{equation}
 \Delta t \leq \alpha \frac{L \sqrt{m}}{\sqrt{k}}
 \end{equation}
 where $\alpha$ is a proportionality constant.
 
-This condition can be quite strict and a small timestep might thus be needed for stability which leads to extensive computational time required. However, the problem we are trying to solve is static and should be independent of the mass. We should therefore be able to scale the mass in the FE model in order to allow for larger time steps to respect the convergence condition without significantly affecting the result. In order to study this analyses were the mass was scaled in order for the stable time step to change were perfomed and the results are shown in figure \ref{fig:mass_scale}. It can be seen if the mass is scaled high enough the resulting stress is irregular and seem to have some high frequency oscillations. However, with smaller time steps the curves seem to converge nicely. 
+This condition can be quite strict and a small timestep might thus be needed for stability which leads to extensive computational time required. However, the problem we are trying to solve is static and should be independent of the mass. We should therefore be able to scale the mass in the FE model in order to allow for larger time steps to respect the convergence condition without significantly affecting the result. In order to study thi,s analyses where the mass was scaled in order for the stable time step to change were perfomed and the results are shown in figure \ref{fig:mass_scale}. It can be seen that if the mass is scaled high enough the resulting stress is irregular and seem to have some high frequency oscillations. However, with smaller time steps the curves seem to converge nicely. 
 
 \begin{figure}[htpb!]
 \centering
@@ -274,12 +273,12 @@ This condition can be quite strict and a small timestep might thus be needed for
 \label{fig:mass_scale}
 \end{figure}
 
-In order to test the validity of the result from the explicit solver the results are compared to the implicit solver for identical mesh and material properties. In figure \ref{fig:impvsexp} the results are shown and very good agreement between the explicit and implicit solutions can be seen. From this we draw the conclusion that it is possible to use the explicit solver in Abaqus in order to circumvent the convergence problems associated with the implicit solver.
+In order to test the validity of the results from the explicit solver the results are compared to the implicit solver for identical mesh and material properties. In figure \ref{fig:impvsexp} the results are shown and very good agreement between the explicit and implicit solutions can be seen. From this we draw the conclusion that it is possible to use the explicit solver in Abaqus in order to circumvent the convergence problems associated with the implicit solver.
 
 \begin{figure}[htpb!]
 \centering
 \includegraphics[width=.7\linewidth]{./figures/impvsexp}
-\caption{Comparison between the solution using either an explicit or implicit solver. This shows that for the region that the implicit solver converges the explicit and implicit solution agree well.}
+\caption{Comparison between the solution from an explicit and and implicit solver. This shows that for the region where the implicit solver converges the explicit and implicit solution agree well.}
 \label{fig:impvsexp}
 \end{figure}
 
