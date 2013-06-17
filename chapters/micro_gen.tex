@@ -11,7 +11,7 @@ In order to conduct numerical analyses of materials with a polycrystalline struc
 One possibility is to extract the three dimensional microstructure from experiments by using X-ray microtomography. 
 The images generated from such an experiment can be analyzed resulting in a digital representation of the microstructure, see for example\cite{Bhandari2007222}.
 However, this is a complicated process. The experiments required are extensive and expensive and the post processing of the data is also non trivial. 
- In order to know if the size of the model that is used is large enough for it to be considered an RVE multiple runs have do be done and the variance in the results have to be evaluated. It can therefore be said that it is necessary to be able to generate different realisations of microstructures of different sizes. Ideally, one would want a mathematically analytic description of a microstructure that is similar enough to the real structure of the material such that a meaningful analysis can be done. One common way of approximating the microstructure in polycrystalline materials is with the Voronoi tesselation. 
+ In order to know if the size of the model that is used is large enough for it to be considered an RVE multiple runs have do be performed and the variance in the results have to be evaluated. It can therefore be said that it is necessary to be able to generate different realisations of microstructures of different sizes. Ideally, one would want a mathematically analytic description of a microstructure that is similar enough to the real structure of the material such that a meaningful analysis can be done. One common way of approximating the microstructure in polycrystalline materials is with the Voronoi tesselation. 
  
 A Voronoi tessellation is a partition of a domain $D \in \mathbb{R}^d$ into $n$ regions $R_i$ in $D$, each corresponding to one of $n$ different \textit{seed points} $\vec{P}_i$. 
 These regions consists of the set of all points that are closer to a particular seed point than to any other,
@@ -23,11 +23,11 @@ In this case, the resulting regions will have the shape of convex polyhedrons wh
 This is the grain structure that would exist in a material that forms in the following way:
 \begin{itemize}
 \item Grains start to nucleate at all the seed points at the same time.
-\item The grains grows in all directions at the same rate.
+\item The grains grow in all directions at the same rate.
 \item A grain boundary is created where the grains meet.
 \end{itemize}
-In such a Voronoi tesselation the intersection of two grains will intersect over a plane called a \textit{face},
-three grains will intersect along a line called an \textit{edge} and four grains will intersect in a point called a \textit{vertex}. A common way to set the locations of the seed points is to randomly assign them to different positions in $D$. This is known as a "Poisson-Voronoi tesselation". One extra requirement that can be used is that 
+In such a Voronoi tesselation two grains will intersect over a plane called a \textit{face},
+three grains will intersect along a line called an \textit{edge} and four grains will intersect in a point called a \textit{vertex}. A common way to set the locations of the seed points is to randomly assign them to different positions in $D$. This is known as a \textit{Poisson-Voronoi tesselation}. One extra requirement that can be used is that 
 %
 \[ \min \left( |\vec{P}_i - \vec{P}_j| \right) < d, \quad \forall i \neq j, \quad d \in \mathbb{R}^+ \]
 %

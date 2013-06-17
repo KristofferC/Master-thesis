@@ -8,11 +8,7 @@
 
 \section{FE analyses of tungsten carbide}
 
-In order to test the cohesive element method on a real world material FE analyses were performed on a model with a traction separation law estimated by atomistic simulations in \cite{Gren2013}. 
-
-The traction separation law is for grains of tungsten carbide with 
-
- and one of the traction separation law were entered in the cohesive elements.
+To test the cohesive element method on a real world material FE analyses were performed on a model with a traction separation law estimated by atomistic simulations in \cite{Gren2013}. The traction separation law for the grain boundaries in tungsten carbide were entered in the cohesive elements and FE analyses were performed.
  
 \subsection{Test case} 
   In order to confirm that the data was entered correctly into Abaqus a simple test was performed. The test used a model of two grains with the shape of rectangular prism. The grains were connected with cohesive elements and the nodes in the top grain was displaced in different directions. In this test the grains were made very stiff such that only deformation in the cohesive elements took place. The model after displacement can be seen in figure \ref{2_grain_test_case}. The two white grains can be seen as well as the green cohesive elements connecting them. The displacement has been exaggerated for clarity of the figure.
@@ -37,10 +33,8 @@ The atomistic simulations only performed displacements of the bulk grains in pur
 
 \subsection{Full analysis}
 
-Since the The same traction separation law as in the test case above was used for these analyses. The bulk behaviour of the .
-This effects of the cobalt skeleton that usually exist in this material is not taken into account in this thesis. The grains of tungsten carbide was modelled to deform elastically with $E \approx 250GPa$. This is consistent with results in \cite{Buss04}.
-
-Size of grains on average 1 micron. Simulations were done with 50, 100, 250, 500 grains. Results of the average stresses can be seen in figure \ref{fig:wcco_res}
+The same traction separation law as in the test case above was used for these analyses. The grains of tungsten carbide was modelled to deform elastically with $E \approx 250GPa$. This is consistent with results in \cite{Buss04}.
+This effects of the cobalt skeleton that usually exist in this material is not taken into account in this thesis. The size of the grains were set to average 1 micron. Simulations were done with 50, 100, 250, 500 grains. Results of the average stresses can be seen in figure \ref{fig:wcco_res}
 
 \begin{figure}[ht]
 \centering
@@ -51,6 +45,7 @@ Size of grains on average 1 micron. Simulations were done with 50, 100, 250, 500
 
 
 \section{Discussion}
+Some more stuff here.
 \begin{itemize}
 \item A lot of things happen at a small time scale when the grain fractures. In later analyses more care must be taken to have a better resolution at that part of the run.
 \item These are recent results, more simulations must be done. For example it can be seen that the fracture is not as abrupt at 500 grains than 50. It is possible that higher number of grains is needed.
