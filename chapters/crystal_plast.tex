@@ -8,21 +8,7 @@
 \chapter{Crystal plasticity in duplex steel}
 \label{chap:cryst_plast}
 
-A material model based on crystal plasticity adopted for a two phase duplex steel has already been developed in \cite{lillekh}. However, the analyses done with that material model have only been performed using two dimensional RVE:s assuming plain stress conditions. It is therefore interesting to see how the same model behaves for a three dimensional RVE and study if significant changes in the stress strain curves are obtained for similar loading conditions.
-
-A short summary of the governing equations of the crystal plasticity model is first presented. Then the method of inducing macroscopic strains into the model is showed by stating the different boundary conditions. Last the different resulting stress strain curves are shown and convergence analyses are given where the influence of number of grains on the response of the RVE:s are studied.
-
-\section{Governing equations}
-
-.
-
-.
-
-.
-
-.
-
-\textbf{Equations describing what the parameters in the table mean. }
+A material model based on crystal plasticity adopted for a two phase duplex steel has already been developed in \cite{lillekh}. Since it is well described there only the parameters to the material model will be given here. They can be seen in table \ref{tbl:mat_par}. The analyses previously perofmred with that material model have only been using a two dimensional RVE:s assuming plain stress conditions. It is therefore interesting to see how the same model behaves for a three dimensional RVE and study if significant changes in the stress strain curves are obtained for similar loading conditions.
 
 
 \begin{table}[htpb!]
@@ -38,16 +24,8 @@ A short summary of the governing equations of the crystal plasticity model is fi
     \end{tabular}
 \end{table}
 
-
-
-\section{Loading case}
-
-This section describes the way the FE analyses were performed.
-
-
-\subsection{Bondary conditions}
+\subsection{Boundary conditions}
 The FE analyses performed simulated an RVE (cube) inside a larger structure experiencing a uniaxial tensile testing. This is done by prescribing suitable boundary conditions on the RVE. The boundary conditions are defined by prescribing the displacements of certain nodes of the model. To be specific, the nodes at the bottom face of the cube are fixed such that they cannot move in the $y$-direction. The nodes at the bottom face on two of the edges have the additional boundary condition that they can only move parallel to their edge, i.e. $u_x = 0$ at $z = 0$ and $u_z = 0$ at $x = 0$. Stresses in the model are induced by having the nodes in the top face of the cube move at a fixed rate in the $y$-direction. An illustration of the boundary conditions can be seen in figure \ref{fig:test_case_cryst}. 
-
 
 \begin{figure}[htpb!]
 \centering
@@ -155,10 +133,12 @@ It can be seen that the stress values tend to increase with more grains in the m
  \overline{D} = 2\cdot\left( \frac{ 3\overline{V}}{4 \pi} \right)^{1/3},
 \end{equation}
 where $\overline{V}$ is the average volume of a grain. The result is shown in figure \ref{fig:avg_sphere_rad}. A line is also shown in the figure where the two parameters $\sigma_0$ and $k_y$ have been fitted to the data to best fit the curve
+%
 \begin{equation}
+\label{eq:hallpetch}
  \sigma_{zz} = \sigma_0 + \frac{k_y}{\sqrt{D}}
- \label{eq:hallpetch}
 \end{equation}
+%
 with the results $\sigma_0 \approx 650$ and $k_y \approx 27$. Equation \ref{eq:hallpetch} is the Hall-Petch relation. It is not yet clear if the material model follows this relation but what is clear is that there is some relation between the grain size and the stress in the model.
 
 \begin{figure}[htpb!]

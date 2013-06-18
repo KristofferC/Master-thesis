@@ -2,7 +2,14 @@
 
 \begin{document}
 
-\subsection{Results}
+
+This thesis has investigated a method of modelling polycrystalline method as well as one method to include grain boundary effects. The microstructures were generated using the Voronoi tessellation and meshed into a mesh conforming to the grain boundaries. Both the generation of the microstructure and the mesh was performed with the software Neper \cite{Quey20111729}. This meshed microstructure was then used to perform analyses of a crystal plasticity model presented in \cite{lillekh}. Grain boundary mechanisms was included in the model by inserting cohesive elements in the interface between grains. FE analyses was performed on this model first with a non realistic material interface law by both an explicit and implicit integration technique and second with a traction separation law as material face law from atomistic simulations performed in \cite{Gren2013}. The method of inserting the cohesive elements between interfaces that is presented should be usable on other types of microstructure than those generated using Voronoi tessellation. This is useful if one wants to tune the microstructure in those cases Voronoi tessellation is not an accurate enough approximation to it.  The code that imports the mesh from Neper and inserts cohesive elements was released as a free open source package from Python: Phon \cite{Phon}.
+
+The FE analyses of the crystal plasticity model showed similar results for the three dimensional RVE as the two dimensional used in the previous work. However, it was found that the stress at a certain macroscopic strain increased with the number of grains. It is possible that the parameters for the material model was tuned to agree with experiments for a certain number of grains. This would imply that the material model need more refinement to take into account the effect of grain size to accurately model the material.
+
+The results of the analyses on the non realistic material on the model with cohesive elements showed that the implicit integration method might be unsuitable for analyses of that type. Convergence problems was encountered even for simple models. It was however shown that an explicit integration method could be used that yielded the same results as with the implicit method but did not have problems with convergence. Analyses of a microstructure that tried to model wolfram carbide 
+
+In order to be able to say if the cohesive element method is useful to model grain boundary mechanisms it is likely that more extensive analysis must be performed. The analyses performed in this thesis had not access to 
 
 
 \subsection{Further studies}

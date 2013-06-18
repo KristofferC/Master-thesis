@@ -34,14 +34,13 @@ The integral over the boundary is zero due to $v$ being zero everywhere on it. A
 \end{equation}
 where $a(.,.)$ is of bilinear form and $f(.)$ is of linear form. The purpose of rewriting the equation in weak form is that the requirement on the smoothness of the function $u$ has been reduced. 
 
-\item \emph{Discretize the problem.} This is done by constructing a finite dimensional subspace of $V$ denoted $V_h$. Let $\{N_1, \ldots, N_D \}$  be a basis for the subspace. The function $v$ can now be written as a linear combination of the basis
+\item \emph{Discretize tdhe problem.} This is done by constructing a finite dimensional subspace of $V$ denoted $V_h$. Let $\{N_1, \ldots, N_D \}$  be a basis for the subspace. The function $v$ can now be written as a linear combination of the basis
 %
 \begin{equation} 
 v =  c_\beta N_\beta, \quad c_\beta \in \mathbb{R} 
 \end{equation}
 %
-Here we introduce the notation that greek letter indices are taken from the range 1 to $D$. The discrete analogue of the weak form \ref{eqn_weak} 
-is then written as: Find $u_h \in V_h$ such that
+Here we introduce the notation that greek letter indices are taken from the range 1 to $D$. The discrete analogue of the weak form \ref{eqn:weak_gen} is then written as: Find $u_h \in V_h$ such that
 %
 \begin{equation} 
 \label{eqn_disc_analo}
@@ -68,12 +67,12 @@ Since $a$ is bilinear this can be rewritten as
 This can in condensed form be written as
 \begin{equation} 
     \mathbf{K} \vec{a} = \vec{b}
-    \label{eqn:cond}
+    \label{eqn:condition}
 \end{equation}
 where $K_{\alpha \beta} = a(N_\alpha, N_\beta)$ is a $D \times D$ matrix and $b_\beta = f(N_\beta)$ is a vector with $D$ elements. $\mathbf{K}$ is commonly denoted as the \textit{stiffness matrix} and $b$ the load vector.
 
 
-\item \textit{Solve the discrete problem.}. In practice this means to solve the system of equations \ref{eqn:cond}. This can be solved by direct (Gauss elimination) or iterative methods (Jacobi method, Gauss-Seidel method). Generally the functions constituting the basis are chosen such that they are non zero only in a small region of $V_h$. This means that the matrix $\mathbf{K}$ will be sparse and can be solved much faster than a general dense $D \times D$ system.
+\item \textit{Solve the discrete problem.}. In practice this means to solve the system of equations \ref{eqn:condition}. This can be solved by direct (Gauss elimination) or iterative methods (Jacobi method, Gauss-Seidel method). Generally the functions constituting the basis are chosen such that they are non zero only in a small region of $V_h$. This means that the matrix $\mathbf{K}$ will be sparse and can be solved much faster than a general dense $D \times D$ system.
 
 \end{enumerate}
 
@@ -108,14 +107,12 @@ As a relevant example, the derivation of the stiffness matrix and load vector fo
 \begin{array}{ll}
    \sigma_{ji,j} + f_i = 0 \quad \text{on } \Omega \\
    t_i = g_i \quad \text{on } \Gamma \end{array} \right.
-    \label{eqn:cond}
 \end{equation}
 %
 As described before the equation is multiplied by a kinetically admissible function $v$ and an integration over the domain is performed,
 %
 \begin{equation} 
   \int_\Omega  v_i\sigma_{ji,j} \id x + \int_\Omega v_i f_i \id x = 0, 
-    \label{eqn:cond}
 \end{equation}
 %
 where $\sigma_{ji} = \sigma(\epsilon_{ij})$ and $\epsilon_{ij} = \frac{1}{2}\left(u_{i,j} + u_{j,i} \right)$. Using Gauss identity and the boundary condition of the problem gives
