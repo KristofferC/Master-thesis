@@ -8,36 +8,35 @@
 \chapter{Grain boundary mechanisms}
 
 
-In polycrystalline materials different mechanisms in the boundary between two grains can have major effects on the macroscopic behavior of the material. Investigations of grain boundary effects in different materials can for example be found in \cite{eff_grain}, \cite{grain_poly}. In order to improve the modeling of materials on a mesoscopic scale there is a need to include these effects into for example a finite element model. This is done in this thesis by something called \textit{cohesive elements}.
+In polycrystalline materials different mechanisms in the boundary between two grains can have significant effects on the macroscopic behavior of the material. Investigations of grain boundary effects in different materials be found in e.g \cite{eff_grain}, \cite{grain_poly}. In order to improve the modeling of materials on a mesoscopic scale there is a need to include these effects into for example a finite element model. This is done in this thesis by something called \textit{cohesive elements}.
 
 \section{Cohesive elements}
 
-The finite element analysis software Abaqus, used in this thesis, has support for cohesive elements. In the manual for Abaqus it says that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary deformation mechanisms that can exist between grains.
+The finite element analysis software Abaqus, used in this thesis, has support for cohesive elements. In the manual for Abaqus it states that these "are primarily intended for bonded interfaces where the interface thickness is negligibly small.". In this thesis they are used to model the grain boundary deformation mechanisms that can exist between grains.
 
-The difference between cohesive elements and solid elements are that cohesive elements do not model any material but instead they model the actual interface between two material surfaces. Since the cohesive elements do not contain any material there is no stress tensor like in solid elements. Instead, when the cohesive element is subjected to deformations a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$ is the output. The normal direction is defined from the order of the nodes defining the vertices of the element as shown in figure \ref{fig:cohs_ori}. The corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. The nominal strain in the element are defined as
+The difference between cohesive elements and solid elements is that cohesive elements do not model any material but instead they model the actual interface between two material surfaces. Since the cohesive elements do not contain any material there is no stress tensor like in solid elements. Instead, when the cohesive element is subjected to deformations a vector of the traction components, the normal traction $t_n$ and two shear tractions $t_s$ and $t_t$ is the output. What is considered the normal direction is defined from the order of the nodes defining the vertices of the element as shown in figure \ref{fig:cohs_ori}. Corresponding separations are denoted by $\delta_n, \delta_s, \delta_t$. Nominal strain in the element are defined as
 %
 \[ \epsilon_n = \frac{\delta_n}{T_0}, \quad \epsilon_s = \frac{\delta_s}{T_0}, \quad \epsilon_t = \frac{\delta_t}{T_0}  \]
 %
-The parameter $T_0$ is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 it yields the strain and the separation become equal. For a more detailed description of how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
+The parameter $T_0$ is not the thickness of the cohesive element but a constitutive thickness that when set to 1.0 yields the strain and the separation become equal. For a more detailed description of how the constitutive thickness works see section 31.5.6 in the Abaqus manual.
 
 
 
 \begin{figure}[htpb!]
 \centering
  \includegraphics[width=.4\linewidth]{./figures/cohs_ele}
-\caption{Orientation of a cohesive element. The order of the nodes is used to determine the bottom and top face as well as the positive normal direction. In order for the normal direction to point upwards the nodes should be given in a counter clockwise direction.}
+\caption{Orientation of a cohesive element. The order of the nodes is used to determine the bottom and top face as well as the positive normal direction.}
 \label{fig:cohs_ori}
 \end{figure}
 
 
 When modeling damage and failure of a material, or rather an interface surface, by using cohesive element there are three main areas of interest:
-
 \begin{enumerate}
 \item The properties of the material interface before damage has taken place. Abaqus only supports a linear elastic traction-separation law prior to damage. This is however not a major limitation since many materials have a linear response before damage occurs. 
 
 \item The criterion that defines when the material starts experiencing damage. This is called the \textit{damage initiation criterion}.
 
-\item The properties of the material interface after that the damage initiation criteria has been fulfilled need to be prescribed. This is done by \textit{damage evolution} which describes how the degradation of the material stiffness develops as the material interface experience more and more separation.
+\item The properties of the material interface after that the damage initiation criteria has been fulfilled need to be prescribed. This is denoted as \textit{damage evolution} which describes how the degradation of the material stiffness develops as the material interface is separated more and more.
 \end{enumerate}
 %
 A possible scenario for the damage initiation and evolution can be seen in figure \ref{fig:tract_sep}.
@@ -51,7 +50,7 @@ A possible scenario for the damage initiation and evolution can be seen in figur
 
 \subsection{Undamaged behavior}
  
-The behavior of the material before damage initiation is assumed to be elastic and is written in term of a constitutive matrix as
+The traction separation law before damage initiation is assumed to be linear and is written in term of a constitutive matrix as
  %
  \[ \vec{t} = 
  \left[
@@ -93,9 +92,9 @@ Here $t_n^0, t_s^0, t_t^0$ are three user defined parameters. The symbol $\langl
 
 The damage evolution describes the degradation of the material interface as a function of the separation. The current degradation of the material is completely captured by one scalar damage variable $D$. The traction vector is then calculated as 
 %
-\[ \vec{t} = (1 - D) \overline{\vec{t}} \]
+\[ \vec{t} = (1 - D) \overline{\vec{t}}, \]
 %
- where $\overline{\vec{t}}$ is the traction in the element if there was no damage in the material interface. Before the damage initiation criterion has been fulfilled, $D = 0$. Having the damage completely described by only a scalar is one of the major limitations of the cohesive elements that are available in Abaqus. This means it is hard to capture the difference in the traction separation law for normal and shear separations. It would be useful if the damage in the material interface could be described by a three component vector or even more generally by a tensor. This is likely possible by writing a user defined element where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UEL}) but doing this out of scope for this thesis.
+ where $\overline{\vec{t}}$ is the traction in the element if there was no damage in the material interface. Before the damage initiation criterion has been fulfilled, $D = 0$. Having the damage completely described by only a scalar is one limitation of the cohesive elements that are available in Abaqus. It has the effect that it is hard to capture eventual differences in the traction separation law for normal and shear separations. It would be useful if the damage in the material interface could be described by a three component vector or more generally by a matrix. This is likely possible by writing a user defined element where one codes how the traction is calculated from the separations (known in Abaqus as a \texttt{UEL}) but doing this out of scope for this thesis.
 
 If we first assume that we only have separations in the normal direction and want to give $D$ in table form as an input to Abaqus, the following procedure would be used. $K_{nn}$ is calculated as the slope of the initial elastic response. For separations larger than the damage initiation $\delta_n^0$,  at a specific point $(\delta_n, \sigma_n)$, $D$ is calculated as $D_f(K_{nn}, \delta_n, \sigma_n)$ where $D_f$ is the function:
 %
@@ -116,7 +115,7 @@ we can solve for the normal separation $d_n$ and the effective shear separation 
  d_\tau  & = d_m\sqrt{1 -\frac{1}{\left(\frac{PK_{nn}}{K_{tt}} \right)^2 + 1 }}.
 \end{align}
 %
-where $P = \tan(2 \phi_1 / 2)$. We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the correct damage scalars for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. The issue now is how these two damage scalars should be combined to give an overall damage of the interface. One way of doing this is by adopting the formula,
+where $P = \tan(2 \phi_1 / 2)$. We now calculate two different damage scalars, $D_n = D_f(K_{nn}, \delta_n, \sigma_n)$ and $D_\tau = D_f(K_{tt}, d_\tau, \sigma_\tau)$. These are the correct damage scalars for the case of pure shear or pure normal separation by a distance of $\delta_n$ or $\delta_\tau$ respectively. There is a level of arbitrariness now as to how these two damage scalars should be combined to give an overall damage of the interface. One way of doing this is by adopting the formula,
 %
 \[ D = 1 - (1 - D_n)(1 - D_t). \]
 %
@@ -136,7 +135,7 @@ From Neper we get a mesh of the generated microstructure but Neper does not have
 \end{itemize}
 The algorithm can now be described in two main steps. The algorithm is described for one grain boundary but the same method is used for all boundaries.
 \begin{enumerate}
-\item \textit{Disjoin the shared face in a grain boundary.} - In the generated mesh each face is shared by two grains except the faces on the boundary of the cube which are ignored. An example of two grains with a shared face can be seen in \ref{fig:cohs_2_a}. What we want to do is create two separate faces, one for each grain, like in figure \ref{fig:cohs_2_a}. From the Neper mesh file, element sets with triangles in the current face can be extracted. The following method is used to separate the faces between two grains. To identify the grains they are assigned a number $G = 1,\ldots , n_g$ where $n_g$ is the total number of grains in the microstructure. The identifiers for the two grains on the current grain boundary will be denoted $G_1$ and $G_2$. From each node $n_i (x_i, y_i, z_i)$ in the face two new nodes are created, $n_{f(G_1,i)} (x_i, y_i, z_i)$ and $n_{f(G_2,i)} (x_i, y_i, z_i)$. These new nodes need unique identifiers and this is the purpose of the function $f$. The function $f$ should take an identifier for a grain and a node such that:
+\item \textit{Disjoin the shared face in a grain boundary.} - In the generated mesh each face is shared by two grains except the faces on the boundary of the cube which are ignored. An example of two grains with a shared face can be seen in \ref{fig:cohs_2_a}. What we want to do is create two separate faces, one for each grain, like in figure \ref{fig:cohs_2_a}. From the Neper mesh file, element sets with the triangles in the current face can be extracted. To identify the grains they are assigned a number $G = 1,\ldots , n_g$ where $n_g$ is the total number of grains in the microstructure. The identifiers for the two grains on the current grain boundary will be denoted $G_1$ and $G_2$. The following method is used to separate the faces between two grains. From each node $n_i (x_i, y_i, z_i)$ in the face two new nodes are created, $n_{f(G_1,i)} (x_i, y_i, z_i)$ and $n_{f(G_2,i)} (x_i, y_i, z_i)$. These new nodes need unique identifiers and this is the purpose of the function $f$. The function $f$ should take an identifier for a grain and a node such that:
 %
 \begin{align}&  f: (\mathbb{N},\mathbb{N}) \rightarrow \mathbb{N} \\
  & f(G_1, i) = f(G_2, j) \Leftrightarrow (G_1, i) = (G_2, j) 
@@ -213,19 +212,19 @@ The algorithms and numerical methods presented in this section have been impleme
 
 \section{FE analyses with cohesive elements}
 
-In order to test the methos well as FE analyses were performed on a micro structure with material properties that were not set to simulate a real case.
+In order to test the generated mesh that includes cohesive elements, FE analyses were performed on a micro structure with material properties that were not set to simulate a real case.
 
-One Voronoi tesselation of 50 grains was generated and meshed. Cohesive elements were then inserted into the mesh. The grains were set to behave elastically with a Young's modulus of $E = \unit[200]{GPa}$. The cohesive elements were set to initially have be mode independent with an elasticity equal to the one in the solid elements. The damage initiation criteria was $\sigma_n^0 = 0.001$ and a linear damage evolution law was used with fracture at $\sigma_n^t = 0.04$. The same method of inducing strain as in section \ref{chap:cryst_plast} was used. The analysis was run for meshes of different coarseness to see if there was any mesh dependence in the results. The resulting strain stress curves can be seen in figure \ref{fig:coarse_coh}.
+One Voronoi tesselation of 50 grains was generated and meshed. Cohesive elements were then inserted into the mesh. The grains were set to behave elastically with a Young's modulus of E $= \unit[200]{GPa}$ and Poisson ratio $\nu = 0.3$. Cohesive elements were set to initially be mode independent with an elasticity equal to the one in the solid elements. The damage initiation criteria used was $\sigma_n^0 = 0.001$ and a linear damage evolution law was used with fracture at $\sigma_n^t = 0.04$. The same method of inducing strain as in section \ref{chap:cryst_plast} was used. The analysis was run for meshes of different coarseness to see if there was any mesh dependence in the results. The resulting stress strain curves can be seen in figure \ref{fig:coarse_coh}.
 %
 %
 \begin{figure}[htpb!]
 \centering
 \includegraphics[width=.7\linewidth]{./figures/mesh_course_coh}
-\caption{Courseness mesh}
+\caption{The analyses were performed for the same microstructure but with different mesh coarseness. This showed slight differences in the resulting stress strain curve and also different points of convergence failure in the implicit integration technique.}
 \label{fig:coarse_coh}
 \end{figure}
 %
- The analyses was set to run until a macroscopic strain of 0.05 of the RVE. However, at different points in the analysis convergence problems with the implicit solver caused the analysis to abort. This happened at different points during the analysis. Implicit solvers generally have difficulties with softening in materials and the discontinuous nature in the gradient of the traction separation law in cohesive elements probably make things worse. It is likely that there is a discontinuity in the force displacement curve causing the Newton Rhapson method to not converge to an equilibrium point.A common advice to overcome the convergence problems with implicit solvers associated with the softening of materials due to cohesive elements is to introduce viscous regularization in the cohesive elements. The viscous stiffness degradation variable $D_v$ is defined as
+ The analyses were set to run until a macroscopic strain of 0.05 of the RVE. However, at different points in the analysis convergence problems with the implicit solver caused the analysis to abort. This happened at different points during the analysis. Implicit solvers generally have difficulties with softening in materials and the discontinuous nature in the gradient of the traction separation law in cohesive elements probably makes things worse. It is likely that there is a discontinuity in the force displacement curve causing the Newton Raphson method to not converge to an equilibrium point. A common advice given to overcome the convergence problems with implicit solvers associated with the softening of materials due to cohesive elements is to introduce viscous regularization in the cohesive elements. The viscous stiffness degradation variable $D_v$ is defined as
  
 \begin{equation}
   \dot{D}_v = \frac{1}{\mu} (D - D_v)
@@ -237,51 +236,51 @@ where $\mu$ is the viscosity parameter. The response of the damaged cohesive int
   \vec{t} = (1 - D_v) \overline{\vec{t}}.
 \end{equation}
 %
-This should have the effect of smoothing out the damage in the cohesive element making it easier for the implicit solver to find an equilibrium point. This was attempted but it had little to no effect in terms of convergence. The exact criterion that causes the convergence problem is yet unknown.
+This should have the effect of smoothing out the damage in the cohesive element making it less likely that the implicit solver fails in finding an equilibrium point. This was attempted but it had little to no effect in terms of convergence. The exact cause for the convergence problem is yet to be pinpointed.
 
-There are however another way of solving the FE problem. The implicit solver tries to solve the equilibrium equation
-%
+There is however another way of solving the FE problem. In an implicit solver the equilibrium equation that is solved is
 \begin{equation}
-  \vec{K} \vec{u} - \vec{R} = 0,
+  \vec{f}_\text{int}(u) -  \vec{f}_\text{ext}(u) = 0.
 \end{equation}
 %
-for notation see section \ref{sec:femmech}. Instead of solving the equilibrium equation we can take into account acceleration giving the equation
+For notation see section \ref{sec:femmech}. Instead of solving the equilibrium equation we can take into account acceleration giving the equation
 %
 \begin{equation}
- \vec{M}\vec{\ddot{u}} + \vec{K} \vec{u} - \vec{R} = 0,
+ \vec{M}\vec{\ddot{u}} + \vec{f}_\text{int}(u) -  \vec{f}_\text{ext}(u) = 0.,
 \end{equation}
 %
 where $\vec{M}$ is known as the  \textit{mass matrix} defined as
 %
 \begin{equation}
-M_{ij} = \int_\Omega \varphi v_i v_j \id x
+M_{ij} = \int_\Omega \varphi v_i v_j \id x.
 \end{equation}
 %
-This can be solved by for example the central different method as
+This can be solved by e.g. the central different method as
 %
 \begin{equation}
-\frac{1}{\Delta t^2} \vec{M} \vec{u}^{t + \Delta t} = \vec{R}^t - \vec{K} \vec{u}^t + \frac{1}{\Delta t^2} \left(2 \vec{M} \vec{u}^{t} - \vec{u}^{t-\Delta t} \right)
+\frac{1}{\Delta t^2} \vec{M} \vec{u}^{t + \Delta t} = \vec{f}^{t}_\text{ext}(u) - \vec{f}^{t}_\text{int}(u) + \frac{1}{\Delta t^2} \left(2 \vec{M} \vec{u}^{t} - \vec{u}^{t-\Delta t} \right)
 \end{equation}
-This is however conditionally stable on the time step $\Delta t$ used, c.f \cite{Park1977343}. A necessary condition for convergence is the  Courant–Friedrichs–Lewy condition. In FE analyses this condition can be stated that he distance traveled by the fastest wave in the material in one time step should be smaller than the characteristic size of the element $L$. The speed of the waves are related to the stiffness $k$ and mass $m$ of the material. The condition can be written as
+This is however conditionally stable depending on the time step $\Delta t$ used, c.f. \cite{Park1977343}. A necessary condition for convergence is the  Courant–Friedrichs–Lewy condition. In FE analyses this condition can be stated that the distance traveled by the fastest wave in the material in one time step should be smaller than the characteristic size of the element $L$. The speed of the waves is related to the stiffness $k$ and mass $m$ of the material. The condition can be written as
 \begin{equation}
 \Delta t \leq \alpha \frac{L \sqrt{m}}{\sqrt{k}}
 \end{equation}
+where $\alpha$ is a proportionality constant.
 
-This condition can be quite strict and a small timestep might thus be needed leading to extensive computational time required. However, the problem we are trying to solve is static and should be independent of the mass. We should therefore be able to scale the mass in the FE model in order for the larger time steps to respect the convergence condition without significantly affecting the result. In order to study this analyses were the mass was scaled in order for the stable time step to change were perfomed and the results are shown in figure \ref{fig:mass_scale}. It can be seen if the mass is scaled high enough the resulting stress is irregular and seem to have some high frequency oscillations. However, with smaller time steps the curves seem to converge nicely. 
+This condition can be quite strict and a small time step might thus be needed for stability which leads to extensive computational time required. However, the problem we are trying to solve is static and should be independent of the mass. We should therefore be able to scale the mass in the FE model in order to allow for larger time steps to respect the convergence condition without significantly affecting the result. In order to study this analyses where the mass was scaled in order for the stable time step to change were perfomed and the results are shown in figure \ref{fig:mass_scale}. It can be seen that if the mass is scaled high enough the resulting stress is irregular and seem to have some high frequency oscillations. However, with smaller time steps the curves seem to converge nicely. 
 
 \begin{figure}[htpb!]
 \centering
 \includegraphics[width=.7\linewidth]{./figures/exptime}
-\caption{Mass scaling for a stable time increment of $1e-03,1e-04,1e-05$ .}
+\caption{Results of the analyses where the mass of the model has been scaled to give a stable time increment of $\unit[10^{-3}]{s}, \unit[10^{-4}]{s}$ and $ \unit[10^{-5}]{s}$ .}
 \label{fig:mass_scale}
 \end{figure}
 
-In order to test the validity of the result from the explicit solver the results are compared to the implicit solver for identical mesh and material properties. In figure \ref{fig:impvsexp} the results are shown and very good agreement between the explicit and implicit solutions can be seen. From this we draw the conclusion that it is possible to use the explicit solver in Abaqus in order to circumvent the convergence problems associated with the implicit solver.
+In order to test the validity of the results from the explicit solver the results are compared to the implicit solver for identical mesh and material properties. In figure \ref{fig:impvsexp} the results are shown and very good agreement between the explicit and implicit solutions can be seen. From this we draw the conclusion that it is possible to use the explicit solver in Abaqus in order to circumvent the convergence problems associated with the implicit solver.
 
 \begin{figure}[htpb!]
 \centering
 \includegraphics[width=.7\linewidth]{./figures/impvsexp}
-\caption{Different}
+\caption{Comparison between the solution from an explicit and and implicit solver. This shows that for the region where the implicit solver converges the explicit and implicit solution agree well.}
 \label{fig:impvsexp}
 \end{figure}
 
